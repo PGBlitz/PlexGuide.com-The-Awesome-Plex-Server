@@ -1,7 +1,7 @@
 ##### WANT TO HELP? CLICK THE ★ (STAR LOGO) in the Upper-Right! 
 
 <p align="left">
-  <a href="https://discord.gg/Uruj9Ds5">
+  <a href="https://discord.gg/93PYgqDX9T">
     <img src="https://i.imgur.com/XI1WGxi.png" alt="Menu Example" width="15%">
   </a>
 </p>
