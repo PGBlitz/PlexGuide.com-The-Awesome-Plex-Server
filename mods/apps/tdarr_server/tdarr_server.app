@@ -4,7 +4,7 @@ deploy_container() {
     
     # Check if NVIDIA GPU is detected
     if lspci | grep -i 'nvidia' &> /dev/null; then
-        nvidia_options="-e NVIDIA_DRIVER_CAPABILITIES=\"${nvidia_driver}\" -e NVIDIA_VISIBLE_DEVICES=\"${nvidia_visible}\" --gpus=\"${nvidia_gpus}\""; else
+        nvidia_options="-e NVIDIA_DRIVER_CAPABILITIES=\"${nvidia_driver}\" -e NVIDIA_VISIBLE_DEVICES=\"${nvidia_visible}\" --gpus=\"${nvidia_graphics}\""; else
         nvidia_options=""; fi
 
     # Run the Docker container with conditional NVIDIA options
