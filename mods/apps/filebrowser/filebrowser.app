@@ -12,7 +12,7 @@ deploy_container() {
       -v "${appdata_path}"/.filebrowser.json:/.filebrowser.json \
       -v "${root_path}":/srv \
       --restart unless-stopped \
-      filebrowser/filebrowser"${version_tag}"
+      filebrowser/filebrowser":${version_tag}"
     
     # display app deployment information
     appverify "$app_name"
