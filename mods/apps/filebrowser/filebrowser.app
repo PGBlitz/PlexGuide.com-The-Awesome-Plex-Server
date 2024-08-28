@@ -6,6 +6,9 @@ deploy_container() {
     #touch "${appdata_path}"/.filebrowser.json
     #touch "${appdata_path}"/filebrowser.db
     
+    #-v "${appdata_path}"/.filebrowser.json:/.filebrowser.json \
+
+
     # Deploy the container
     docker run -d \
       --name="${app_name}" \
@@ -13,8 +16,7 @@ deploy_container() {
       -e PGID=1000 \
       -e TZ="${time_zone}" \
       -p "${expose}${port_number}":80 \
-      -v "${appdata_path}"/filebrowser.db:/database.db \
-      -v "${appdata_path}"/.filebrowser.json:/.filebrowser.json \
+      -v "${appdata_path}"/database.db:/database.db \
       -v "${root_path}":/srv \
       --restart unless-stopped \
       filebrowser/filebrowser:"${version_tag}"
