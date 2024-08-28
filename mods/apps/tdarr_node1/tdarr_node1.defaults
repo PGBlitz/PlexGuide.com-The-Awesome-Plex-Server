@@ -10,6 +10,6 @@
 ##### Expose:
 
 # For NVIDIA Graphics Cards
-##### Driver: all
-##### Visible : all
-##### GPUs: all
+##### NVIDIA Driver: all
+##### NVIDIA Visible : all
+##### NVIDIA GPUS: all
