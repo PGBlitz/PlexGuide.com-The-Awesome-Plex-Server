@@ -3,7 +3,7 @@
 deploy_container() {
         
 docker run -d \
-    --name="${app_name}" \
+    --name="tdarr_server" \
     -v "${appdata_path}/server":/app/server \
     -v "${appdata_path}/configs":/app/configs \
     -v "${appdata_path}/logs":/app/logs \
@@ -15,17 +15,17 @@ docker run -d \
     -e "inContainer=true" \
     -e "ffmpegVersion=${ffmpeg_version}" \
     -e "nodeName=${node_name}" \
-    --network bridge \
     -p "${expose}${port_number}":8265 \
     -p "${expose}${port_two}":8266 \
     -e "TZ=${time_zone}" \
     -e PUID=1000 \
     -e PGID=1000 \
+    --network bridge \
     --device=/dev/dri:/dev/dri \
     --log-opt max-size=10m \
     --log-opt max-file=5 \
     --restart unless-stopped \
-    ghcr.io/haveagitgat/tdarr:"${version_tag}"
+    ghcr.io/haveagitgat/tdarr:latest
 
     # display app deployment information
     appverify "$app_name"
