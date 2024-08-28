@@ -16,7 +16,6 @@ if lspci | grep -i 'nvidia' &> /dev/null; then
       -v "${tv_path}":/data/tvshows \
       -v "${movies_path}":/data/movies \
       --device=/dev/dri:/dev/dri \
-      --device=/dev/vchiq:/dev/vchiq \
       --restart unless-stopped \
       $nvidia_options \
       lscr.io/linuxserver/emby:"${version_tag}"
