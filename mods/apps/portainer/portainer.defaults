@@ -1,7 +1,7 @@
 #!/bin/bash
 
-##### AppData Path: /pg/appdata/prowlarr
-##### Port Number: 9696
+##### AppData Path: /pg/appdata/portainer
+##### Port Number: 9000
 ##### Time Zone: America/New_York
 ##### Version Tag: latest
 ##### Expose:
