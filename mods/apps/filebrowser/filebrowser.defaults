@@ -2,7 +2,8 @@
 
 ##### Port Number: 8089
 ##### Time Zone: America/New_York
-##### AppData Path: /pg/appdata/filebrowser
+##### File Browser: /pg/appdata/filebrowser/filebrowser.db
+##### Settings JSON: /pg/appdata/filebrowser/settings.json
 ##### Root Path: /
 ##### Version Tag: latest
 ##### Expose:

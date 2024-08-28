@@ -16,7 +16,8 @@ deploy_container() {
       -e PGID=1000 \
       -e TZ="${time_zone}" \
       -p "${expose}${port_number}":80 \
-      -v "${appdata_path}"/database.db:/database.db \
+      -v "${file_browser}"/filebrowser.db \
+      -v "${file_browser}"/config/settings.json \
       -v "${root_path}":/srv \
       --restart unless-stopped \
       filebrowser/filebrowser:"${version_tag}"
