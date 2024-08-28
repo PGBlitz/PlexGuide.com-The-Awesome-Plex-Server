@@ -11,7 +11,7 @@ deploy_container() {
       -v /var/run/docker.sock:/var/run/docker.sock \
       -v "${data_path}":/data \
       -v "${icons_path}":/app/public/icons \
-      -v "${configs_path}":/app/data/configs \
+      -v "${appdata_path}":/app/data/configs \
       --restart unless-stopped \
       ghcr.io/ajnart/homarr:"${version_tag}"
     
