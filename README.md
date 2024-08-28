@@ -42,7 +42,7 @@ sudo apt-get update && sudo apt-get install -y curl && bash <(curl -s https://ra
 ----
 
 **<span style="color:green">Deployable Apps:</span>**  
-FireFox, Jackett, JellyFin, Lidarr, NetData, NZBGET, Overseer, Ombi, Opera, Portainer, Plex, Prowlarr, QBittorent, Radarr, TdarrServer, TdarrNodes, SABNZBD, Sonarr, Ungoogled Chromium, UpTimeKuma, VaultWarden
+FireFox, Jackett, JellyFin, Lidarr, NetData, NZBGET, Overseer, Ombi, Opera, Portainer, Plex, Prowlarr, QBittorent, Radarr, Requestrr, TdarrServer, TdarrNodes, SABNZBD, Sonarr, Ungoogled Chromium, UpTimeKuma, VaultWarden
 
 ### **Current Functionality**
 
