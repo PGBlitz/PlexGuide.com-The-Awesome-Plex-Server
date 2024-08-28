@@ -11,8 +11,6 @@ docker run -d \
     -v "${transcode_cache_path}":/temp \
     -e "inContainer=true" \
     -e "ffmpegVersion=${ffmpeg_version}" \
-    -e "nodeName=${node_name}" \
-    -e "internalNode=${internal_node}" \
     -p "${expose}${port_number}":8268 \
     -e "TZ=${time_zone}" \
     -e PUID=1000 \
