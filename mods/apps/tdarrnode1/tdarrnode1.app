@@ -2,7 +2,7 @@
 
 deploy_container() {
         
-    docker run -ti \
+    docker run -d \
         --name="${app_name}" \
         -v "${appdata_path}/server":/app/server \
         -v "${appdata_path}/configs":/app/configs \
