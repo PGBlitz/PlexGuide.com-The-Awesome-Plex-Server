@@ -7,3 +7,8 @@
 ##### Plex Token: null
 ##### Version Tag: latest
 ##### Expose:
+
+# For NVIDIA Graphics Cards
+##### Driver: all
+##### Visible : all
+##### GPUs: all

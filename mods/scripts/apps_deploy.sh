@@ -10,6 +10,14 @@ app_name=$1
 
 # Function: redeploy_app
 redeploy_app() {
+
+    # Check if lspci is installed; detect NVIDIA graphics cards
+    if ! command -v lspci &> /dev/null; then
+        if [ -f /etc/debian_version ]; then
+            sudo apt-get update && sudo apt-get install -y pciutils
+        fi
+    fi
+
     echo "Deploying $app_name"
     source /pg/scripts/apps_support.sh "$app_name" && appsourcing
     source "/pg/apps/$app_name/$app_name.app"  # Source the app script to load functions

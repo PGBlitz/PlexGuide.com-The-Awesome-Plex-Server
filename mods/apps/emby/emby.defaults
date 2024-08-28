@@ -1,8 +1,8 @@
 #!/bin/bash
 
-##### Port Number: 8095
+##### Port Number: 8096
 ##### Time Zone: America/New_York
-##### AppData Path: /pg/appdata/jellyfin
+##### AppData Path: /pg/appdata/emby
 ##### Movies Path: /pg/media/movies
 ##### TV Path: /pg/media/tv
 ##### JF ServerUrl: 1.1.1.1

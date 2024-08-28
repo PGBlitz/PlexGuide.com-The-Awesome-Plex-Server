@@ -8,6 +8,10 @@ NC="\033[0m" # No color
 # Function to deploy the Docker container for the app
 deploy_container() {
 
+if lspci | grep -i 'nvidia' &> /dev/null; then
+    nvidia_options="-e NVIDIA_DRIVER_CAPABILITIES=\"${driver}\" -e NVIDIA_VISIBLE_DEVICES=\"${visible}\" --gpus=\"${gpus}\""; else
+    nvidia_options=""; fi
+
     # If no token exists, prompts user to create one for the claim
     check_plex_token_default
 

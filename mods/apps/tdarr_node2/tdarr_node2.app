@@ -2,6 +2,10 @@
 
 deploy_container() {
 
+if lspci | grep -i 'nvidia' &> /dev/null; then
+    nvidia_options="-e NVIDIA_DRIVER_CAPABILITIES=\"${driver}\" -e NVIDIA_VISIBLE_DEVICES=\"${visible}\" --gpus=\"${gpus}\""; else
+    nvidia_options=""; fi
+
 docker run -d \
     --name="${app_name}" \
     -v "${appdata_path}/server":/app/server \

@@ -1,32 +1,43 @@
 #!/bin/bash
 
 deploy_container() {
-        
-docker run -d \
-    --name="tdarr_server" \
-    -v "${appdata_path}/server":/app/server \
-    -v "${appdata_path}/configs":/app/configs \
-    -v "${appdata_path}/logs":/app/logs \
-    -v "${media_path}":/media \
-    -v "${transcode_cache_path}":/temp \
-    -e "serverIP=${server_ip}" \
-    -e "serverPort=${port_number}" \
-    -e "webUIPort=${expose}${port_number}" \
-    -e "inContainer=true" \
-    -e "ffmpegVersion=${ffmpeg_version}" \
-    -e "nodeName=${node_name}" \
-    -p "${expose}${port_number}":8265 \
-    -p "${expose}${port_two}":8266 \
-    -e "TZ=${time_zone}" \
-    -e PUID=1000 \
-    -e PGID=1000 \
-    --network bridge \
-    --device=/dev/dri:/dev/dri \
-    --log-opt max-size=10m \
-    --log-opt max-file=5 \
-    --restart unless-stopped \
-    ghcr.io/haveagitgat/tdarr:latest
+    
+    # Check if NVIDIA GPU is detected
+    if lspci | grep -i 'nvidia' &> /dev/null; then
+        nvidia_options="-e NVIDIA_DRIVER_CAPABILITIES=\"${driver}\" -e NVIDIA_VISIBLE_DEVICES=\"${visible}\" --gpus=\"${gpus}\""; else
+        nvidia_options=""; fi
 
-    # display app deployment information
+    # Run the Docker container with conditional NVIDIA options
+    docker run -d \
+        --name="tdarr_server" \
+        -v "${appdata_path}/server":/app/server \
+        -v "${appdata_path}/configs":/app/configs \
+        -v "${appdata_path}/logs":/app/logs \
+        -v "${media_path}":/media \
+        -v "${transcode_cache_path}":/temp \
+        -e "serverIP=${server_ip}" \
+        -e "serverPort=${port_number}" \
+        -e "webUIPort=${expose}${port_number}" \
+        -e "inContainer=true" \
+        -e "ffmpegVersion=${ffmpeg_version}" \
+        -e "nodeName=${node_name}" \
+        -p "${expose}${port_number}":8265 \
+        -p "${expose}${port_two}":8266 \
+        -e "TZ=${time_zone}" \
+        -e PUID=1000 \
+        -e PGID=1000 \
+        --network bridge \
+        --device=/dev/dri:/dev/dri \
+        --log-opt max-size=10m \
+        --log-opt max-file=5 \
+        --restart unless-stopped \
+        $nvidia_options \
+        ghcr.io/haveagitgat/tdarr:latest
+
+    # Display app deployment information
     appverify "$app_name"
 }
+
+# Example usage:
+deploy_container
+

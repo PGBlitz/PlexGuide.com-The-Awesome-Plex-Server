@@ -17,8 +17,9 @@ if lspci | grep -i 'nvidia' &> /dev/null; then
       -v "${tv_path}":/data/tvshows \
       -v "${movies_path}":/data/movies \
       --device=/dev/dri:/dev/dri \
+      --device=/dev/vchiq:/dev/vchiq \
       --restart unless-stopped \
-      lscr.io/linuxserver/jellyfin:"${version_tag}"
+      lscr.io/linuxserver/emby:"${version_tag}"
 
     # display app deployment information
     appverify "$app_name"
