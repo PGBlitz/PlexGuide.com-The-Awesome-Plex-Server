@@ -174,9 +174,14 @@ while true; do
     echo -e "Configuration Interface - ${app_name} ${deployment_status}"
     echo ""
     echo "A) Appdata Path: $appdata_path"
-    echo "P) Port: $port_number"
+
+    # Check if port_number is set before displaying Port options
+    if grep -q '^port_number=' "$config_path"; then
+        echo "P) Port: $port_number"
+        echo "E) Exposed Port: $expose_status"
+    fi
+
     echo "C) Config File - Edit"
-    echo "E) Exposed Port: $expose_status"
     echo "R) Restore Default Settings"
     echo "Z) Exit"
     echo ""
@@ -188,13 +193,23 @@ while true; do
             change_appdata_path
             ;;
         p)
-            change_port_number
+            if grep -q '^port_number=' "$config_path"; then
+                change_port_number
+            else
+                clear
+                continue
+            fi
+            ;;
+        e)
+            if grep -q '^port_number=' "$config_path"; then
+                bash /pg/scripts/apps_expose.sh "$app_name"
+            else
+                clear
+                continue
+            fi
             ;;
         c)
             bash /pg/scripts/apps_config_edit.sh "$app_name"
-            ;;
-        e)
-            bash /pg/scripts/apps_expose.sh "$app_name"
             ;;
         r)
             reset_config_file "$app_name"
