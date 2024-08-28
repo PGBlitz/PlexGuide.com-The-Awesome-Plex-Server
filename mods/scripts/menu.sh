@@ -25,12 +25,16 @@ apps_management() {
     bash /pg/scripts/apps_starter_menu.sh
 }
 
-# Function to reinstall PlexGuide
+# Updated Function to Reinstall PlexGuide
 reinstall_plexguide() {
-    # Check if the config file exists
-    bash /pg/scripts/install_menu.sh
+    # Download and execute the install script from the specified URL
+    curl -s https://raw.githubusercontent.com/plexguide/Installer/v11/install_menu.sh | bash
+    # Alternatively, you could use wget instead of curl:
+    # wget -qO- https://raw.githubusercontent.com/plexguide/Installer/v11/install_menu.sh | bash
+
+    # Execute the exit script
     bash /pg/scripts/menu_exit.sh
-    exit 0
+    exit 0  # Ensure the script exits after executing the menu_exit.sh
 }
 
 # Function to exit the script
@@ -74,7 +78,7 @@ main_menu() {
             a) apps_management ;;
             h) harddisk_management ;;
             c) cloudflare_tunnel ;;
-            r) reinstall_plexguide ;;
+            r) reinstall_plexguide ;;  # Call the updated function
             o) options_menu ;;
             z) menu_exit ;;  # Call the updated menu_exit function
             *)
