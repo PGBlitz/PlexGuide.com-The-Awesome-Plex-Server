@@ -5,11 +5,8 @@
 ##### AppData Path: /pg/appdata/emby
 ##### Movies Path: /pg/media/movies
 ##### TV Path: /pg/media/tv
-##### JF ServerUrl: 1.1.1.1
 ##### Version Tag: latest
 ##### Expose:
-
-# For NVIDIA Graphics Cards
 ##### NVIDIA Driver: all
 ##### NVIDIA Visible: all
-##### NVIDIA GPUS: all
+##### NVIDIA Graphics: all
