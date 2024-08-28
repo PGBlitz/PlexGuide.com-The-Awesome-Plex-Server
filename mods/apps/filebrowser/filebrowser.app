@@ -1,7 +1,7 @@
+#!/bin/bash
+
 deploy_container() {
-    # Ensure the appdata directory exists
-    mkdir -p "${appdata_path}"
-    
+
     # Create required files if they don't exist
     touch "${appdata_path}"/.filebrowser.json
     touch "${appdata_path}"/filebrowser.db
