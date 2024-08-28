@@ -3,7 +3,7 @@
 deploy_container() {
         
     docker run -ti \
-        --name="tdarrserver" \
+        --name="${app_name}" \
         -v "${appdata_path}/server":/app/server \
         -v "${appdata_path}/configs":/app/configs \
         -v "${appdata_path}/logs":/app/logs \
