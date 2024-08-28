@@ -27,10 +27,21 @@ apps_management() {
 
 # Updated Function to Reinstall PlexGuide
 reinstall_plexguide() {
-    # Download and execute the install script from the specified URL
-    curl -s https://raw.githubusercontent.com/plexguide/Installer/v11/install_menu.sh | bash
-    # Alternatively, you could use wget instead of curl:
-    # wget -qO- https://raw.githubusercontent.com/plexguide/Installer/v11/install_menu.sh | bash
+    # Define the destination path
+    INSTALL_SCRIPT_PATH="/pg/installer/install_menu.sh"
+
+    # Create the directory if it doesn't exist
+    mkdir -p /pg/installer
+
+    # Download the install script from the specified URL
+    curl -s https://raw.githubusercontent.com/plexguide/Installer/v11/install_menu.sh -o "$INSTALL_SCRIPT_PATH"
+
+    # Set ownership to 1000:1000 and make the script executable
+    chown 1000:1000 "$INSTALL_SCRIPT_PATH"
+    chmod +x "$INSTALL_SCRIPT_PATH"
+
+    # Execute the downloaded script
+    bash "$INSTALL_SCRIPT_PATH"
 
     # Execute the exit script
     bash /pg/scripts/menu_exit.sh
