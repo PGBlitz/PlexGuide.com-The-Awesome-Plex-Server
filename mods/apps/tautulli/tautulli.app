@@ -9,8 +9,6 @@ deploy_container() {
       -e TZ="${time_zone}" \
       -p "${expose}""${port_number}":8181 \
       -v "${appdata_path}":/config \
-      -v "${movies_path}":/movies \
-      -v "${clientdownload_path}":/downloads \
       --restart unless-stopped \
       lscr.io/linuxserver/tautulli:"${version_tag}"
     
