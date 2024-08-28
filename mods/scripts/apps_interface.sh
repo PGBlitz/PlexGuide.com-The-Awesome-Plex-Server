@@ -33,7 +33,7 @@ create_command_symlinks() {
 
             # Set ownership and permissions for the wrapper script
             sudo chown 1000:1000 "$wrapper_script"
-            sudo chmod 755 "$wrapper_script"
+            sudo chmod 755 "$wrapper_script"  # Ensure the script is executable
         fi
     done
 
