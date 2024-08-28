@@ -13,7 +13,7 @@ deploy_container() {
       -v "${icons_path}":/app/public/icons \
       -v "${configs_path}":/app/data/configs \
       --restart unless-stopped \
-      lscr.io/linuxserver/tautulli:"${version_tag}"
+      ghcr.io/ajnart/homarr:"${version_tag}"
     
     # display app deployment information
     appverify "$app_name"
