@@ -1,11 +1,10 @@
 #!/bin/bash
 
 ##### Port Number: 8263
-##### Server IP: 0.0.0.0
 ##### Time Zone: America/New_York
 ##### AppData Path: /pg/appdata/tdarr_node3
 ##### Media Path: /pg/media
 ##### Transcode Cache Path: /pg/transcode/tdarr_node3
-##### Internal Node: true
 ##### FFMPEG Version: 6
 ##### Version Tag: latest
+##### Expose:
