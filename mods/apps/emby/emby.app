@@ -11,7 +11,6 @@ if lspci | grep -i 'nvidia' &> /dev/null; then
       -e PUID=1000 \
       -e PGID=1000 \
       -e TZ="${time_zone}" \
-      -e JELLYFIN_PublishedServerUrl="${jf_serverurl}" \
       -p "${expose}""${port_number}":8096 \
       -v "${appdata_path}":/config \
       -v "${tv_path}":/data/tvshows \
