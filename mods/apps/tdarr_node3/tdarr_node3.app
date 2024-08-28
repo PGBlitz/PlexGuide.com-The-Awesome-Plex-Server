@@ -24,6 +24,7 @@ docker run -d \
     --log-opt max-size=10m \
     --log-opt max-file=5 \
     --restart unless-stopped \
+    $nvidia_options \
     ghcr.io/haveagitgat/tdarr:"${version_tag}"
 
     # display app deployment information

@@ -18,6 +18,7 @@ if lspci | grep -i 'nvidia' &> /dev/null; then
       -v "${movies_path}":/data/movies \
       --device=/dev/dri:/dev/dri \
       --restart unless-stopped \
+      $nvidia_options \
       lscr.io/linuxserver/jellyfin:"${version_tag}"
 
     # display app deployment information

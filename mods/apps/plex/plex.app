@@ -30,6 +30,7 @@ if lspci | grep -i 'nvidia' &> /dev/null; then
       --restart unless-stopped \
       --device=/dev/dri:/dev/dri \
       --restart unless-stopped \
+      $nvidia_options \
       lscr.io/linuxserver/plex:"${version_tag}"
 
     # display app deployment information

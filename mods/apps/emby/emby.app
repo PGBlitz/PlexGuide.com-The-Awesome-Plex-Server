@@ -19,6 +19,7 @@ if lspci | grep -i 'nvidia' &> /dev/null; then
       --device=/dev/dri:/dev/dri \
       --device=/dev/vchiq:/dev/vchiq \
       --restart unless-stopped \
+      $nvidia_options \
       lscr.io/linuxserver/emby:"${version_tag}"
 
     # display app deployment information
