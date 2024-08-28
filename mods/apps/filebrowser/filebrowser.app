@@ -2,6 +2,9 @@
 
 deploy_container() {
 
+    # Ensure the appdata directory exists
+    mkdir -p "${appdata_path}"
+    
     # Create required files if they don't exist
     touch "${appdata_path}"/.filebrowser.json
     touch "${appdata_path}"/filebrowser.db
@@ -19,6 +22,9 @@ deploy_container() {
       --restart unless-stopped \
       filebrowser/filebrowser:"${version_tag}"
     
-    # display app deployment information
+    # Display app deployment information
     appverify "$app_name"
 }
+
+# Call the function to deploy the container
+deploy_container
