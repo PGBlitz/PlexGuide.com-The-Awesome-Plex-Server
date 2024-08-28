@@ -3,9 +3,9 @@
 ##### Port Number: 8262
 ##### Server IP: 0.0.0.0
 ##### Time Zone: America/New_York
-##### AppData Path: /pg/appdata/tdarrnode2
+##### AppData Path: /pg/appdata/tdarr_node2
 ##### Media Path: /pg/media
-##### Transcode Cache Path: /pg/transcode/tdarrnode2
+##### Transcode Cache Path: /pg/transcode/tdarr_node2
 ##### Internal Node: true
 ##### FFMPEG Version: 6
 ##### Version Tag: latest
