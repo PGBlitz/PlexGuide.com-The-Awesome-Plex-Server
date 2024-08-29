@@ -31,15 +31,13 @@ display_and_prompt_user_repo() {
     echo -e "Current User/Repo: [${GREEN}${user}/${repo}${NC}]"
     echo ""  # Space for separation
 
-    read -p "Would you like to change the User/Repo? (y/n, or ${RED}Z${NC} to Exit): " change_choice
+    local random_pin=$(printf "%04d" $((RANDOM % 10000)))
+    read -p "$(echo -e "Enter ${RED}$random_pin${NC} to change User/Repo or ${RED}Z${NC} to Exit: ")" change_choice
 
     if [[ "${change_choice,,}" == "z" ]]; then
         echo "Exiting..."
         exit 0
-    elif [[ "${change_choice,,}" == "n" ]]; then
-        echo "No changes made. Exiting..."
-        exit 0
-    elif [[ "${change_choice,,}" == "y" ]]; then
+    elif [[ "$change_choice" == "$random_pin" ]]; then
         read -p "Enter new GitHub User: " new_user
         read -p "Enter new GitHub Repo: " new_repo
 
@@ -64,32 +62,11 @@ validate_github_repository() {
         echo -e "\n${GREEN}The GitHub repository is valid.${NC}"
         echo ""
         save_changes_to_config "$user" "$repo"
-        request_pin_to_continue "$user" "$repo"
+        clone_repository "$user" "$repo"
     else
         echo -e "${RED}Invalid GitHub repository. Please try again.${NC}"
         read -p "Press Enter to continue..."
     fi
-}
-
-# Function to request a 4-digit PIN to proceed
-request_pin_to_continue() {
-    local user="$1"
-    local repo="$2"
-    local random_pin=$(printf "%04d" $((RANDOM % 10000)))
-
-    while true; do
-        echo ""
-        read -p "$(echo -e "Type [${RED}${random_pin}${NC}] to proceed or [${RED}Z${NC}] to cancel: ")" response
-        if [[ "$response" == "$random_pin" ]]; then
-            clone_repository "$user" "$repo"
-            break
-        elif [[ "${response,,}" == "z" ]]; then
-            echo "Operation canceled. Exiting..."
-            exit 0
-        else
-            echo -e "${RED}Invalid input. Please try again.${NC}"
-        fi
-    done
 }
 
 # Function to save the new user and repo to the configuration file
@@ -110,7 +87,7 @@ save_changes_to_config() {
 
     echo -e "${GREEN}Updated configuration successfully!${NC}"
     echo ""
-    echo -e "New User/Repo: ${user}/${repo}"
+    echo -e "${ORANGE}NOTE:${NC} New User/Repo: ${user}/${repo}"
     echo -e "[Press ENTER] to continue..."
     read -r
 }
