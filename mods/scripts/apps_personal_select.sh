@@ -14,7 +14,7 @@ DEFAULT_REPO="apps"
 
 # Function to load personal apps configuration
 load_personal_apps_config() {
-    local config_file="/pg/config/personal_apps.cfg"
+    local config_file="/pg/personal_configs/personal_apps.cfg"  # Updated config path
     if [[ -f "$config_file" ]]; then
         source "$config_file"
     else
@@ -75,7 +75,7 @@ validate_github_repository() {
 save_changes_to_config() {
     local user="$1"
     local repo="$2"
-    local config_file="/pg/config/personal_apps.cfg"
+    local config_file="/pg/personal_configs/personal_apps.cfg"  # Updated config path
 
     if [[ ! -f "$config_file" ]]; then
         touch "$config_file"

@@ -10,7 +10,6 @@ app_name=$1
 
 # Function: redeploy_app
 redeploy_app() {
-
     # Check if lspci is installed; detect NVIDIA graphics cards
     if ! command -v lspci &> /dev/null; then
         if [ -f /etc/debian_version ]; then

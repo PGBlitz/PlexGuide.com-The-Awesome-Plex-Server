@@ -3,12 +3,11 @@
 # Function: parse_and_store_defaults
 parse_and_store_defaults() {
     local app_name="$1"
-    local raw_app_name="${app_name#p-}"  # Remove the p- prefix to get the raw app name
-    local app_defaults_path="/pg/p_apps/${raw_app_name}/${raw_app_name}.defaults"
-    local config_path="/pg/config/${app_name}.cfg"
+    local app_defaults_path="/pg/p_apps/${app_name}/${app_name}.defaults"
+    local config_path="/pg/personal_configs/${app_name}.cfg"
 
     # Debugging: Show the paths being used
-    echo "Using raw app name: $raw_app_name"
+    echo "Using app name: $app_name"
     echo "App defaults path: $app_defaults_path"
     echo "Config path: $config_path"
     read -p "Press Enter to continue..."
@@ -32,6 +31,6 @@ parse_and_store_defaults() {
     done < "$app_defaults_path"
 
     # Debugging: Confirm parsing and storing is complete
-    echo "Completed parsing defaults and storing in config for $raw_app_name"
+    echo "Completed parsing defaults and storing in config for $app_name"
     read -p "Press Enter to continue..."
 }

@@ -29,8 +29,8 @@ execute_dynamic_menu() {
     read -p "Press Enter to continue..."
 
     # Source the app script to load the menu functions
-    echo "Attempting to source: /pg/p_apps/${raw_app_name}/${raw_app_name}.menu"  # Debugging: Echo the source command
-    source /pg/p_apps/${raw_app_name}/${raw_app_name}.menu
+    echo "Attempting to source: /pg/p_apps/${app_name}/${app_name}.menu"  # Debugging: Echo the source command
+    source /pg/p_apps/${app_name}/${app_name}.menu
 
     # Get the selected option name (e.g., "Admin Token" or "Token")
     local selected_name=$(echo "${dynamic_menu_items[$((selected_option-1))]}" | awk '{$1=""; print $0}' | xargs)  # Trim spaces and get full menu item name
@@ -57,15 +57,13 @@ execute_dynamic_menu() {
 # Function: apps_interface
 apps_interface() {
     local app_name=$1
-    local raw_app_name=${app_name#p-}  # Remove the p- prefix temporarily for actual script and deployment
 
-    # Debugging: Show raw app name and app name
-    echo "Raw app name: $raw_app_name"
-    echo "App name with prefix: $app_name"
+    # Debugging: Show app name
+    echo "App name: $app_name"
     read -p "Press Enter to continue..."
 
-    local config_path="/pg/config/${app_name}.cfg"
-    local app_menu_path="/pg/p_apps/${raw_app_name}/${raw_app_name}.menu"
+    local config_path="/pg/personal_configs/${app_name}.cfg"
+    local app_menu_path="/pg/p_apps/${app_name}/${app_name}.menu"
     local dynamic_menu_items=()
     local dynamic_menu_count=1
 
@@ -98,7 +96,7 @@ apps_interface() {
 
         check_deployment_status  # Display the initial status
         echo ""
-        echo "D) Deploy $raw_app_name"
+        echo "D) Deploy $app_name"
         echo "K) Kill Docker Container"
         echo "C) Configuration Options"
 
@@ -115,9 +113,9 @@ apps_interface() {
         case ${choice,,} in  # Convert input to lowercase
             d)
                 # Debugging: Output deployment command
-                echo "Deploying app: $raw_app_name (command: /pg/scripts/apps_personal_deploy.sh $raw_app_name)"
+                echo "Deploying app: $app_name (command: /pg/scripts/apps_personal_deploy.sh $app_name)"
                 read -p "Press Enter to continue..."
-                bash /pg/scripts/apps_personal_deploy.sh "$raw_app_name"
+                bash /pg/scripts/apps_personal_deploy.sh "$app_name"
                 ;;
             k)
                 echo "Killing app: $app_name"

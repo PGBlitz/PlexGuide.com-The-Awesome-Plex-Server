@@ -1,8 +1,8 @@
 #!/bin/bash
 
-# Function to verify if the Docker container is running
+# Function to source configuration and functions for the app
 appsourcing() {
-    source "/pg/config/p-${app_name}.cfg"
+    source "/pg/personal_configs/${app_name}.cfg"  # Updated config path
     source /pg/p_apps/${app_name}/${app_name}.functions 2>/dev/null
 }
 
@@ -24,7 +24,7 @@ appverify() {
 # Function to source configuration from the config file
 configsource() {
     local app_name="$1"
-    config_path="/pg/config/p-${app_name}.cfg"
+    config_path="/pg/personal_configs/${app_name}.cfg"  # Updated config path
     if [ -f "$config_path" ]; then
         source "$config_path"
     else

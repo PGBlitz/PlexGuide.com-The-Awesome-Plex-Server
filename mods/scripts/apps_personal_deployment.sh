@@ -68,13 +68,10 @@ deploy_app() {
     local app_name=$1
     local app_script="/pg/scripts/apps_personal_interface.sh"
 
-    # Prefix the app name with 'p-' to indicate it's a personal app
-    local prefixed_app_name="p-$app_name"
-
     # Ensure the app script exists before proceeding
     if [[ -f "$app_script" ]]; then
-        # Execute the apps_interface.sh script with the prefixed app name as an argument
-        bash "$app_script" "$prefixed_app_name"
+        # Execute the apps_interface.sh script with the app name as an argument
+        bash "$app_script" "$app_name"
     else
         echo "Error: Interface script $app_script not found!"
         read -p "Press Enter to continue..."
