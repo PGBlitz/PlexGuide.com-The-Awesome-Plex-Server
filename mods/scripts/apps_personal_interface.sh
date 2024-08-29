@@ -115,9 +115,9 @@ apps_interface() {
         case ${choice,,} in  # Convert input to lowercase
             d)
                 # Debugging: Output deployment command
-                echo "Deploying app: $app_name (command: /pg/scripts/apps_personal_deploy.sh $app_name)"
+                echo "Deploying app: $raw_app_name (command: /pg/scripts/apps_personal_deploy.sh $raw_app_name)"
                 read -p "Press Enter to continue..."
-                bash /pg/scripts/apps_personal_deploy.sh "$app_name"
+                bash /pg/scripts/apps_personal_deploy.sh "$raw_app_name"
                 ;;
             k)
                 echo "Killing app: $app_name"
