@@ -41,10 +41,23 @@ check_plex_existence() {
     fi
 }
 
+# Function to create /pg/apps directory if it does not exist
+ensure_apps_directory() {
+    if [[ ! -d "/pg/apps" ]]; then
+        echo "Creating /pg/apps directory..."
+        mkdir -p /pg/apps
+        chown 1000:1000 /pg/apps
+        chmod +x /pg/apps
+    fi
+}
+
 # Main menu function
 main_menu() {
   while true; do
     clear
+
+    # Ensure /pg/apps directory exists with correct permissions
+    ensure_apps_directory
 
     # Get the number of running Docker apps, excluding cf_tunnel
     APP_COUNT=$(count_docker_apps)
@@ -70,7 +83,7 @@ main_menu() {
     else
         # If plex exists, show the options V and D
         echo -e "V) Apps [${ORANGE}View${NC}] [ $APP_COUNT ]"
-        echo -e "D) Apps [${GREEN}Deploy${NC}]"
+        echo -e "D) Apps [${ORANGE}Deploy${NC}]"
     fi
 
     echo "Z) Exit"
