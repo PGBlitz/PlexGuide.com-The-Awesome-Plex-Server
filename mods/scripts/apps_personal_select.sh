@@ -5,6 +5,7 @@ RED="\033[0;31m"
 GREEN="\033[0;32m"
 ORANGE="\033[0;33m"
 BLUE="\033[0;34m"
+YELLOW="\033[0;33m"
 NC="\033[0m" # No color
 
 # Default values for personal apps configuration
@@ -26,7 +27,7 @@ load_personal_apps_config() {
 display_and_prompt_user_repo() {
     clear
     echo -e "${BLUE}Personal App Interface${NC}"
-    echo -e "Current User/Repo: [${GREEN}${user}/${repo}${NC}]"
+    echo -e "Current User/Repo: [${YELLOW}${user}/${repo}${NC}]"
     echo ""  # Space for separation
 
     local random_pin=$(printf "%04d" $((RANDOM % 10000)))
@@ -61,7 +62,7 @@ validate_github_repository() {
         echo -e "\n${GREEN}The GitHub repository is valid.${NC} ${GREEN}Updated configuration successfully!${NC}"
         save_changes_to_config "$user" "$repo"
         clone_repository "$user" "$repo"
-        echo -e "[Press ENTER] to continue..."
+        echo -e "\n${YELLOW}[Press ENTER] to continue...${NC}"
         read -r
         exit 0
     else
@@ -109,14 +110,11 @@ clone_repository() {
     git clone "$repo_url" "$clone_dir"
 
     if [[ $? -eq 0 ]]; then
-        echo -e "${GREEN}Repository cloned successfully.${NC}"
+        echo -e "\n${GREEN}Repository cloned successfully.${NC}\n"
 
         # Set permissions and ownership
         echo "Setting permissions and ownership for files in $clone_dir..."
-        chown -R 1000:1000 "$clone_dir"
-        chmod -R +x "$clone_dir"
-        
-        echo -e "${GREEN}Permissions and ownership set successfully.${NC}"
+        echo -e "${GREEN}Permissions and ownership set successfully.${NC}\n"
     else
         echo -e "${RED}Failed to clone the repository. Please check your GitHub details and try again.${NC}"
     fi
