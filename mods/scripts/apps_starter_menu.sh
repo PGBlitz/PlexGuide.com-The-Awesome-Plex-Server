@@ -84,6 +84,7 @@ main_menu() {
         # If plex exists, show the options V and D
         echo -e "M) Apps: Manage [ $APP_COUNT ]"
         echo -e "D) Apps: Deploy"
+        echo -e "P) Apps: Personal"
     fi
 
     echo "Z) Exit"
@@ -93,7 +94,7 @@ main_menu() {
     read -p "Enter your choice: " choice
 
     case $choice in
-      V|v)
+      M|m)
         if [[ $plex_exists -eq 1 ]]; then
             echo -e "${RED}Option V is not available. Please select an App Store version first.${NC}"
             read -p "Press Enter to continue..."
@@ -111,6 +112,9 @@ main_menu() {
         ;;
       A|a)
         bash /pg/scripts/apps_version.sh
+        ;;
+      P|p)
+        bash /pg/scripts/apps_personal.sh
         ;;
       Z|z)
         exit 0
