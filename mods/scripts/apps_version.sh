@@ -64,13 +64,33 @@ handle_alpha_version() {
 
     # Clone the Alpha version
     echo "Cloning Alpha version from GitHub..."
-    git clone https://github.com/plexguide/Installer.git "$alpha_dir"
+    git clone https://github.com/plexguide/Apps.git "$alpha_dir"
+
+    # Clear the /pg/apps directory before moving files
+    echo "Clearing /pg/apps/ directory..."
+    rm -rf /pg/apps/*
+
+    # Move all contents from the alpha directory to /pg/apps
+    echo "Moving Alpha version files to /pg/apps"
+    mv "$alpha_dir/"* /pg/apps/
+
+    # Remove the LICENSE file from /pg/apps if it exists
+    if [[ -f "/pg/apps/LICENSE" ]]; then
+        rm "/pg/apps/LICENSE"
+        echo "Removed LICENSE file from /pg/apps"
+    fi
 
     # Set permissions and ownership
-    echo "Setting permissions and ownership for Alpha version files..."
-    chmod -R +x "$alpha_dir"
-    chown -R 1000:1000 "$alpha_dir"
-    echo "Alpha version setup complete."
+    echo "Setting permissions and ownership for files in /pg/apps..."
+    chmod -R +x /pg/apps/
+    chown -R 1000:1000 /pg/apps/
+
+    # Remove the alpha directory to clean up
+    rm -rf "$alpha_dir"
+    echo "Removed temporary directory: $alpha_dir"
+
+    # Update the version in the config file
+    update_config_version "Alpha"
 }
 
 # Function to download and extract the selected version
@@ -160,7 +180,7 @@ while true; do
     if [[ "${selected_version,,}" == "z" ]]; then
         echo "Installation canceled."
         exit 0
-    elif [[ "$selected_version" == "Alpha" ]]; then
+    elif [[ "${selected_version,,}" == "alpha" ]]; then
         echo "Alpha version selected."
         handle_alpha_version  # Call the function to handle the Alpha version
         echo -e "\nAlpha version setup complete. [Press ENTER] to continue..."
