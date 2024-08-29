@@ -48,7 +48,7 @@ while true; do
     read -p "Enter your choice: " choice
 
     case $choice in
-        M|m)
+        P|p)
             # Execute the script to view personal apps
             bash /pg/scripts/apps_personal_select.sh
             ;;
