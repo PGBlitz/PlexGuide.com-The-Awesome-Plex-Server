@@ -1,9 +1,0 @@
-#!/bin/bash
-
-##### Port Number: 8444
-##### Time Zone: America/New_York
-##### AppData Path: /pg/appdata/heimdall
-##### Version Tag: latest
-##### Expose:
-
-# END OF DEFAULTS
