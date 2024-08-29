@@ -120,4 +120,4 @@ apps_interface() {
 }
 
 # Run the interface with the provided app name
-apps_interface "$1"
+apps_interface "$app_name"
