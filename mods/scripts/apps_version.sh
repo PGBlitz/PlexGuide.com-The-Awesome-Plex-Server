@@ -37,7 +37,7 @@ get_current_version() {
 display_releases() {
     local current_version="$1"
     releases="$2"
-    echo -e "Apps Version Selector [${GREEN}${current_version}${NC}]"
+    echo -e "${BLUE}Apps Version Selector - [${GREEN}${current_version}${BLUE}]${NC}"
     echo ""
     echo -n -e "${RED}Alpha${NC} "
     line_length=0
@@ -50,6 +50,27 @@ display_releases() {
         line_length=$((line_length + ${#release} + 1))
     done
     echo "" # New line after displaying all releases
+}
+
+# Function to handle Alpha version download
+handle_alpha_version() {
+    local alpha_dir="/pg/tmp/alpha_apps"
+    
+    # Clear the directory if it exists
+    if [[ -d "$alpha_dir" ]]; then
+        echo "Clearing existing /pg/tmp/alpha_apps directory..."
+        rm -rf "$alpha_dir/*"
+    fi
+
+    # Clone the Alpha version
+    echo "Cloning Alpha version from GitHub..."
+    git clone https://github.com/plexguide/Installer.git "$alpha_dir"
+
+    # Set permissions and ownership
+    echo "Setting permissions and ownership for Alpha version files..."
+    chmod -R +x "$alpha_dir"
+    chown -R 1000:1000 "$alpha_dir"
+    echo "Alpha version setup complete."
 }
 
 # Function to download and extract the selected version
@@ -140,7 +161,11 @@ while true; do
         echo "Installation canceled."
         exit 0
     elif [[ "$selected_version" == "Alpha" ]]; then
-        selected_version="Alpha"  # Handling the special case for Alpha
+        echo "Alpha version selected."
+        handle_alpha_version  # Call the function to handle the Alpha version
+        echo -e "\nAlpha version setup complete. [Press ENTER] to continue..."
+        read -r
+        exit 0
     elif echo "$releases" | grep -q "^${selected_version}$"; then
         echo "Valid version selected: $selected_version"
     else
