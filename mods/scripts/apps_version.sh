@@ -37,8 +37,8 @@ get_current_version() {
 display_releases() {
     local current_version="$1"
     releases="$2"
-    echo -e "${BLUE}PG Application Store Selector${NC}"
-    echo -e "${ORANGE}- Current Version [${GREEN}${current_version}${ORANGE}]${NC}"
+    echo -e "${BLUE}Apps Version Selector- Current: ${NC}[${GREEN}${current_version}${NC}]"
+    echo ""
     echo -n -e "${RED}Alpha${NC} "
     line_length=0
     for release in $releases; do
@@ -129,7 +129,7 @@ while true; do
 
     display_releases "$current_version" "$releases"
     echo ""
-    read -p "Which version do you want to install? " selected_version
+    read -p "Which version do you want to install? (Type ${GREEN}[Z]${NC} to Exit): " selected_version
     echo ""
 
     if [[ "$selected_version" == "Alpha" ]]; then
