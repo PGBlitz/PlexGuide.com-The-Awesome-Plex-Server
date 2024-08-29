@@ -82,8 +82,8 @@ main_menu() {
         echo ""  # Blank line for separation
     else
         # If plex exists, show the options V and D
-        echo -e "V) Apps [${ORANGE}View${NC}] [ $APP_COUNT ]"
-        echo -e "D) Apps [${ORANGE}Deploy${NC}]"
+        echo -e "M) Apps: Manage [ $APP_COUNT ]"
+        echo -e "D) Apps: Deploy"
     fi
 
     echo "Z) Exit"
