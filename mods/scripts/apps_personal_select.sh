@@ -32,7 +32,7 @@ display_and_prompt_user_repo() {
     echo ""  # Space for separation
 
     local random_pin=$(printf "%04d" $((RANDOM % 10000)))
-    read -p "$(echo -e "Enter ${RED}$random_pin${NC} to change User/Repo or ${RED}Z${NC} to Exit: ")" change_choice
+    read -p "$(echo -e "Enter [${RED}$random_pin${NC}] to process or [${GREEN}Z${NC}] to Exit: ")" change_choice
 
     if [[ "${change_choice,,}" == "z" ]]; then
         echo "Exiting..."
@@ -55,7 +55,8 @@ validate_github_repository() {
     local api_url="https://api.github.com/repos/${user}/${repo}"
 
     echo ""
-    echo "Checking if the GitHub repository is valid: $api_url"
+    echo "Checking if the GitHub repository is valid:"
+    echo "$api_url"
     local response=$(curl -s -o /dev/null -w "%{http_code}" "$api_url")
 
     if [[ "$response" == "200" ]]; then
