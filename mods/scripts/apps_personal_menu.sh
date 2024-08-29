@@ -50,6 +50,10 @@ while true; do
     case $choice in
         M|m)
             # Execute the script to view personal apps
+            bash /pg/scripts/apps_personal_select.sh
+            ;;
+        M|m)
+            # Execute the script to view personal apps
             bash /pg/scripts/apps_personal_view.sh
             ;;
         D|d)
