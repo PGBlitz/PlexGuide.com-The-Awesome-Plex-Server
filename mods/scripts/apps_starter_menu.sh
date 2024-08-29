@@ -51,11 +51,11 @@ load_app_store_version() {
 # Function to display the App Store version with appropriate color
 display_app_store_version() {
     if [ "$appstore_version" == "Alpha" ]; then
-        echo -e "A) App Store Version: [${RED}$appstore_version${NC}]"
+        echo -e "A) App Store Version     [ ${ORANGE}$appstore_version${NC} ]"
     elif [ "$appstore_version" == "None" ]; then
-        echo -e "A) App Store Version: [${ORANGE}$appstore_version${NC}]"
+        echo -e "A) App Store Version     [ ${ORANGE}$appstore_version${NC} ]"
     else
-        echo -e "A) App Store Version: [${GREEN}$appstore_version${NC}]"
+        echo -e "A) App Store Version     [ ${ORANGE}$appstore_version${NC} ]"
     fi
 }
 
@@ -132,17 +132,17 @@ main_menu() {
     echo "Official Applications"
     # Display the App Store Version at the top
     display_app_store_version
-    echo -e "B) Official: Manage [ $APP_COUNT ]"
-    echo -e "C) Official: Deploy"
+    printf "B) Official: Manage       [ ${ORANGE}$APP_COUNT${NC} ]\n"
+    printf "C) Official: Deploy\n"
     echo ""  # Space for separation
 
     echo "Personal Applications"
-    echo -e "P) Personal: [${GREEN}${user}/${repo}${NC}]"
-    echo -e "Q) Personal: Manage [ $P_COUNT ]"
-    echo -e "R) Personal: Deploy Apps"
+    printf "P) Personal:              [ ${ORANGE}${user}/${repo}${NC} ]\n"
+    printf "Q) Personal: Manage       [ ${ORANGE}$P_COUNT${NC} ]\n"
+    printf "R) Personal: Deploy Apps\n"
     echo ""  # Space between options and input prompt
 
-    echo -e "Make a Selection or type [${RED}Z${NC}] to Exit: "
+    echo -e "Make a Selection or type [${GREEN}Z${NC}] to Exit: "
     
     # Prompt the user for input
     read -p "" choice
