@@ -54,7 +54,7 @@ apps_interface() {
     local app_name=$1
     local raw_app_name=${app_name#p-}  # Remove the p- prefix temporarily for actual script and deployment
 
-    local config_path="/pg/config/${app_name}.cfg"
+    local config_path="/pg/config/p-${app_name}.cfg"
     local app_menu_path="/pg/p_apps/${raw_app_name}/${raw_app_name}.menu" 2>/dev/null
     local dynamic_menu_items=()
     local dynamic_menu_count=1
