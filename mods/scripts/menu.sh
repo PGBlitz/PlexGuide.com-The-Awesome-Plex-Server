@@ -50,7 +50,7 @@ reinstall_plexguide() {
 
 # Function to exit the script
 menu_exit() {
-    bash /pg/scripts/menu_exit.sh
+    bash /pg/installer/menu_exit.sh
     exit 0  # Ensure the script exits after executing the menu_exit.sh
 }
 
