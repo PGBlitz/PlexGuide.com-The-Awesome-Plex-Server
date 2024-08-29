@@ -37,7 +37,7 @@ get_current_version() {
 display_releases() {
     local current_version="$1"
     releases="$2"
-    echo -e "${BLUE}Apps Version Selector- Current: ${NC}[${GREEN}${current_version}${NC}]"
+    echo -e "${BLUE}Apps Version Selector - [${GREEN}${current_version}${BLUE}]${NC}"
     echo ""
     echo -n -e "${RED}Alpha${NC} "
     line_length=0
@@ -129,10 +129,17 @@ while true; do
 
     display_releases "$current_version" "$releases"
     echo ""
-    read -p "Which version do you want to install? (Type ${GREEN}[Z]${NC} to Exit): " selected_version
+
+    # Prompt user with the updated question, using echo for colors
+    echo -e "Which Version to Install? (Type ${GREEN}[Z]${NC} to Exit): "
+    read -r selected_version
     echo ""
 
-    if [[ "$selected_version" == "Alpha" ]]; then
+    # Handle the user's input, including the exit option
+    if [[ "${selected_version,,}" == "z" ]]; then
+        echo "Installation canceled."
+        exit 0
+    elif [[ "$selected_version" == "Alpha" ]]; then
         selected_version="Alpha"  # Handling the special case for Alpha
     elif echo "$releases" | grep -q "^${selected_version}$"; then
         echo "Valid version selected: $selected_version"
