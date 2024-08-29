@@ -37,7 +37,7 @@ get_current_version() {
 display_releases() {
     local current_version="$1"
     releases="$2"
-    echo -e "${BLUE}Apps Version Selector - [${NC}${GREEN}${current_version}${NC}]${BLUE}${NC}"
+    echo -e "Apps Version Selector - [${GREEN}${current_version}${NC}]"
     echo "NOTE: Visit https://github.com/plexguide/Apps/releases for Information"
     echo ""
     echo -n -e "${RED}Alpha${NC} "
