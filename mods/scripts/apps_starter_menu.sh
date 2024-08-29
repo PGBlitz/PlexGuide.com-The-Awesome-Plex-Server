@@ -43,7 +43,6 @@ main_menu() {
         ;;
       *)
         clear
-        echo ""  # Blank line for separation
         echo "Incorrect selection. Please enter V, D, or Z."
         echo -e "[${GREEN}Press Enter${NC}] to continue..."
         read
