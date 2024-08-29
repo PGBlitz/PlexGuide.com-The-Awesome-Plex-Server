@@ -66,7 +66,7 @@ display_available_apps() {
 # Function to deploy the selected app
 deploy_app() {
     local app_name=$1
-    local app_script="/pg/scripts/apps_interface.sh"
+    local app_script="/pg/scripts/apps_personal_interface.sh"
 
     # Prefix the app name with 'p-' to indicate it's a personal app
     local prefixed_app_name="p-$app_name"
@@ -102,7 +102,7 @@ deployment_function() {
         
         echo "════════════════════════════════════════════════════════════════════════════════"
         # Prompt the user to enter an app name or exit
-        read -p "$(echo -e "Type [${GREEN}App${NC}] to Deploy or [${GREEN}Z${NC}] to Exit: ")" app_choice
+        read -p "$(echo -e "Type [${RED}App${NC}] to Deploy or [${GREEN}Z${NC}] to Exit: ")" app_choice
 
         app_choice=$(echo "$app_choice" | tr '[:upper:]' '[:lower:]')
 
