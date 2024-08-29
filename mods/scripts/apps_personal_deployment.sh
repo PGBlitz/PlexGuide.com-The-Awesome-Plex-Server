@@ -14,15 +14,15 @@ clear
 TERMINAL_WIDTH=80
 MAX_LINE_LENGTH=72
 
-# Function to create the /pg/personal directory if it doesn't exist
-create_personal_directory() {
-    [[ ! -d "/pg/personal" ]] && mkdir -p /pg/personal
+# Function to create the /pg/p_apps directory if it doesn't exist
+create_personal_apps_directory() {
+    [[ ! -d "/pg/p_apps" ]] && mkdir -p /pg/p_apps
 }
 
-# Function to list all available apps in /pg/personal, excluding those already running in Docker
+# Function to list all available apps in /pg/p_apps, excluding those already running in Docker
 list_available_apps() {
     # Use find to list only files and directories that do not start with a dot (.)
-    local all_apps=$(find /pg/personal -maxdepth 1 -mindepth 1 -type d -exec basename {} \; | grep -vE '^\.' | sort)
+    local all_apps=$(find /pg/p_apps -maxdepth 1 -mindepth 1 -type d -exec basename {} \; | grep -vE '^\.' | sort)
     local running_apps=$(docker ps --format '{{.Names}}' | sort)
 
     local available_apps=()
@@ -86,7 +86,7 @@ deployment_function() {
     while true; do
         clear
 
-        create_personal_directory
+        create_personal_apps_directory
 
         # Get the list of available apps
         APP_LIST=($(list_available_apps))
@@ -102,12 +102,12 @@ deployment_function() {
         
         echo "════════════════════════════════════════════════════════════════════════════════"
         # Prompt the user to enter an app name or exit
-        read -p "$(echo -e "Type [${GREEN}App${NC}] to Deploy or [${RED}Exit${NC}]: ")" app_choice
+        read -p "$(echo -e "Type [${GREEN}App${NC}] to Deploy or [${GREEN}Z${NC}] to Exit: ")" app_choice
 
         app_choice=$(echo "$app_choice" | tr '[:upper:]' '[:lower:]')
 
-        # Check if the user input is "exit"
-        if [[ "$app_choice" == "exit" ]]; then
+        # Check if the user input is "z"
+        if [[ "$app_choice" == "z" ]]; then
             exit 0
         elif [[ " ${APP_LIST[@]} " =~ " $app_choice " ]]; then
             deploy_app "$app_choice"
