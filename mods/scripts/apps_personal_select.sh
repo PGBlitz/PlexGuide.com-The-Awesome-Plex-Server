@@ -61,6 +61,9 @@ validate_github_repository() {
         echo -e "\n${GREEN}The GitHub repository is valid.${NC} ${GREEN}Updated configuration successfully!${NC}"
         save_changes_to_config "$user" "$repo"
         clone_repository "$user" "$repo"
+        echo -e "[Press ENTER] to continue..."
+        read -r
+        exit 0
     else
         echo -e "${RED}Invalid GitHub repository. Please try again.${NC}"
         read -p "Press Enter to continue..."
