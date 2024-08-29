@@ -19,16 +19,19 @@ create_apps_directory() {
     [[ ! -d "/pg/apps" ]] && mkdir -p /pg/apps
 }
 
-# Function to list all available apps in /pg/apps, excluding those already running in Docker
+# Function to list all available official apps in /pg/apps, excluding those already running in Docker
 list_available_apps() {
     local all_apps=$(ls -1 /pg/apps | sort)
     local running_apps=$(docker ps --format '{{.Names}}' | sort)
-
+    
     local available_apps=()
     for app in $all_apps; do
-        # Only exclude those that are already running
-        if ! echo "$running_apps" | grep -i -w "$app" >/dev/null; then
-            available_apps+=("$app")
+        # Check if the app name matches a folder in /pg/apps
+        if [[ -d "/pg/apps/$app" ]]; then
+            # Only exclude those that are already running
+            if ! echo "$running_apps" | grep -i -w "$app" >/dev/null; then
+                available_apps+=("$app")
+            fi
         fi
     done
 
@@ -84,7 +87,7 @@ deployment_function() {
 
         create_apps_directory
 
-        # Get the list of available apps
+        # Get the list of available apps, ensuring they match official app folders
         APP_LIST=($(list_available_apps))
 
         echo -e "${RED}PG: Deployable Apps${NC}"
@@ -98,12 +101,12 @@ deployment_function() {
         
         echo "════════════════════════════════════════════════════════════════════════════════"
         # Prompt the user to enter an app name or exit
-        read -p "$(echo -e "Type [${GREEN}App${NC}] to Deploy or [${RED}Exit${NC}]: ")" app_choice
+        read -p "$(echo -e "Type [${RED}App${NC}] to Deploy or [${GREEN}Z${NC}] to Exit: ")" app_choice
 
         app_choice=$(echo "$app_choice" | tr '[:upper:]' '[:lower:]')
 
-        # Check if the user input is "exit"
-        if [[ "$app_choice" == "exit" ]]; then
+        # Check if the user input is "z"
+        if [[ "$app_choice" == "z" ]]; then
             exit 0
         elif [[ " ${APP_LIST[@]} " =~ " $app_choice " ]]; then
             deploy_app "$app_choice"
