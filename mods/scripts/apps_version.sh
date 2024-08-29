@@ -8,7 +8,7 @@ NC="\033[0m" # No color
 
 # Function to fetch releases from GitHub
 fetch_releases() {
-    curl -s https://api.github.com/repos/plexguide/Apps/releases | jq -r '.[].tag_name' | grep -E '^11\.0\.[0-9]{4}$' | sort -r
+    curl -s https://api.github.com/repos/plexguide/Apps/releases | jq -r '.[].tag_name' | grep -E '^11\.[0-9]{4}$' | sort -r
 }
 
 # Function to display releases
