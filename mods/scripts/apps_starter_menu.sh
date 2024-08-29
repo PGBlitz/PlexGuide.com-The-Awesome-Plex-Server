@@ -7,9 +7,32 @@ BLUE="\033[0;34m"
 ORANGE="\033[0;33m"
 NC="\033[0m" # No color
 
-# Function to count running Docker containers, excluding cf_tunnel
+# Function to count running Docker containers that match official app names in /pg/apps
 count_docker_apps() {
-    docker ps --format '{{.Names}}' | grep -v 'cf_tunnel' | wc -l
+    local all_running_apps=$(docker ps --format '{{.Names}}' | grep -v 'cf_tunnel')
+    local official_count=0
+
+    for app in $all_running_apps; do
+        if [[ -d "/pg/apps/$app" ]]; then
+            ((official_count++))
+        fi
+    done
+
+    echo $official_count
+}
+
+# Function to count running Docker containers that match personal app names in /pg/p_apps
+count_personal_docker_apps() {
+    local all_running_apps=$(docker ps --format '{{.Names}}' | grep -v 'cf_tunnel')
+    local personal_count=0
+
+    for app in $all_running_apps; do
+        if [[ -d "/pg/p_apps/$app" ]]; then
+            ((personal_count++))
+        fi
+    done
+
+    echo $personal_count
 }
 
 # Load the App Store version from the config file
@@ -62,6 +85,9 @@ main_menu() {
     # Get the number of running Docker apps, excluding cf_tunnel
     APP_COUNT=$(count_docker_apps)
 
+    # Get the number of running personal Docker apps, excluding cf_tunnel
+    P_COUNT=$(count_personal_docker_apps)
+
     # Load the App Store version
     load_app_store_version
 
@@ -77,14 +103,14 @@ main_menu() {
     echo ""  # Space for separation
 
     if [[ $plex_exists -eq 1 ]]; then
-        # If plex doesn't exist, disable V and D options and show a warning
+        # If plex doesn't exist, disable M and D options and show a warning
         echo -e "${RED}You need to select an App Store version.${NC}"
         echo ""  # Blank line for separation
     else
-        # If plex exists, show the options V and D
+        # If plex exists, show the options M and D
         echo -e "M) Apps: Manage [ $APP_COUNT ]"
         echo -e "D) Apps: Deploy"
-        echo -e "P) Apps: Personal"
+        echo -e "P) Apps: Personal [ $P_COUNT ]"
     fi
 
     echo "Z) Exit"
@@ -96,7 +122,7 @@ main_menu() {
     case $choice in
       M|m)
         if [[ $plex_exists -eq 1 ]]; then
-            echo -e "${RED}Option V is not available. Please select an App Store version first.${NC}"
+            echo -e "${RED}Option M is not available. Please select an App Store version first.${NC}"
             read -p "Press Enter to continue..."
         else
             bash /pg/scripts/running.sh
@@ -120,7 +146,7 @@ main_menu() {
         exit 0
         ;;
       *)
-        echo "Invalid option, please try again."
+        echo -e "${RED}Invalid option, please try again.${NC}"
         read -p "Press Enter to continue..."
         ;;
     esac
