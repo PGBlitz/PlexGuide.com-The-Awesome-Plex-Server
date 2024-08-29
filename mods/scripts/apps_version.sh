@@ -51,6 +51,12 @@ download_and_extract() {
     unzip -o /pg/tmp/release.zip -d /pg/tmp/
     local extracted_folder="/pg/tmp/Apps-${selected_version}"
 
+    # Debugging step: list the contents of /pg/tmp and pause
+    echo -e "\nContents of /pg/tmp after extraction:"
+    ls -l /pg/tmp
+    echo -e "\nPlease check the contents of /pg/tmp. Press [Enter] to continue..."
+    read -r
+
     if [[ -d "$extracted_folder" ]]; then
         echo "Found extracted folder: $extracted_folder"
 
