@@ -114,7 +114,7 @@ main_menu() {
         bash /pg/scripts/apps_version.sh
         ;;
       P|p)
-        bash /pg/scripts/apps_personal.sh
+        bash /pg/scripts/apps_personal_menu.sh
         ;;
       Z|z)
         exit 0
