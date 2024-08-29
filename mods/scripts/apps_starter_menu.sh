@@ -17,7 +17,7 @@ load_app_store_version() {
     if [ -f /pg/config/appstore_version.cfg ]; then
         source /pg/config/appstore_version.cfg
     else
-        appstore_version="Alpha"
+        appstore_version="None"
     fi
 }
 
@@ -25,8 +25,19 @@ load_app_store_version() {
 display_app_store_version() {
     if [ "$appstore_version" == "Alpha" ]; then
         echo -e "A) App Store Version: [${RED}$appstore_version${NC}]"
+    elif [ "$appstore_version" == "None" ]; then
+        echo -e "A) App Store Version: [${ORANGE}$appstore_version${NC}]"
     else
         echo -e "A) App Store Version: [${GREEN}$appstore_version${NC}]"
+    fi
+}
+
+# Function to check if the plex app directory exists
+check_plex_existence() {
+    if [[ ! -d "/pg/apps/plex" ]]; then
+        return 1  # plex does not exist
+    else
+        return 0  # plex exists
     fi
 }
 
@@ -41,12 +52,27 @@ main_menu() {
     # Load the App Store version
     load_app_store_version
 
+    # Check if the plex app directory exists
+    check_plex_existence
+    local plex_exists=$?
+
     echo -e "${BLUE}PG: Docker Apps${NC}"
     echo ""  # Blank line for separation
-    # Display the main menu options
-    echo -e "V) Apps [${ORANGE}View${NC}] [ $APP_COUNT ]"
-    echo -e "D) Apps [${GREEN}Deploy${NC}]"
-    display_app_store_version  # Display App Store Version with appropriate color
+
+    # Display the App Store Version at the top
+    display_app_store_version
+    echo ""  # Space for separation
+
+    if [[ $plex_exists -eq 1 ]]; then
+        # If plex doesn't exist, disable V and D options and show a warning
+        echo -e "${RED}You need to select an App Store version.${NC}"
+        echo ""  # Blank line for separation
+    else
+        # If plex exists, show the options V and D
+        echo -e "V) Apps [${ORANGE}View${NC}] [ $APP_COUNT ]"
+        echo -e "D) Apps [${GREEN}Deploy${NC}]"
+    fi
+
     echo "Z) Exit"
     echo ""  # Space between options and input prompt
 
@@ -55,10 +81,20 @@ main_menu() {
 
     case $choice in
       V|v)
-        bash /pg/scripts/running.sh
+        if [[ $plex_exists -eq 1 ]]; then
+            echo -e "${RED}Option V is not available. Please select an App Store version first.${NC}"
+            read -p "Press Enter to continue..."
+        else
+            bash /pg/scripts/running.sh
+        fi
         ;;
       D|d)
-        bash /pg/scripts/deployment.sh
+        if [[ $plex_exists -eq 1 ]]; then
+            echo -e "${RED}Option D is not available. Please select an App Store version first.${NC}"
+            read -p "Press Enter to continue..."
+        else
+            bash /pg/scripts/deployment.sh
+        fi
         ;;
       A|a)
         bash /pg/scripts/apps_version.sh
@@ -67,7 +103,8 @@ main_menu() {
         exit 0
         ;;
       *)
-        echo ""
+        echo "Invalid option, please try again."
+        read -p "Press Enter to continue..."
         ;;
     esac
   done
