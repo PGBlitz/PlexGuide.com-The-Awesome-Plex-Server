@@ -19,7 +19,7 @@ redeploy_app() {
     fi
 
     echo "Deploying $app_name"
-    source /pg/scripts/apps_support.sh "$app_name" && appsourcing
+    source /pg/scripts/apps_personal_support.sh "$app_name" && appsourcing
     source "/pg/apps/$app_name/$app_name.app"  # Source the app script to load functions
     deploy_container "$app_name"  # Call the deploy_container function
 }
