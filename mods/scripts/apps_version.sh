@@ -4,7 +4,18 @@
 RED="\033[0;31m"
 GREEN="\033[0;32m"
 ORANGE="\033[0;33m"
+BLUE="\033[0;34m"
 NC="\033[0m" # No color
+
+# Function to check and install unzip if not present
+check_and_install_unzip() {
+    if ! command -v unzip &> /dev/null; then
+        echo -e "\n${RED}unzip is missing. Installing unzip...${NC}\n"
+        sudo apt-get update
+        sudo apt-get install -y unzip
+        echo -e "\nProceeding...\n"
+    fi
+}
 
 # Function to fetch releases from GitHub
 fetch_releases() {
@@ -14,21 +25,16 @@ fetch_releases() {
 # Function to display releases
 display_releases() {
     releases="$1"
-    echo -e "${RED}Alpha${NC}"
-    echo ""
+    echo -e "${BLUE}PG Application Store Selector${NC}"
+    echo ""  # Blank line for separation
     line_length=0
-    first_release=true
+    echo -n -e "${RED}Alpha${NC} "
     for release in $releases; do
         if (( line_length + ${#release} + 1 > 80 )); then
             echo ""
             line_length=0
         fi
-        if $first_release; then
-            echo -n -e "${ORANGE}$release${NC} "
-            first_release=false
-        else
-            echo -n "$release "
-        fi
+        echo -n -e "${ORANGE}$release${NC} "
         line_length=$((line_length + ${#release} + 1))
     done
     echo "" # New line after displaying all releases
@@ -109,6 +115,7 @@ while true; do
     if [[ "$selected_version" == "Alpha" ]]; then
         selected_version="Alpha"  # Handling the special case for Alpha
     elif echo "$releases" | grep -q "^${selected_version}$"; then
+        echo ""
         echo "Valid version selected: $selected_version"
     else
         echo "Invalid version. Please select a valid version from the list."
@@ -117,8 +124,10 @@ while true; do
 
     random_pin=$(printf "%04d" $((RANDOM % 10000)))
     while true; do
+        echo ""
         read -p "$(echo -e "Type [${RED}${random_pin}${NC}] to proceed or [${GREEN}Z${NC}] to cancel: ")" response
         if [[ "$response" == "$random_pin" ]]; then
+            check_and_install_unzip
             if download_and_extract "$selected_version"; then
                 update_config_version "$selected_version"
                 echo "Version update successful!"
