@@ -26,13 +26,11 @@ load_personal_apps_config() {
 display_and_prompt_user_repo() {
     clear
     echo -e "${BLUE}Personal App Interface${NC}"
-    echo ""  # Blank line for separation
-
     echo -e "Current User/Repo: [${GREEN}${user}/${repo}${NC}]"
     echo ""  # Space for separation
 
     local random_pin=$(printf "%04d" $((RANDOM % 10000)))
-    read -p "$(echo -e "Enter [${RED}$random_pin${NC}] to process or [${GREEN}Z${NC}] to Exit: ")" change_choice
+    read -p "$(echo -e "Enter [${RED}$random_pin${NC}] to proceed or [${GREEN}Z${NC}] to Exit: ")" change_choice
 
     if [[ "${change_choice,,}" == "z" ]]; then
         echo "Exiting..."
@@ -60,8 +58,7 @@ validate_github_repository() {
     local response=$(curl -s -o /dev/null -w "%{http_code}" "$api_url")
 
     if [[ "$response" == "200" ]]; then
-        echo -e "\n${GREEN}The GitHub repository is valid.${NC}"
-        echo ""
+        echo -e "\n${GREEN}The GitHub repository is valid.${NC} ${GREEN}Updated configuration successfully!${NC}"
         save_changes_to_config "$user" "$repo"
         clone_repository "$user" "$repo"
     else
@@ -86,11 +83,7 @@ save_changes_to_config() {
     echo "user=$user" >> "$config_file"
     echo "repo=$repo" >> "$config_file"
 
-    echo -e "${GREEN}Updated configuration successfully!${NC}"
-    echo ""
     echo -e "${ORANGE}NOTE:${NC} New User/Repo: ${user}/${repo}"
-    echo -e "[Press ENTER] to continue..."
-    read -r
 }
 
 # Function to clone the GitHub repository
@@ -124,8 +117,6 @@ clone_repository() {
     else
         echo -e "${RED}Failed to clone the repository. Please check your GitHub details and try again.${NC}"
     fi
-    echo -e "[Press ENTER] to continue..."
-    read -r
 }
 
 # Main logic
