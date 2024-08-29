@@ -38,8 +38,7 @@ display_releases() {
     local current_version="$1"
     releases="$2"
     echo -e "${BLUE}PG Application Store Selector${NC}"
-    echo ""  # Blank line for separation
-    echo -e "${ORANGE}- Current Version [${current_version}]${NC}"
+    echo -e "${ORANGE}- Current Version [${GREEN}${current_version}${ORANGE}]${NC}"
     echo -n -e "${RED}Alpha${NC} "
     line_length=0
     for release in $releases; do
@@ -131,6 +130,7 @@ while true; do
     display_releases "$current_version" "$releases"
     echo ""
     read -p "Which version do you want to install? " selected_version
+    echo ""
 
     if [[ "$selected_version" == "Alpha" ]]; then
         selected_version="Alpha"  # Handling the special case for Alpha
@@ -143,6 +143,7 @@ while true; do
 
     random_pin=$(printf "%04d" $((RANDOM % 10000)))
     while true; do
+        echo ""
         read -p "$(echo -e "Type [${RED}${random_pin}${NC}] to proceed or [${GREEN}Z${NC}] to cancel: ")" response
         if [[ "$response" == "$random_pin" ]]; then
             check_and_install_unzip
