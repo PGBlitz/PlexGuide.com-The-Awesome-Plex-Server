@@ -43,8 +43,6 @@ main_menu() {
         ;;
       *)
         echo ""
-        echo "Incorrect selection."
-        read
         ;;
     esac
   done
