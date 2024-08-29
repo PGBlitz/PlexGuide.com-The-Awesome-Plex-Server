@@ -29,7 +29,7 @@ main_menu() {
     echo ""  # Space between options and input prompt
 
     # Prompt the user for input
-    read -p "Enter your choice [V/D/Z]: " choice
+    read -p "Enter your choice: " choice
 
     case $choice in
       V|v)
@@ -42,9 +42,8 @@ main_menu() {
         exit 0
         ;;
       *)
-        clear
-        echo "Incorrect selection. Please enter V, D, or Z."
-        echo -e "[${GREEN}Press Enter${NC}] to continue..."
+        echo ""
+        echo "Incorrect selection."
         read
         ;;
     esac
