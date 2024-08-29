@@ -56,10 +56,10 @@ display_releases() {
 handle_alpha_version() {
     local alpha_dir="/pg/tmp/alpha_apps"
     
-    # Clear the directory if it exists
+    # Delete the directory outright if it exists
     if [[ -d "$alpha_dir" ]]; then
-        echo "Clearing existing /pg/tmp/alpha_apps directory..."
-        rm -rf "$alpha_dir/*"
+        echo "Deleting existing /pg/tmp/alpha_apps directory..."
+        rm -rf "$alpha_dir"
     fi
 
     # Clone the Alpha version
