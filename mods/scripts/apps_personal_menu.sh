@@ -28,7 +28,8 @@ display_personal_menu() {
     echo -e "${BLUE}Personal App Interface [$status]${NC}"
     echo ""  # Blank line for separation
 
-    echo -e "P) Personal [${GREEN}${user}/${repo}${NC}]"
+    echo -e "P) Personal: [${GREEN}${user}/${repo}${NC}]"
+    echo ""
     echo -e "M) Personal: Manage Apps"
     echo -e "D) Personal: Deploy Apps"
     echo -e "Z) Exit"
