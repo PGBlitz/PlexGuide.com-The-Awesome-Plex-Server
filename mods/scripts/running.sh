@@ -14,9 +14,19 @@ clear
 TERMINAL_WIDTH=80
 MAX_LINE_LENGTH=72
 
-# Function to list running Docker apps, excluding cf_tunnel
+# Function to list running Docker apps that match official app folders in /pg/apps
 list_running_docker_apps() {
-    docker ps --format '{{.Names}}' | grep -v 'cf_tunnel' | sort
+    local all_running_apps=$(docker ps --format '{{.Names}}' | grep -v 'cf_tunnel' | sort)
+    local official_apps=()
+
+    for app in $all_running_apps; do
+        # Only add the app if it matches a directory in /pg/apps
+        if [[ -d "/pg/apps/$app" ]]; then
+            official_apps+=("$app")
+        fi
+    done
+
+    echo "${official_apps[@]}"
 }
 
 # Function to display running Docker apps in a formatted way
@@ -66,7 +76,7 @@ running_function() {
     while true; do
         clear
 
-        # Get the list of running Docker apps, excluding cf_tunnel
+        # Get the list of running Docker apps that match official app folders
         APP_LIST=($(list_running_docker_apps))
 
         if [[ ${#APP_LIST[@]} -eq 0 ]]; then
@@ -80,7 +90,7 @@ running_function() {
         echo -e "${RED}PG: Running Apps [View | Edit]${NC}"
         echo ""  # Blank line for separation
 
-        # Display the list of running Docker apps, excluding cf_tunnel
+        # Display the list of running Docker apps that match official app folders
         display_running_apps "${APP_LIST[@]}"
         
         echo "════════════════════════════════════════════════════════════════════════════════"
