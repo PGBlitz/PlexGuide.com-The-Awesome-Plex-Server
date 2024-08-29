@@ -58,7 +58,7 @@ while true; do
             ;;
         D|d)
             # Execute the script to deploy personal apps
-            bash /pg/scripts/apps_personal_deploy.sh
+            bash /pg/scripts/apps_personal_deployment.sh
             ;;
         Z|z)
             # Exit the script
