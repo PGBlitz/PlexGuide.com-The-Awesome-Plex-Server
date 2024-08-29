@@ -11,6 +11,18 @@ NC="\033[0m" # No color
 DEFAULT_USER="Admin9705"
 DEFAULT_REPO="apps"
 
+# Function to create /pg/personal_configs/ directory if it doesn't exist
+setup_personal_configs_directory() {
+    local config_dir="/pg/personal_configs"
+    if [[ ! -d "$config_dir" ]]; then
+        echo "Creating $config_dir directory..."
+        mkdir -p "$config_dir"
+        chown 1000:1000 "$config_dir"
+        chmod +x "$config_dir"
+        echo -e "${GREEN}Directory $config_dir created and permissions set.${NC}"
+    fi
+}
+
 # Function to load personal apps configuration
 load_personal_apps_config() {
     local config_file="/pg/personal_configs/personal_apps.cfg"  # Updated config path
@@ -37,6 +49,8 @@ display_personal_menu() {
 }
 
 # Main logic
+setup_personal_configs_directory  # Ensure the personal_configs directory exists
+
 while true; do
     # Load the personal apps configuration
     load_personal_apps_config
