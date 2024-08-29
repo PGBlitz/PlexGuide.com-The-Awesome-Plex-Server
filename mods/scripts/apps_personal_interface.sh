@@ -95,7 +95,7 @@ apps_interface() {
         case ${choice,,} in  # Convert input to lowercase
             d)
                 # Remove the p- prefix for deployment but pass the full app name with p- for config and logging
-                bash /pg/scripts/apps_deploy.sh "$app_name"
+                bash /pg/scripts/apps_personal_deploy.sh "$app_name"
                 ;;
             k)
                 bash /pg/scripts/apps_kill_remove.sh "$app_name"
