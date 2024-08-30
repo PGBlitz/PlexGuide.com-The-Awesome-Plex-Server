@@ -7,7 +7,7 @@ NC="\033[0m" # No color
 
 # Arguments
 app_name=$1
-script_type=$2  # 'personal' for apps_personal_support, 'official' for apps_support
+script_type=$2  # personal or official
 
 # Function: redeploy_app
 redeploy_app() {
