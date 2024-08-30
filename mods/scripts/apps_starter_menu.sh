@@ -134,8 +134,8 @@ main_menu() {
         printf "R) Personal: Deploy Apps\n"
         echo ""  # Space between options and input prompt
     else
-        echo -e "${RED}Please select an App Store version by choosing option A.${NC}"
         echo ""  # Space for separation
+        echo -e "${RED}Please select an App Store version by choosing option A.${NC}"
     fi
 
     # Display the prompt with colors and capture user input
