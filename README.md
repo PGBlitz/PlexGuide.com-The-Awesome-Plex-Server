@@ -34,7 +34,7 @@ sudo apt-get update && sudo apt-get install -y curl && bash <(curl -s https://ra
     </tr>
     <tr>
       <td align="center"><img src="https://i.imgur.com/goozBTI.jpeg" alt="Plex Example" width="500"></td>
-      <td align="center"><img src="https://i.imgur.com/WkEyL9D.jpeg" alt="Plex Example" width="500"></td>
+      <td align="center"><img src="https://i.imgur.com/dlhxRNs.jpeg" alt="Plex Example" width="500"></td>
     </tr>
   </table>
 </p>
