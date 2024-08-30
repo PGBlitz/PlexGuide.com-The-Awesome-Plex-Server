@@ -8,8 +8,8 @@ BLUE="\033[0;34m"
 NC="\033[0m" # No color
 
 # Default values for personal apps configuration
-DEFAULT_USER="Admin9705"
-DEFAULT_REPO="apps"
+DEFAULT_USER="plexguide"
+DEFAULT_REPO="AppsFork"
 
 # Function to count running Docker containers that match official app names in /pg/apps
 count_docker_apps() {
