@@ -1,16 +1,26 @@
 #!/bin/bash
 
+# Combined script for official and personal configuration menus
+
 # ANSI color codes
 RED="\033[0;31m"
 GREEN="\033[0;32m"
 NC="\033[0m" # No color
 
+# Arguments
 app_name=$1
-config_path="/pg/config/${app_name}.cfg"
-app_path="/pg/apps/${app_name}/${app_name}.app"
+config_type=$2  # 'personal' for personal configurations, 'official' for official configurations
 
-# Source the default and restore scripts
-source /pg/scripts/apps_restore_default_settings.sh
+# Determine paths based on config type
+if [[ "$config_type" == "personal" ]]; then
+    config_path="/pg/personal_configs/${app_name}.cfg"
+    app_path="/pg/p_apps/${app_name}/${app_name}.app"
+    source /pg/scripts/apps_personal_restore_default_settings.sh
+else
+    config_path="/pg/config/${app_name}.cfg"
+    app_path="/pg/apps/${app_name}/${app_name}.app"
+    source /pg/scripts/apps_restore_default_settings.sh
+fi
 
 # Function: get_or_set_port_number
 get_or_set_port_number() {
@@ -199,14 +209,14 @@ while true; do
             ;;
         e)
             if grep -q '^port_number=' "$config_path"; then
-                bash /pg/scripts/apps_expose.sh "$app_name" "official"
+                bash /pg/scripts/apps_expose.sh "$app_name" "$config_type"
             else
                 clear
                 continue
             fi
             ;;
         c)
-            bash /pg/scripts/apps_config_edit.sh "$app_name" "official"
+            bash /pg/scripts/apps_config_edit.sh "$app_name" "$config_type"
             ;;
         r)
             reset_config_file "$app_name"

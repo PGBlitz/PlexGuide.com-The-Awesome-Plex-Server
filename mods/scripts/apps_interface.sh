@@ -98,7 +98,7 @@ apps_interface() {
                 bash /pg/scripts/apps_kill_remove.sh "$app_name"
                 ;;
             c)
-                bash /pg/scripts/apps_config_menu.sh "$app_name"
+                bash /pg/scripts/apps_config_menu.sh "$app_name" "official"
                 ;;
             [0-9]*)
                 if [[ $choice -le ${#dynamic_menu_items[@]} ]]; then
