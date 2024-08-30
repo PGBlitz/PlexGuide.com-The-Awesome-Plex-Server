@@ -125,7 +125,7 @@ apps_interface() {
             c)
                 echo "Opening configuration for app: $app_name"
                 read -p "Press Enter to continue..."
-                bash /pg/scripts/apps_config_menu.sh "$app_name"
+                bash /pg/scripts/apps_personal_config_menu.sh "$app_name"
                 ;;
             [0-9]*)
                 if [[ $choice -le ${#dynamic_menu_items[@]} ]]; then
