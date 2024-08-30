@@ -51,11 +51,11 @@ load_app_store_version() {
 # Function to display the App Store version with appropriate color
 display_app_store_version() {
     if [ "$appstore_version" == "Alpha" ]; then
-        printf "A) App Store Version     [ %s ]\n" "$appstore_version"
+        printf "A) App Store Version     [%s]\n" "$appstore_version"
     elif [ "$appstore_version" == "None" ]; then
-        printf "A) App Store Version     [ %s ]\n" "$appstore_version"
+        printf "A) App Store Version     [%s]\n" "$appstore_version"
     else
-        printf "A) App Store Version     [ %s ]\n" "$appstore_version"
+        printf "A) App Store Version     [%s]\n" "$appstore_version"
     fi
 }
 
@@ -132,13 +132,13 @@ main_menu() {
     echo -e "${ORANGE}Official Applications${NC}"
     # Display the App Store Version at the top
     display_app_store_version
-    printf "B) Official: Manage       [ %s ]\n" "$APP_COUNT"
+    printf "B) Official: Manage       [%d]\n" "$APP_COUNT"
     printf "C) Official: Deploy\n"
     echo ""  # Space for separation
 
     echo -e "${RED}Personal Applications${NC}"
-    printf "P) Personal:              [ %s/%s ]\n" "$user" "$repo"
-    printf "Q) Personal: Manage       [ %s ]\n" "$P_COUNT"
+    printf "P) Personal:              [%s/%s]\n" "$user" "$repo"
+    printf "Q) Personal: Manage       [%d]\n" "$P_COUNT"
     printf "R) Personal: Deploy Apps\n"
     echo ""  # Space between options and input prompt
 
