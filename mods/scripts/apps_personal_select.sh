@@ -9,8 +9,8 @@ YELLOW="\033[0;33m"
 NC="\033[0m" # No color
 
 # Default values for personal apps configuration
-DEFAULT_USER="Admin9705"
-DEFAULT_REPO="apps"
+DEFAULT_USER="None"
+DEFAULT_REPO="None"
 
 # Function to load personal apps configuration
 load_personal_apps_config() {
@@ -37,6 +37,8 @@ display_and_prompt_user_repo() {
         echo "Exiting..."
         exit 0
     elif [[ "$change_choice" == "$random_pin" ]]; then
+        # Show testing hint
+        echo -e "\nTesting? Use [${YELLOW}plexguide${NC}] for user and [${YELLOW}AppsFork${NC}] for repo."
         read -p "Enter new GitHub User: " new_user
         read -p "Enter new GitHub Repo: " new_repo
 
