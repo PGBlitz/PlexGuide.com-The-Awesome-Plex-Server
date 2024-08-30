@@ -48,17 +48,6 @@ load_app_store_version() {
     fi
 }
 
-# Function to display the App Store version with appropriate color
-display_app_store_version() {
-    if [ "$appstore_version" == "Alpha" ]; then
-        printf "A) App Store Version      [%s]\n" "$appstore_version"
-    elif [ "$appstore_version" == "None" ]; then
-        printf "A) App Store Version      [%s]\n" "$appstore_version"
-    else
-        printf "A) App Store Version      [%s]\n" "$appstore_version"
-    fi
-}
-
 # Function to check if the plex app directory exists
 check_plex_existence() {
     if [[ ! -d "/pg/apps/plex" ]]; then
@@ -131,24 +120,34 @@ main_menu() {
 
     echo -e "${ORANGE}Official Applications${NC}"
     # Display the App Store Version at the top
-    display_app_store_version
-    printf "B) Official: Manage       [%d]\n" "$APP_COUNT"
-    printf "C) Official: Deploy\n"
-    echo ""  # Space for separation
+    printf "A) App Store Version      [%s]\n" "$appstore_version"
+    
+    # Conditionally display other menu options only if appstore_version is not "None"
+    if [[ "$appstore_version" != "None" ]]; then
+        printf "B) Official: Manage       [%d]\n" "$APP_COUNT"
+        printf "C) Official: Deploy\n"
+        echo ""  # Space for separation
 
-    echo -e "${RED}Personal Applications${NC}"
-    printf "P) Personal:              [%s/%s]\n" "$user" "$repo"
-    printf "Q) Personal: Manage       [%d]\n" "$P_COUNT"
-    printf "R) Personal: Deploy Apps\n"
-    echo ""  # Space between options and input prompt
+        echo -e "${RED}Personal Applications${NC}"
+        printf "P) Personal:              [%s/%s]\n" "$user" "$repo"
+        printf "Q) Personal: Manage       [%d]\n" "$P_COUNT"
+        printf "R) Personal: Deploy Apps\n"
+        echo ""  # Space between options and input prompt
+    else
+        echo -e "${RED}Please select an App Store version by choosing option A.${NC}"
+        echo ""  # Space for separation
+    fi
 
     # Display the prompt with colors and capture user input
     echo -e "Make a Selection or type [${GREEN}Z${NC}] to Exit: \c"
     read -r choice
 
     case $choice in
+      A|a)
+        bash /pg/scripts/apps_version.sh
+        ;;
       B|b)
-        if [[ $plex_exists -eq 1 ]]; then
+        if [[ "$appstore_version" == "None" ]]; then
             echo -e "${RED}Option B is not available. Please select an App Store version first.${NC}"
             read -p "Press Enter to continue..."
         else
@@ -156,15 +155,12 @@ main_menu() {
         fi
         ;;
       C|c)
-        if [[ $plex_exists -eq 1 ]]; then
+        if [[ "$appstore_version" == "None" ]]; then
             echo -e "${RED}Option C is not available. Please select an App Store version first.${NC}"
             read -p "Press Enter to continue..."
         else
             bash /pg/scripts/deployment.sh
         fi
-        ;;
-      A|a)
-        bash /pg/scripts/apps_version.sh
         ;;
       P|p)
         bash /pg/scripts/apps_personal_select.sh
