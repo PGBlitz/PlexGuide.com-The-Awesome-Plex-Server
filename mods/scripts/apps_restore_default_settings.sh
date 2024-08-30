@@ -5,6 +5,8 @@ RED="\033[0;31m"
 GREEN="\033[0;32m"
 NC="\033[0m" # No color
 
+source /pg/scripts/apps_defaults.sh
+
 # Function: reset_config_file
 reset_config_file() {
     local app_name="$1"
@@ -39,7 +41,7 @@ reset_config_file() {
             rm -f "$config_path"
             echo "Config file has been reset to default."
             touch "$config_path"
-            parse_and_store_defaults "$app_name"
+            parse_and_store_defaults "$app_name" "$app_type"
             echo "The config file has been regenerated."
             return
         elif [[ "${reset_choice,,}" == "z" ]]; then
