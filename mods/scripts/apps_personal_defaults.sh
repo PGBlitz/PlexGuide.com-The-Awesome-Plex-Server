@@ -6,12 +6,6 @@ parse_and_store_defaults() {
     local app_defaults_path="/pg/p_apps/${app_name}/${app_name}.defaults"
     local config_path="/pg/personal_configs/${app_name}.cfg"
 
-    # Debugging: Show the paths being used
-    echo "Using app name: $app_name"
-    echo "App defaults path: $app_defaults_path"
-    echo "Config path: $config_path"
-    read -p "Press Enter to continue..."
-
     # Check if the config file exists, create it if not
     [[ ! -f "$config_path" ]] && touch "$config_path"
 
@@ -29,8 +23,4 @@ parse_and_store_defaults() {
             fi
         fi
     done < "$app_defaults_path"
-
-    # Debugging: Confirm parsing and storing is complete
-    echo "Completed parsing defaults and storing in config for $app_name"
-    read -p "Press Enter to continue..."
 }

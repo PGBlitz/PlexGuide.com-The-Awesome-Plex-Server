@@ -60,7 +60,6 @@ check_plex_existence() {
 # Function to create /pg/apps directory if it does not exist
 ensure_apps_directory() {
     if [[ ! -d "/pg/apps" ]]; then
-        echo "Creating /pg/apps directory..."
         mkdir -p /pg/apps
         chown 1000:1000 /pg/apps
         chmod +x /pg/apps
@@ -71,7 +70,6 @@ ensure_apps_directory() {
 setup_personal_configs_directory() {
     local config_dir="/pg/personal_configs"
     if [[ ! -d "$config_dir" ]]; then
-        echo "Creating $config_dir directory..."
         mkdir -p "$config_dir"
         chown 1000:1000 "$config_dir"
         chmod +x "$config_dir"

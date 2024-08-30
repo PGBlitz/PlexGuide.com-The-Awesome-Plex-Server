@@ -33,13 +33,11 @@ reset_config_file() {
             touch "$config_path"
             parse_and_store_defaults "$app_name"
             echo "The config file has been regenerated."
-            read -p "Press Enter to continue..."
             return
         elif [[ "${reset_choice,,}" == "z" ]]; then
             echo "Operation Cancelled."
             return
         else
-            # Invalid response: clear the screen and repeat the prompt
             clear
         fi
     done

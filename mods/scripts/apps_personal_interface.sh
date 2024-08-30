@@ -3,7 +3,6 @@
 # ANSI color codes
 RED="\033[0;31m"
 GREEN="\033[0;32m"
-BLUE="\033[0;34m"
 NC="\033[0m" # No color
 
 # Source the defaults script
@@ -24,23 +23,15 @@ check_deployment_status() {
 execute_dynamic_menu() {
     local selected_option=$1
 
-    # Debugging: Print selected option
-    echo "Selected menu option: $selected_option"
-    read -p "Press Enter to continue..."
-
     # Source the app script to load the menu functions
-    echo "Attempting to source: /pg/p_apps/${app_name}/${app_name}.menu"  # Debugging: Echo the source command
     source /pg/p_apps/${app_name}/${app_name}.menu
 
     # Get the selected option name (e.g., "Admin Token" or "Token")
     local selected_name=$(echo "${dynamic_menu_items[$((selected_option-1))]}" | awk '{$1=""; print $0}' | xargs)  # Trim spaces and get full menu item name
-    echo "Selected function name: $selected_name"  # Debugging: Check the function name extracted
-    read -p "Press Enter to continue..."
 
     # Convert the selected_name to lowercase and replace spaces with underscores
     local function_name=$(echo "$selected_name" | tr '[:upper:]' '[:lower:]' | tr -s ' ' '_')
     function_name=$(echo "$function_name" | sed 's/_$//')  # Remove trailing underscore
-    echo "Function name derived: $function_name"  # Debugging: Output the function name
 
     # Check if the function exists and execute it
     if declare -f "$function_name" > /dev/null; then
@@ -49,8 +40,6 @@ execute_dynamic_menu() {
     else
         echo "Error: No corresponding function found for ${function_name}."
     fi
-
-    read -p "Press Enter to continue..."  # Pause to observe output
 }
 
 # Main Interface
@@ -58,24 +47,16 @@ execute_dynamic_menu() {
 apps_interface() {
     local app_name=$1
 
-    # Debugging: Show app name
-    echo "App name: $app_name"
-    read -p "Press Enter to continue..."
-
     local config_path="/pg/personal_configs/${app_name}.cfg"
     local app_menu_path="/pg/p_apps/${app_name}/${app_name}.menu"
     local dynamic_menu_items=()
     local dynamic_menu_count=1
 
     # Call parse_and_store_defaults to populate the config file
-    echo "Calling parse_and_store_defaults for $app_name"
     parse_and_store_defaults "$app_name"
-    read -p "Press Enter to continue..."
 
     # Check if the .menu file exists before parsing
-    echo "Checking if menu file exists: $app_menu_path"
     if [[ -f "$app_menu_path" ]]; then
-        echo "Parsing menu file: $app_menu_path"
         while IFS= read -r line; do
             if [[ "$line" =~ ^####\  ]]; then
                 # Extract everything after the first four characters to account for multi-word titles
@@ -86,15 +67,7 @@ apps_interface() {
         done < "$app_menu_path"
     else
         echo -e "${RED}Warning: Menu file $app_menu_path does not exist. Skipping parsing step.${NC}"
-        read -p "Press Enter to continue..."
     fi
-
-    # Debugging: Output parsed menu items
-    echo "Dynamic menu items parsed:"
-    for item in "${dynamic_menu_items[@]}"; do
-        echo "$item"
-    done
-    read -p "Press Enter to continue..."
 
     # Menu
     while true; do
@@ -118,19 +91,12 @@ apps_interface() {
 
         case ${choice,,} in  # Convert input to lowercase
             d)
-                # Debugging: Output deployment command
-                echo "Deploying app: $app_name (command: /pg/scripts/apps_personal_deploy.sh $app_name)"
-                read -p "Press Enter to continue..."
                 bash /pg/scripts/apps_personal_deploy.sh "$app_name"
                 ;;
             k)
-                echo "Killing app: $app_name"
-                read -p "Press Enter to continue..."
                 bash /pg/scripts/apps_kill_remove.sh "$app_name"
                 ;;
             c)
-                echo "Opening configuration for app: $app_name"
-                read -p "Press Enter to continue..."
                 bash /pg/scripts/apps_personal_config_menu.sh "$app_name"
                 ;;
             [0-9]*)
@@ -142,8 +108,6 @@ apps_interface() {
                 fi
                 ;;
             z)
-                echo "Exiting menu for app: $app_name"
-                read -p "Press Enter to continue..."
                 break
                 ;;
             *)

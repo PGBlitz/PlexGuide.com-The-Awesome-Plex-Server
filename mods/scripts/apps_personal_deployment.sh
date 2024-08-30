@@ -21,7 +21,6 @@ create_personal_apps_directory() {
 
 # Function to list all available apps in /pg/p_apps, excluding those already running in Docker
 list_available_apps() {
-    # Use find to list only files and directories that do not start with a dot (.)
     local all_apps=$(find /pg/p_apps -maxdepth 1 -mindepth 1 -type d -exec basename {} \; | grep -vE '^\.' | sort)
     local running_apps=$(docker ps --format '{{.Names}}' | sort)
 
