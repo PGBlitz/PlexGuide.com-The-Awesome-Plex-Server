@@ -14,19 +14,24 @@ clear
 TERMINAL_WIDTH=80
 MAX_LINE_LENGTH=72
 
-# Function to list running Docker apps that match official app folders in /pg/apps
+# Check if the script is being called for personal or official apps
+app_type=$1  # 'personal' for personal configurations, 'official' for official configurations
+
+# Function to list running Docker apps that match personal or official app folders
 list_running_docker_apps() {
     local all_running_apps=$(docker ps --format '{{.Names}}' | grep -v 'cf_tunnel' | sort)
-    local official_apps=()
+    local matching_apps=()
 
     for app in $all_running_apps; do
-        # Only add the app if it matches a directory in /pg/apps
-        if [[ -d "/pg/apps/$app" ]]; then
-            official_apps+=("$app")
+        # Only add the app if it matches a directory in the appropriate folder
+        if [[ "$app_type" == "personal" && -d "/pg/p_apps/$app" ]]; then
+            matching_apps+=("$app")
+        elif [[ "$app_type" == "official" && -d "/pg/apps/$app" ]]; then
+            matching_apps+=("$app")
         fi
     done
 
-    echo "${official_apps[@]}"
+    echo "${matching_apps[@]}"
 }
 
 # Function to display running Docker apps in a formatted way
@@ -64,7 +69,7 @@ manage_app() {
     # Ensure the apps_interface.sh script exists before proceeding
     if [[ -f "$app_script" ]]; then
         # Execute the apps_interface.sh script with the app name as an argument
-        bash "$app_script" "$app_name"
+        bash "$app_script" "$app_name" "$app_type"
     else
         echo "Error: Interface script $app_script not found!"
         read -p "Press Enter to continue..."
@@ -76,7 +81,7 @@ running_function() {
     while true; do
         clear
 
-        # Get the list of running Docker apps that match official app folders
+        # Get the list of running Docker apps that match personal or official app folders
         APP_LIST=($(list_running_docker_apps))
 
         if [[ ${#APP_LIST[@]} -eq 0 ]]; then
@@ -90,9 +95,9 @@ running_function() {
         echo -e "${RED}PG: Running Apps [View | Edit]${NC}"
         echo ""  # Blank line for separation
 
-        # Display the list of running Docker apps that match official app folders
+        # Display the list of running Docker apps that match the selected type
         display_running_apps "${APP_LIST[@]}"
-        
+
         echo "════════════════════════════════════════════════════════════════════════════════"
         # Prompt the user to enter an app name or exit
         read -p "$(echo -e "Type [${GREEN}App${NC}] to View/Edit or [${RED}Exit${NC}]: ")" app_choice
