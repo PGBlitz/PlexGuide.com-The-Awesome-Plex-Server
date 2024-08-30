@@ -72,16 +72,22 @@ apps_interface() {
     parse_and_store_defaults "$app_name"
     read -p "Press Enter to continue..."
 
-    # Parse the .menu file for dynamic menu items
-    echo "Parsing menu file: $app_menu_path"
-    while IFS= read -r line; do
-        if [[ "$line" =~ ^####\  ]]; then
-            # Extract everything after the first four characters to account for multi-word titles
-            local menu_item=$(echo "$line" | cut -d' ' -f2-)
-            dynamic_menu_items+=("${dynamic_menu_count}) $menu_item")
-            ((dynamic_menu_count++))
-        fi
-    done < "$app_menu_path"  # Change: Read from the .menu file
+    # Check if the .menu file exists before parsing
+    echo "Checking if menu file exists: $app_menu_path"
+    if [[ -f "$app_menu_path" ]]; then
+        echo "Parsing menu file: $app_menu_path"
+        while IFS= read -r line; do
+            if [[ "$line" =~ ^####\  ]]; then
+                # Extract everything after the first four characters to account for multi-word titles
+                local menu_item=$(echo "$line" | cut -d' ' -f2-)
+                dynamic_menu_items+=("${dynamic_menu_count}) $menu_item")
+                ((dynamic_menu_count++))
+            fi
+        done < "$app_menu_path"
+    else
+        echo -e "${RED}Warning: Menu file $app_menu_path does not exist. Skipping parsing step.${NC}"
+        read -p "Press Enter to continue..."
+    fi
 
     # Debugging: Output parsed menu items
     echo "Dynamic menu items parsed:"
