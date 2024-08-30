@@ -42,9 +42,7 @@ reinstall_plexguide() {
 
     # Execute the downloaded script
     bash "$INSTALL_SCRIPT_PATH"
-
-    # Execute the exit script
-    bash /pg/scripts/menu_exit.sh
+    
     exit 0  # Ensure the script exits after executing the menu_exit.sh
 }
 
