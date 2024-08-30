@@ -22,7 +22,7 @@ deployment_type=$1  # 'personal' for personal deployment, 'official' for officia
 # Function to create the appropriate apps directory if it doesn't exist
 create_apps_directory() {
     if [[ "$deployment_type" == "personal" ]]; then
-        [[ ! -d "/pg/personal_apps" ]] && mkdir -p /pg/personal_apps
+        [[ ! -d "/pg/p_apps" ]] && mkdir -p /pg/p_apps
     else
         [[ ! -d "/pg/apps" ]] && mkdir -p /pg/apps
     fi
@@ -31,24 +31,20 @@ create_apps_directory() {
 # Function to list all available apps, excluding those already running in Docker
 list_available_apps() {
     local app_dir
-
     if [[ "$deployment_type" == "personal" ]]; then
-        app_dir="/pg/personal_apps"
+        app_dir="/pg/p_apps"
     else
         app_dir="/pg/apps"
     fi
 
-    local all_apps=$(ls -1 "$app_dir" | sort)
+    local all_apps=$(find "$app_dir" -maxdepth 1 -mindepth 1 -type d -exec basename {} \; | grep -vE '^\.' | sort)
     local running_apps=$(docker ps --format '{{.Names}}' | sort)
 
     local available_apps=()
     for app in $all_apps; do
-        # Check if the app name matches a folder in the app directory
-        if [[ -d "$app_dir/$app" ]]; then
-            # Only exclude those that are already running
-            if ! echo "$running_apps" | grep -i -w "$app" >/dev/null; then
-                available_apps+=("$app")
-            fi
+        # Only exclude those that are already running
+        if ! echo "$running_apps" | grep -i -w "$app" >/dev/null; then
+            available_apps+=("$app")
         fi
     done
 
@@ -85,7 +81,13 @@ display_available_apps() {
 # Function to deploy the selected app
 deploy_app() {
     local app_name=$1
-    local app_script="/pg/scripts/apps_interface.sh"
+    local app_script
+
+    if [[ "$deployment_type" == "personal" ]]; then
+        app_script="/pg/scripts/apps_personal_interface.sh"
+    else
+        app_script="/pg/scripts/apps_interface.sh"
+    fi
 
     # Ensure the app script exists before proceeding
     if [[ -f "$app_script" ]]; then
@@ -104,7 +106,7 @@ deployment_function() {
 
         create_apps_directory
 
-        # Get the list of available apps, ensuring they match app folders
+        # Get the list of available apps
         APP_LIST=($(list_available_apps))
 
         echo -e "${RED}PG: Deployable Apps${NC}"
@@ -115,7 +117,7 @@ deployment_function() {
         else
             display_available_apps "${APP_LIST[@]}"
         fi
-        
+
         echo "════════════════════════════════════════════════════════════════════════════════"
         # Prompt the user to enter an app name or exit
         read -p "$(echo -e "Type [${RED}App${NC}] to Deploy or [${GREEN}Z${NC}] to Exit: ")" app_choice
