@@ -5,7 +5,9 @@ RED="\033[0;31m"
 GREEN="\033[0;32m"
 ORANGE="\033[0;33m"
 BLUE="\033[0;34m"
-NC="\033[0m" # No color
+YELLOW="\033[1;33m"
+BOLD="\033[1m"
+NC="\033[0m"  # No color
 
 # Default values for personal apps configuration
 DEFAULT_USER="None"
@@ -48,15 +50,6 @@ load_app_store_version() {
     fi
 }
 
-# Function to check if the plex app directory exists
-check_plex_existence() {
-    if [[ ! -d "/pg/apps/plex" ]]; then
-        return 1  # plex does not exist
-    else
-        return 0  # plex exists
-    fi
-}
-
 # Function to create /pg/apps directory if it does not exist
 ensure_apps_directory() {
     if [[ ! -d "/pg/apps" ]]; then
@@ -90,109 +83,108 @@ load_personal_apps_config() {
 
 # Main menu function
 main_menu() {
-  while true; do
-    clear
+    while true; do
+        clear
 
-    # Ensure /pg/apps and /pg/personal_configs directories exist with correct permissions
-    ensure_apps_directory
-    setup_personal_configs_directory
+        # Ensure /pg/apps and /pg/personal_configs directories exist with correct permissions
+        ensure_apps_directory
+        setup_personal_configs_directory
 
-    # Get the number of running Docker apps, excluding cf_tunnel
-    APP_COUNT=$(count_docker_apps)
+        # Get the number of running Docker apps, excluding cf_tunnel
+        APP_COUNT=$(count_docker_apps)
 
-    # Get the number of running personal Docker apps, excluding cf_tunnel
-    P_COUNT=$(count_personal_docker_apps)
+        # Get the number of running personal Docker apps, excluding cf_tunnel
+        P_COUNT=$(count_personal_docker_apps)
 
-    # Load the App Store version
-    load_app_store_version
+        # Load the App Store version
+        load_app_store_version
 
-    # Load personal apps configuration
-    load_personal_apps_config
+        # Load personal apps configuration
+        load_personal_apps_config
 
-    # Check if the plex app directory exists
-    check_plex_existence
-    local plex_exists=$?
-    clear
-    echo -e "${BLUE}PG: Docker Apps${NC}"
-    echo ""  # Blank line for separation
+        clear
+        echo -e "${BLUE}${BOLD}PG: Docker Apps${NC}"
+        echo -e "${YELLOW}════════════════════════════════════════════════════${NC}"
+        echo ""  # Blank line for separation
 
-    echo -e "${ORANGE}Official Applications${NC}"
-    # Display the App Store Version at the top
-    printf "A) App Store Version      [%s]\n" "$appstore_version"
-    
-    # Conditionally display other menu options only if appstore_version is not "None"
-    if [[ "$appstore_version" != "None" ]]; then
-        printf "B) Official: Manage       [%d]\n" "$APP_COUNT"
-        printf "C) Official: Deploy\n"
-        echo ""  # Space for separation
-
-        echo -e "${RED}Personal Applications${NC}"
-        printf "P) Personal:              [%s/%s]\n" "$user" "$repo"
+        echo -e "${ORANGE}${BOLD}Official Applications${NC}"
+        # Display the App Store Version at the top
+        printf "  A) App Store Version    [${YELLOW}%s${NC}]\n" "$appstore_version"
         
-        # Conditionally hide options Q and R if the repo is set to "None"
-        if [[ "$repo" != "None" ]]; then
-            printf "Q) Personal: Manage       [%d]\n" "$P_COUNT"
-            printf "R) Personal: Deploy Apps\n"
-        fi
-        
-        echo ""  # Space between options and input prompt
-    else
-        echo ""  # Space for separation
-        echo -e "${RED}Please select an App Store version by choosing option A.${NC}"
-    fi
+        # Conditionally display other menu options only if appstore_version is not "None"
+        if [[ "$appstore_version" != "None" ]]; then
+            printf "  B) Official: Manage     [${YELLOW}%d${NC}]\n" "$APP_COUNT"
+            printf "  C) Official: Deploy\n"
+            echo ""  # Space for separation
 
-    # Display the prompt with colors and capture user input
-    echo -e "Make a Selection or type [${GREEN}Z${NC}] to Exit: \c"
-    read -r choice
+            echo -e "${RED}${BOLD}Personal Applications${NC}"
+            printf "  P) Personal:            [${YELLOW}%s/%s${NC}]\n" "$user" "$repo"
+            
+            # Conditionally hide options Q and R if the repo is set to "None"
+            if [[ "$repo" != "None" ]]; then
+                printf "  Q) Personal: Manage     [${YELLOW}%d${NC}]\n" "$P_COUNT"
+                printf "  R) Personal: Deploy Apps\n"
+            fi
+            
+            echo ""  # Space between options and input prompt
+        else
+            echo ""  # Space for separation
+            echo -e "${RED}Please select an App Store version by choosing option A.${NC}"
+        fi
 
-    case $choice in
-      A|a)
-        bash /pg/scripts/apps_version.sh
-        ;;
-      B|b)
-        if [[ "$appstore_version" == "None" ]]; then
-            echo -e "${RED}Option B is not available. Please select an App Store version first.${NC}"
-            read -p "Press Enter to continue..."
-        else
-            bash /pg/scripts/apps_running.sh "official"
-        fi
-        ;;
-      C|c)
-        if [[ "$appstore_version" == "None" ]]; then
-            echo -e "${RED}Option C is not available. Please select an App Store version first.${NC}"
-            read -p "Press Enter to continue..."
-        else
-            bash /pg/scripts/apps_deployment.sh "official"
-        fi
-        ;;
-      P|p)
-        bash /pg/scripts/apps_personal_select.sh
-        ;;
-      Q|q)
-        if [[ "$repo" == "None" ]]; then
-            echo -e "${RED}Option Q is not available. Please use P to set a User and Repo first.${NC}"
-            read -p "Press Enter to continue..."
-        else
-            bash /pg/scripts/apps_running.sh "personal"
-        fi
-        ;;
-      R|r)
-        if [[ "$repo" == "None" ]]; then
-            echo -e "${RED}Option R is not available. Please use P to set a User and Repo first.${NC}"
-            read -p "Press Enter to continue..."
-        else
-            bash /pg/scripts/apps_deployment.sh "personal"
-        fi
-        ;;
-      Z|z)
-        exit 0
-        ;;
-      *)
-        echo -e "${RED}Invalid option, please try again.${NC}"
-        read -p "Press Enter to continue..."
-        ;;
-    esac
-  done
+        echo -e "════════════════════════════════════════════════════"
+        # Display the prompt with colors and capture user input
+        echo -e "Make a Selection or type [${GREEN}Z${NC}] to Exit: \c"
+        read -r choice
+
+        case $choice in
+            A|a)
+                bash /pg/scripts/apps_version.sh
+                ;;
+            B|b)
+                if [[ "$appstore_version" == "None" ]]; then
+                    echo -e "${RED}Option B is not available. Please select an App Store version first.${NC}"
+                    read -p "Press Enter to continue..."
+                else
+                    bash /pg/scripts/apps_running.sh "official"
+                fi
+                ;;
+            C|c)
+                if [[ "$appstore_version" == "None" ]]; then
+                    echo -e "${RED}Option C is not available. Please select an App Store version first.${NC}"
+                    read -p "Press Enter to continue..."
+                else
+                    bash /pg/scripts/apps_deployment.sh "official"
+                fi
+                ;;
+            P|p)
+                bash /pg/scripts/apps_personal_select.sh
+                ;;
+            Q|q)
+                if [[ "$repo" == "None" ]]; then
+                    echo -e "${RED}Option Q is not available. Please use P to set a User and Repo first.${NC}"
+                    read -p "Press Enter to continue..."
+                else
+                    bash /pg/scripts/apps_running.sh "personal"
+                fi
+                ;;
+            R|r)
+                if [[ "$repo" == "None" ]]; then
+                    echo -e "${RED}Option R is not available. Please use P to set a User and Repo first.${NC}"
+                    read -p "Press Enter to continue..."
+                else
+                    bash /pg/scripts/apps_deployment.sh "personal"
+                fi
+                ;;
+            Z|z)
+                exit 0
+                ;;
+            *)
+                echo -e "${RED}Invalid option, please try again.${NC}"
+                read -p "Press Enter to continue..."
+                ;;
+        esac
+    done
 }
 
 # Call the main menu function
