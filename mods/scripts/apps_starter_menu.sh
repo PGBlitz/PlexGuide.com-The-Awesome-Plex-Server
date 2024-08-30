@@ -156,7 +156,7 @@ main_menu() {
             echo -e "${RED}Option B is not available. Please select an App Store version first.${NC}"
             read -p "Press Enter to continue..."
         else
-            bash /pg/scripts/running.sh
+            bash /pg/scripts/apps_running.sh
         fi
         ;;
       C|c)
@@ -164,7 +164,7 @@ main_menu() {
             echo -e "${RED}Option C is not available. Please select an App Store version first.${NC}"
             read -p "Press Enter to continue..."
         else
-            bash /pg/scripts/deployment.sh
+            bash /pg/scripts/apps_deployment.sh
         fi
         ;;
       P|p)
@@ -175,7 +175,7 @@ main_menu() {
             echo -e "${RED}Option Q is not available. Please use P to set a User and Repo first.${NC}"
             read -p "Press Enter to continue..."
         else
-            bash /pg/scripts/apps_personal_view.sh
+            bash /pg/scripts/apps_personal_running.sh
         fi
         ;;
       R|r)
