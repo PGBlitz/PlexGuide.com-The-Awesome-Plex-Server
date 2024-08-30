@@ -66,6 +66,7 @@ main_menu() {
     clear
     check_mergerfs_status
     echo -e "${BLUE}PG: Drive Management${NC} - MergerFS Status: $MERGERFS_STATUS"
+    echo "NOTE: This is not functional yet"
     echo ""  # Space for separation
     echo "V) View Drives"
     echo "M) Manage Drives"

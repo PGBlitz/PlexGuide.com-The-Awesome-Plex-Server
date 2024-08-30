@@ -35,7 +35,7 @@ main_menu() {
     # Display the main menu options
     echo "G) Graphics Cards"
     echo "S) SSH Management"
-    echo "P) Firewall Port Security"
+    echo "P) Firewall Port Security - Note: May Go Away"
     echo "Z) Exit"
     echo ""  # Space between options and input prompt
 
