@@ -50,7 +50,7 @@ main_menu() {
         ssh_management
         ;;
       p)
-        bash /pg/scripts/portsecurity_menu.sh
+        bash /pg/scripts/portsecurity.sh
         ;;
       z)
         exit_script
