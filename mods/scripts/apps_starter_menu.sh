@@ -51,11 +51,11 @@ load_app_store_version() {
 # Function to display the App Store version with appropriate color
 display_app_store_version() {
     if [ "$appstore_version" == "Alpha" ]; then
-        printf "A) App Store Version     [%s]\n" "$appstore_version"
+        printf "A) App Store Version      [%s]\n" "$appstore_version"
     elif [ "$appstore_version" == "None" ]; then
-        printf "A) App Store Version     [%s]\n" "$appstore_version"
+        printf "A) App Store Version      [%s]\n" "$appstore_version"
     else
-        printf "A) App Store Version     [%s]\n" "$appstore_version"
+        printf "A) App Store Version      [%s]\n" "$appstore_version"
     fi
 }
 
