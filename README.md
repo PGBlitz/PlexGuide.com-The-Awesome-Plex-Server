@@ -23,7 +23,7 @@ sudo apt-get update && sudo apt-get install -y curl && bash <(curl -s https://ra
 ### Working on PG11
 
 * Simple, debloated, no fancy menus and executes for exactly what you need!
-* Tested on UB 22/24 Server LTS (should work on Debian, but not tested)
+* Works on Ubuntu 22/Ubuntu 24/Debian 12
 * To Test (Use Ubuntu or Debian) CMD Line; once installed, type `pg` or `plexguide`
 
 <p align="center">
