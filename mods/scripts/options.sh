@@ -26,18 +26,38 @@ exit_script() {
     exit 0
 }
 
-# Function for the main menu loop
+# Function for the main menu
 main_menu() {
-    while true; do
-        display_main_menu
-        read -p "Select an option: " choice
-        case "$choice" in
-            G|g) echo "Graphics Cards option selected." ;;
-            S|s) ssh_management ;;
-            Z|z) exit_script ;;
-            *) echo -e "${RED}Invalid option. Please try again.${NC}" ;;
-        esac
-    done
+  while true; do
+    clear
+    echo -e "${BLUE}PlexGuide Options Interface${NC}"
+    echo ""  # Blank line for separation
+    # Display the main menu options
+    echo "G) Graphics Cards"
+    echo "S) SSH Management"
+    echo "Z) Exit"
+    echo ""  # Space between options and input prompt
+
+    # Prompt the user for input
+    read -p "Enter your choice [G/S/Z]: " choice
+
+    case ${choice,,} in  # Convert input to lowercase for g/G, s/S, z/Z handling
+      g)
+        bash /pg/scripts/graphics.sh
+        ;;
+      s)
+        ssh_management
+        ;;
+      z)
+        exit_script
+        ;;
+      *)
+        echo "Invalid option, please try again."
+        read -p "Press Enter to continue..."
+        ;;
+    esac
+
+  done
 }
 
 # Call the main menu function
