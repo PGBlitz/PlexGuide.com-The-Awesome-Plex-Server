@@ -11,12 +11,6 @@ clear
 # Load the configuration
 load_config
 
-# Function for Graphics Cards option
-graphics_cards() {
-    clear
-    /pg/scripts/graphics.sh
-}
-
 # Function for SSH Management option
 ssh_management() {
     clear
@@ -50,7 +44,7 @@ main_menu() {
 
     case ${choice,,} in  # Convert input to lowercase for g/G, s/S, z/Z handling
       g)
-        graphics_cards
+        bash /pg/scripts/graphics.sh
         ;;
       s)
         ssh_management
