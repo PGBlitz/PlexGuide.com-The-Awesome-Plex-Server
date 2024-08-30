@@ -132,13 +132,13 @@ main_menu() {
     echo -e "${ORANGE}Official Applications${NC}"
     # Display the App Store Version at the top
     display_app_store_version
-    printf "B) Official: Manage        [ $APP_COUNT ]\n"
+    printf "B) Official: Manage       [$APP_COUNT]\n"
     printf "C) Official: Deploy\n"
     echo ""  # Space for separation
 
     echo -e "${RED}Personal Applications${NC}"
-    printf "P) Personal:              [ $user/$repo ]\n"
-    printf "Q) Personal: Manage       [ $P_COUNT ]\n"
+    printf "P) Personal:              [$user/$repo]\n"
+    printf "Q) Personal: Manage       [$P_COUNT]\n"
     printf "R) Personal: Deploy Apps\n"
     echo ""  # Space between options and input prompt
 
