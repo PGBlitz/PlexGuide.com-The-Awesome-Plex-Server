@@ -27,7 +27,7 @@ while true; do
         # Capture file's modification time before editing
         before_edit=$(stat -c %Y "$config_path")
 
-        nano "/pg/personal_config/$app_name.cfg"
+        nano "/pg/personal_configs/$app_name.cfg"
 
         # Capture file's modification time after editing
         after_edit=$(stat -c %Y "$config_path")
