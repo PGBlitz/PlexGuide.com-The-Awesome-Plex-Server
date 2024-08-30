@@ -38,7 +38,7 @@ display_and_prompt_user_repo() {
         exit 0
     elif [[ "$change_choice" == "$random_pin" ]]; then
         # Show testing hint
-        echo -e "\nTesting? Use [${YELLOW}plexguide${NC}] for user and [${YELLOW}AppsFork${NC}] for repo."
+        echo -e "\nTesting? Use [${YELLOW}plexguide${NC}] for user and [${YELLOW}appsfork${NC}] for repo."
         read -p "Enter new GitHub User: " new_user
         read -p "Enter new GitHub Repo: " new_repo
 
