@@ -1,5 +1,7 @@
 #!/bin/bash
 
+# Combined deployment script for official and personal apps
+
 # ANSI color codes for green, red, blue, and orange
 GREEN="\033[0;32m"
 RED="\033[0;31m"
@@ -14,20 +16,35 @@ clear
 TERMINAL_WIDTH=80
 MAX_LINE_LENGTH=72
 
-# Function to create the /pg/apps directory if it doesn't exist
+# Arguments
+deployment_type=$1  # 'personal' for personal deployment, 'official' for official deployment
+
+# Function to create the appropriate apps directory if it doesn't exist
 create_apps_directory() {
-    [[ ! -d "/pg/apps" ]] && mkdir -p /pg/apps
+    if [[ "$deployment_type" == "personal" ]]; then
+        [[ ! -d "/pg/personal_apps" ]] && mkdir -p /pg/personal_apps
+    else
+        [[ ! -d "/pg/apps" ]] && mkdir -p /pg/apps
+    fi
 }
 
-# Function to list all available official apps in /pg/apps, excluding those already running in Docker
+# Function to list all available apps, excluding those already running in Docker
 list_available_apps() {
-    local all_apps=$(ls -1 /pg/apps | sort)
+    local app_dir
+
+    if [[ "$deployment_type" == "personal" ]]; then
+        app_dir="/pg/personal_apps"
+    else
+        app_dir="/pg/apps"
+    fi
+
+    local all_apps=$(ls -1 "$app_dir" | sort)
     local running_apps=$(docker ps --format '{{.Names}}' | sort)
-    
+
     local available_apps=()
     for app in $all_apps; do
-        # Check if the app name matches a folder in /pg/apps
-        if [[ -d "/pg/apps/$app" ]]; then
+        # Check if the app name matches a folder in the app directory
+        if [[ -d "$app_dir/$app" ]]; then
             # Only exclude those that are already running
             if ! echo "$running_apps" | grep -i -w "$app" >/dev/null; then
                 available_apps+=("$app")
@@ -87,7 +104,7 @@ deployment_function() {
 
         create_apps_directory
 
-        # Get the list of available apps, ensuring they match official app folders
+        # Get the list of available apps, ensuring they match app folders
         APP_LIST=($(list_available_apps))
 
         echo -e "${RED}PG: Deployable Apps${NC}"
@@ -118,5 +135,10 @@ deployment_function() {
     done
 }
 
-# Call the main deployment function
-deployment_function
+# Validate the deployment type and call the main deployment function
+if [[ "$deployment_type" == "personal" || "$deployment_type" == "official" ]]; then
+    deployment_function
+else
+    echo -e "${RED}Invalid deployment type specified. Use 'personal' or 'official'.${NC}"
+    exit 1
+fi
