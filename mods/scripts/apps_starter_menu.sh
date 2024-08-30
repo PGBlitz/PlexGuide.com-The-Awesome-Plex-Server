@@ -8,8 +8,8 @@ BLUE="\033[0;34m"
 NC="\033[0m" # No color
 
 # Default values for personal apps configuration
-DEFAULT_USER="plexguide"
-DEFAULT_REPO="AppsFork"
+DEFAULT_USER="None"
+DEFAULT_REPO="None"
 
 # Function to count running Docker containers that match official app names in /pg/apps
 count_docker_apps() {
@@ -130,8 +130,15 @@ main_menu() {
 
         echo -e "${RED}Personal Applications${NC}"
         printf "P) Personal:              [%s/%s]\n" "$user" "$repo"
-        printf "Q) Personal: Manage       [%d]\n" "$P_COUNT"
-        printf "R) Personal: Deploy Apps\n"
+        
+        # Conditionally hide options Q and R if the repo is set to "None"
+        if [[ "$repo" != "None" ]]; then
+            printf "Q) Personal: Manage       [%d]\n" "$P_COUNT"
+            printf "R) Personal: Deploy Apps\n"
+        else
+            echo -e "${RED}Please use P to set a User and Repo.${NC}"
+        fi
+        
         echo ""  # Space between options and input prompt
     else
         echo ""  # Space for separation
@@ -166,10 +173,20 @@ main_menu() {
         bash /pg/scripts/apps_personal_select.sh
         ;;
       Q|q)
-        bash /pg/scripts/apps_personal_view.sh
+        if [[ "$repo" == "None" ]]; then
+            echo -e "${RED}Option Q is not available. Please use P to set a User and Repo first.${NC}"
+            read -p "Press Enter to continue..."
+        else
+            bash /pg/scripts/apps_personal_view.sh
+        fi
         ;;
       R|r)
-        bash /pg/scripts/apps_personal_deployment.sh
+        if [[ "$repo" == "None" ]]; then
+            echo -e "${RED}Option R is not available. Please use P to set a User and Repo first.${NC}"
+            read -p "Press Enter to continue..."
+        else
+            bash /pg/scripts/apps_personal_deployment.sh
+        fi
         ;;
       Z|z)
         exit 0
