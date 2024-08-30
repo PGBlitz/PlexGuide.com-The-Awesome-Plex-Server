@@ -11,6 +11,10 @@ NC="\033[0m" # No color
 # Source the defaults script
 source /pg/scripts/apps_defaults.sh
 
+# Arguments
+app_name=$1
+config_type=$2  # 'personal' for personal configurations, 'official' for official configurations
+
 # Function: check_deployment_status
 check_deployment_status() {
     local container_status=$(docker ps --filter "name=^/${app_name}$" --format "{{.Names}}")
@@ -54,9 +58,6 @@ execute_dynamic_menu() {
 # Main Interface
 # Function: apps_interface
 apps_interface() {
-    local app_name=$1
-    local config_type=$2  # 'personal' or 'official'
-
     if [[ "$config_type" == "personal" ]]; then
         config_path="/pg/personal_configs/${app_name}.cfg"
         app_menu_path="/pg/p_apps/${app_name}/${app_name}.menu"
@@ -135,4 +136,4 @@ apps_interface() {
 }
 
 # Run the interface with the provided app name and type
-apps_interface "$1" "$2"
+apps_interface
