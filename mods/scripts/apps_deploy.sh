@@ -22,7 +22,7 @@ redeploy_app() {
     
     # Determine which support script to source
     if [[ "$script_type" == "personal" ]]; then
-        source /pg/scripts/apps_personal_support.sh "$app_name" "$script_type" && appsourcing
+        source /pg/scripts/apps_support.sh "$app_name" "$script_type" && appsourcing
         source "/pg/p_apps/$app_name/$app_name.app"
     elif [[ "$script_type" == "official" ]]; then
         source /pg/scripts/apps_support.sh "$app_name" "$script_type" && appsourcing
