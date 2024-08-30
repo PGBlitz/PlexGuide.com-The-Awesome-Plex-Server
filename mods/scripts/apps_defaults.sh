@@ -5,10 +5,10 @@
 # Function: parse_and_store_defaults
 parse_and_store_defaults() {
     local app_name="$1"
-    local config_type="$2"  # 'personal' for personal apps, 'official' for official apps
+    local app_type="$2"  # 'personal' for personal apps, 'official' for official apps
 
     # Determine paths based on config type
-    if [[ "$config_type" == "personal" ]]; then
+    if [[ "$app_type" == "personal" ]]; then
         local app_defaults_path="/pg/p_apps/${app_name}/${app_name}.defaults"
         local config_path="/pg/personal_configs/${app_name}.cfg"
     else
