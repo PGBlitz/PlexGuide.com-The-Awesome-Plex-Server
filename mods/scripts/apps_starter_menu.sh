@@ -1,10 +1,10 @@
 #!/bin/bash
 
 # ANSI color codes for formatting
-GREEN="\033[0;32m"
 RED="\033[0;31m"
-BLUE="\033[0;34m"
+GREEN="\033[0;32m"
 ORANGE="\033[0;33m"
+BLUE="\033[0;34m"
 NC="\033[0m" # No color
 
 # Default values for personal apps configuration
@@ -51,11 +51,11 @@ load_app_store_version() {
 # Function to display the App Store version with appropriate color
 display_app_store_version() {
     if [ "$appstore_version" == "Alpha" ]; then
-        echo -e "A) App Store Version     [ ${ORANGE}$appstore_version${NC} ]"
+        printf "A) App Store Version     [ $appstore_version ]\n"
     elif [ "$appstore_version" == "None" ]; then
-        echo -e "A) App Store Version     [ ${ORANGE}$appstore_version${NC} ]"
+        printf "A) App Store Version     [ $appstore_version ]\n"
     else
-        echo -e "A) App Store Version     [ ${ORANGE}$appstore_version${NC} ]"
+        printf "A) App Store Version     [ $appstore_version ]\n"
     fi
 }
 
@@ -129,23 +129,20 @@ main_menu() {
     echo -e "${BLUE}PG: Docker Apps${NC}"
     echo ""  # Blank line for separation
 
-    echo "Official Applications"
+    echo -e "${ORANGE}Official Applications${NC}"
     # Display the App Store Version at the top
     display_app_store_version
-    printf "B) Official: Manage       [ ${ORANGE}$APP_COUNT${NC} ]\n"
+    printf "B) Official: Manage       [ $APP_COUNT ]\n"
     printf "C) Official: Deploy\n"
     echo ""  # Space for separation
 
-    echo "Personal Applications"
-    printf "P) Personal:              [ ${ORANGE}${user}/${repo}${NC} ]\n"
-    printf "Q) Personal: Manage       [ ${ORANGE}$P_COUNT${NC} ]\n"
+    echo -e "${RED}Personal Applications${NC}"
+    printf "P) Personal:              [ $user/$repo ]\n"
+    printf "Q) Personal: Manage       [ $P_COUNT ]\n"
     printf "R) Personal: Deploy Apps\n"
     echo ""  # Space between options and input prompt
 
-    echo -e "Make a Selection or type [${GREEN}Z${NC}] to Exit: "
-    
-    # Prompt the user for input
-    read -p "" choice
+    read -p "Make a Selection or type [${GREEN}Z${NC}] to Exit: " choice
 
     case $choice in
       B|b)
