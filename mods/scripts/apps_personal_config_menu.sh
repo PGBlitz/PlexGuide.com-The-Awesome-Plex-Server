@@ -6,7 +6,7 @@ GREEN="\033[0;32m"
 NC="\033[0m" # No color
 
 app_name=$1
-config_path="/pg/personal_config/${app_name}.cfg"
+config_path="/pg/personal_configs/${app_name}.cfg"
 app_path="/pg/p_apps/${app_name}/${app_name}.app"
 
 # Source the default and restore scripts
