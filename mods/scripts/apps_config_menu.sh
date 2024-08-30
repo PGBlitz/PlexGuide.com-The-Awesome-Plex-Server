@@ -209,7 +209,7 @@ while true; do
             fi
             ;;
         c)
-            bash /pg/scripts/apps_config_edit.sh "$app_name"
+            bash /pg/scripts/apps_config_edit.sh "$app_name" "official"
             ;;
         r)
             reset_config_file "$app_name"
