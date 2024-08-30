@@ -56,10 +56,10 @@ FireFox, Jackett, JellyFin, Lidarr, NetData, NZBGET, Overseer, Ombi, Opera, Port
 - **Firewall Port Security**: View open ports; close and open additional ports
 - **Dynamic Menu Intergration**: Enables custom options for docker containers
 - **Streamlined Updating**: PG Alpha and Beta Builds Intergrated. Stable will be added later
+- **Personal Apps**: Deploy your own personal apps from your own personal repo with PG!
 
 ### **In Progress**
-
-- [ ] Enable Personal Apps from Personal Repo  
+ 
 - [ ] Incorporate MergerFS to Merge Multiple Local Drives (Main Focus)  
 - [ ] Incorporate CloudDrives (Secondary Focus)  
 - [ ] AppData Backup & Restore  
@@ -67,3 +67,4 @@ FireFox, Jackett, JellyFin, Lidarr, NetData, NZBGET, Overseer, Ombi, Opera, Port
 - [ ] Create Detailed Wiki
 - [ ] Deployment of PlexDebrid/Zurg
 - [ ] VPN Server Capabilities
+- [ ] Link PlexGuide Domain to GITHUB
