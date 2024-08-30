@@ -5,7 +5,10 @@ CONFIG_FILE="/pg/config/config.cfg"
 
 # ANSI color codes
 RED="\033[0;31m"
-NC="\033[0m" # No color
+GREEN="\033[0;32m"
+BLUE="\033[0;34m"
+BOLD="\033[1m"
+NC="\033[0m"  # No color
 
 # Clear the screen at the start
 clear
@@ -71,14 +74,17 @@ options_menu() {
 main_menu() {
     while true; do
         clear
-        echo -e "${RED}Welcome to PlexGuide: $VERSION${NC}"
+        echo -e "${RED}${BOLD}════════════════════════════════════════════════${NC}"
+        echo -e "${RED}${BOLD}     Welcome to PlexGuide: $VERSION${NC}"
+        echo -e "${RED}${BOLD}════════════════════════════════════════════════${NC}"
         echo ""  # Blank line for separation
-        echo "A) Apps Management"
-        echo "H) HardDisk Management"
-        echo "C) CloudFlare Tunnel (Domains)"
-        echo "O) Options"
-        echo "R) Reinstall PlexGuide"
-        echo "Z) Exit"
+
+        echo -e "${BOLD}A)${NC} Apps Management"
+        echo -e "${BOLD}H)${NC} HardDisk Management"
+        echo -e "${BOLD}C)${NC} CloudFlare Tunnel (Domains)"
+        echo -e "${BOLD}O)${NC} Options"
+        echo -e "${BOLD}R)${NC} Reinstall PlexGuide"
+        echo -e "${BOLD}Z)${NC} Exit"
         echo ""  # Space between options and input prompt
 
         read -p "Enter your choice: " choice
@@ -91,7 +97,8 @@ main_menu() {
             o) options_menu ;;
             z) menu_exit ;;  # Call the updated menu_exit function
             *)
-                clear
+                echo -e "${RED}Invalid option. Please try again.${NC}"
+                read -p "Press Enter to continue..."
                 ;;
         esac
     done
