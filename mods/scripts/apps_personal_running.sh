@@ -59,7 +59,7 @@ display_running_apps() {
 # Function to manage the selected app
 manage_app() {
     local app_name=$1
-    local app_script="/pg/scripts/apps_personal_interface.sh"
+    local app_script="/pg/scripts/apps_interface.sh"
 
     # Ensure the apps_interface.sh script exists before proceeding
     if [[ -f "$app_script" ]]; then
