@@ -202,7 +202,7 @@ while true; do
             ;;
         e)
             if grep -q '^port_number=' "$config_path"; then
-                bash /pg/scripts/apps_personal_expose.sh "$app_name"
+                bash /pg/scripts/apps_personal_expose.sh "$app_name" "personal"
             else
                 clear
                 continue

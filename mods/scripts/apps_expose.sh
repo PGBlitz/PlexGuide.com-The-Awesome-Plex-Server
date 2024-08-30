@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# External script to handle exposing the app's port
+# Combined script to handle exposing the app's port
 
 # ANSI color codes
 RED="\033[0;31m"
@@ -9,8 +9,19 @@ BLUE="\033[0;34m"
 ORANGE="\033[0;33m"
 NC="\033[0m" # No color
 
+# Arguments
 app_name="$1"
-config_path="/pg/config/${app_name}.cfg"
+script_type="$2"  # 'personal' for personal configurations, 'official' for official configurations
+
+# Determine the correct config path
+if [[ "$script_type" == "personal" ]]; then
+    config_path="/pg/personal_configs/${app_name}.cfg"
+elif [[ "$script_type" == "official" ]]; then
+    config_path="/pg/config/${app_name}.cfg"
+else
+    echo -e "${RED}Invalid script type specified. Use 'personal' or 'official'.${NC}"
+    exit 1
+fi
 
 clear
 
@@ -40,6 +51,7 @@ echo ""
 while true; do
     echo -e "Type [${GREEN}${yes_code}${NC}] [${RED}${no_code}${NC}] or [${ORANGE}Z${NC}]: "
     read -p "" user_input
+
     if [[ "$user_input" == "$yes_code" ]]; then
         echo "Port will be exposed."
         sed -i 's|^expose=.*|expose=|' "$config_path"
@@ -53,7 +65,7 @@ while true; do
         exit 0
     else
         clear
-        # Invalid input; clear screen and repeat
+        echo -e "${RED}Invalid input. Please try again.${NC}"
     fi
 done
 
