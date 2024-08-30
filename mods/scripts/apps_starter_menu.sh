@@ -5,7 +5,7 @@ RED="\033[0;31m"
 GREEN="\033[0;32m"
 ORANGE="\033[0;33m"
 BLUE="\033[0;34m"
-YELLOW="\033[1;33m"
+WHITE="\033[1;37m"
 BOLD="\033[1m"
 NC="\033[0m"  # No color
 
@@ -104,25 +104,25 @@ main_menu() {
 
         clear
         echo -e "${BLUE}${BOLD}PG: Docker Apps${NC}"
-        echo -e "${YELLOW}════════════════════════════════════════════════════${NC}"
+        echo -e "${WHITE}────────────────────────────────────────────────────${NC}"
         echo ""  # Blank line for separation
 
-        echo -e "${ORANGE}${BOLD}Official Applications${NC}"
+        echo -e "${BOLD}Official Applications${NC}"
         # Display the App Store Version at the top
-        printf "  A) App Store Version    [${YELLOW}%s${NC}]\n" "$appstore_version"
+        printf "  A) App Store Version     [%s]\n" "$appstore_version"
         
         # Conditionally display other menu options only if appstore_version is not "None"
         if [[ "$appstore_version" != "None" ]]; then
-            printf "  B) Official: Manage     [${YELLOW}%d${NC}]\n" "$APP_COUNT"
+            printf "  B) Official: Manage      [%d]\n" "$APP_COUNT"
             printf "  C) Official: Deploy\n"
             echo ""  # Space for separation
 
             echo -e "${RED}${BOLD}Personal Applications${NC}"
-            printf "  P) Personal:            [${YELLOW}%s/%s${NC}]\n" "$user" "$repo"
+            printf "  P) Personal:             [%s/%s]\n" "$user" "$repo"
             
             # Conditionally hide options Q and R if the repo is set to "None"
             if [[ "$repo" != "None" ]]; then
-                printf "  Q) Personal: Manage     [${YELLOW}%d${NC}]\n" "$P_COUNT"
+                printf "  Q) Personal: Manage      [%d]\n" "$P_COUNT"
                 printf "  R) Personal: Deploy Apps\n"
             fi
             
@@ -132,9 +132,9 @@ main_menu() {
             echo -e "${RED}Please select an App Store version by choosing option A.${NC}"
         fi
 
-        echo -e "════════════════════════════════════════════════════"
+        echo -e "${WHITE}────────────────────────────────────────────────────${NC}"
         # Display the prompt with colors and capture user input
-        echo -e "Make a Selection or type [${GREEN}Z${NC}] to Exit: \c"
+        echo -e "${BOLD}Make a selection or type [${GREEN}Z${NC}] to exit:${NC} \c"
         read -r choice
 
         case $choice in
