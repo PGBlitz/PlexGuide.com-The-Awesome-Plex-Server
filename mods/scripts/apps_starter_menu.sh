@@ -135,8 +135,6 @@ main_menu() {
         if [[ "$repo" != "None" ]]; then
             printf "Q) Personal: Manage       [%d]\n" "$P_COUNT"
             printf "R) Personal: Deploy Apps\n"
-        else
-            echo -e "${RED}Please use P to set a User and Repo.${NC}"
         fi
         
         echo ""  # Space between options and input prompt
