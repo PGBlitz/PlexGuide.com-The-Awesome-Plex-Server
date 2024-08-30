@@ -219,7 +219,7 @@ while true; do
             bash /pg/scripts/apps_config_edit.sh "$app_name" "$config_type"
             ;;
         r)
-            reset_config_file "app_name" "$config_type"
+            reset_config_file "$app_name" "$config_type"
             ;;
         z)
             break
