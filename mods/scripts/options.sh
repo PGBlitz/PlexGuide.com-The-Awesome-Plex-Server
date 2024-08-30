@@ -35,7 +35,6 @@ main_menu() {
     # Display the main menu options
     echo "G) Graphics Cards"
     echo "S) SSH Management"
-    echo "P) Firewall Port Security - Note: May Go Away"
     echo "Z) Exit"
     echo ""  # Space between options and input prompt
 
@@ -48,9 +47,6 @@ main_menu() {
         ;;
       s)
         ssh_management
-        ;;
-      p)
-        bash /pg/scripts/portsecurity.sh
         ;;
       z)
         exit_script
