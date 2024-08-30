@@ -11,11 +11,17 @@ NC="\033[0m" # No color
 app_name=$1
 config_type=$2  # 'personal' for personal configurations, 'official' for official configurations
 
+# Source default settings script
 source /pg/scripts/apps_restore_default_settings.sh
 
 # Determine paths based on config type
-config_path="/pg/${config_type}_configs/${app_name}.cfg"
-app_path="/pg/${config_type}/apps/${app_name}/${app_name}.app"
+if [[ "$config_type" == "personal" ]]; then
+    config_path="/pg/personal_configs/${app_name}.cfg"
+    app_path="/pg/p_apps/${app_name}/${app_name}.app"
+else
+    config_path="/pg/config/${app_name}.cfg"
+    app_path="/pg/apps/${app_name}/${app_name}.app"
+fi
 
 # Ensure config file exists
 if [[ ! -f "$config_path" ]]; then
