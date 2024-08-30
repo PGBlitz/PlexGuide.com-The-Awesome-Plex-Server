@@ -64,7 +64,7 @@ validate_github_repository() {
         echo -e "\n${GREEN}The GitHub repository is valid.${NC} ${GREEN}Updated configuration successfully!${NC}"
         save_changes_to_config "$user" "$repo"
         clone_repository "$user" "$repo"
-        echo -e "NOTE: Added new apps? You must redeploy this for updates"
+        echo -e "${RED}NOTE: Added new apps later? You must redeploy this for updates!${NC}"
         echo -e "\n${YELLOW}[Press ENTER] to continue...${NC}"
         read -r
         exit 0
