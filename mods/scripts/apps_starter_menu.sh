@@ -132,7 +132,7 @@ main_menu() {
     echo -e "${ORANGE}Official Applications${NC}"
     # Display the App Store Version at the top
     display_app_store_version
-    printf "B) Official: Manage       [ $APP_COUNT ]\n"
+    printf "B) Official: Manage        [ $APP_COUNT ]\n"
     printf "C) Official: Deploy\n"
     echo ""  # Space for separation
 
@@ -142,7 +142,9 @@ main_menu() {
     printf "R) Personal: Deploy Apps\n"
     echo ""  # Space between options and input prompt
 
-    read -p "Make a Selection or type [${GREEN}Z${NC}] to Exit: " choice
+    # Display the prompt with colors and capture user input
+    echo -e "Make a Selection or type [${GREEN}Z${NC}] to Exit: \c"
+    read -r choice
 
     case $choice in
       B|b)
