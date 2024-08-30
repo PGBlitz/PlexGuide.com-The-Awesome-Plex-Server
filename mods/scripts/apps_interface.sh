@@ -58,7 +58,7 @@ apps_interface() {
     local dynamic_menu_count=1
 
     # Call parse_and_store_defaults to populate the config file
-    parse_and_store_defaults "$app_name"
+    parse_and_store_defaults "$app_name" "official"
 
     # Parse the .menu file for dynamic menu items
     while IFS= read -r line; do

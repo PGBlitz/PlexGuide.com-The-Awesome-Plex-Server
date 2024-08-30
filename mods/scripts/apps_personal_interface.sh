@@ -6,7 +6,7 @@ GREEN="\033[0;32m"
 NC="\033[0m" # No color
 
 # Source the defaults script
-source /pg/scripts/apps_personal_defaults.sh
+source /pg/scripts/apps_defaults.sh
 
 # Function: check_deployment_status
 check_deployment_status() {
@@ -53,7 +53,7 @@ apps_interface() {
     local dynamic_menu_count=1
 
     # Call parse_and_store_defaults to populate the config file
-    parse_and_store_defaults "$app_name"
+    parse_and_store_defaults "$app_name" "personal"
 
     # Check if the .menu file exists before parsing
     if [[ -f "$app_menu_path" ]]; then

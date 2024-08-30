@@ -10,10 +10,7 @@ config_path="/pg/config/${app_name}.cfg"
 app_path="/pg/apps/${app_name}/${app_name}.app"
 
 # Source the default and restore scripts
-source /pg/scripts/apps_defaults.sh
 source /pg/scripts/apps_restore_default_settings.sh
-
-# Function: parse_and_store_defaults is already sourced from apps_defaults.sh
 
 # Function: get_or_set_port_number
 get_or_set_port_number() {
