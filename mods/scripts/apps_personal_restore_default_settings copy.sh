@@ -8,7 +8,7 @@ NC="\033[0m" # No color
 # Function: reset_config_file
 reset_config_file() {
     local app_name="$1"
-    local config_path="/pg/config/${app_name}.cfg"
+    local config_path="/pg/personal_configs/${app_name}.cfg"
 
     while true; do
         clear
