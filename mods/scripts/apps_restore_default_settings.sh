@@ -8,7 +8,15 @@ NC="\033[0m" # No color
 # Function: reset_config_file
 reset_config_file() {
     local app_name="$1"
-    local config_path="/pg/config/${app_name}.cfg"
+    local app_type="$2"
+    local config_path
+
+    # Determine the config path based on the app type
+    if [[ "$app_type" == "personal" ]]; then
+        config_path="/pg/personal_configs/${app_name}.cfg"
+    else
+        config_path="/pg/config/${app_name}.cfg"
+    fi
 
     while true; do
         clear
@@ -38,10 +46,8 @@ reset_config_file() {
             echo "Operation Cancelled."
             return
         else
+            # Invalid response: clear the screen and repeat the prompt
             clear
         fi
     done
 }
-
-# Example usage:
-# reset_config_file "app_name"
