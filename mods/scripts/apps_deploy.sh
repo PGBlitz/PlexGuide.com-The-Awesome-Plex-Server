@@ -7,10 +7,10 @@ NC="\033[0m" # No color
 
 # Arguments
 app_name=$1
+script_type=$2  # 'personal' for apps_personal_support, 'official' for apps_support
 
 # Function: redeploy_app
 redeploy_app() {
-
     # Check if lspci is installed; detect NVIDIA graphics cards
     if ! command -v lspci &> /dev/null; then
         if [ -f /etc/debian_version ]; then
@@ -19,8 +19,19 @@ redeploy_app() {
     fi
 
     echo "Deploying $app_name"
-    source /pg/scripts/apps_support.sh "$app_name" && appsourcing
-    source "/pg/apps/$app_name/$app_name.app"  # Source the app script to load functions
+    
+    # Determine which support script to source
+    if [[ "$script_type" == "personal" ]]; then
+        source /pg/scripts/apps_personal_support.sh "$app_name" && appsourcing
+        source "/pg/p_apps/$app_name/$app_name.app"
+    elif [[ "$script_type" == "official" ]]; then
+        source /pg/scripts/apps_support.sh "$app_name" && appsourcing
+        source "/pg/apps/$app_name/$app_name.app"
+    else
+        echo -e "${RED}Invalid script type specified. Use 'personal' or 'official'.${NC}"
+        exit 1
+    fi
+
     deploy_container "$app_name"  # Call the deploy_container function
 }
 
@@ -43,5 +54,8 @@ while true; do
     elif [[ "${deploy_choice,,}" == "z" ]]; then
         echo "Operation cancelled."
         break
+    else
+        echo "Invalid choice. Please try again."
+        read -p "Press Enter to continue..."
     fi
 done

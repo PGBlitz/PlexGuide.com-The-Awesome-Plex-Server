@@ -91,7 +91,7 @@ apps_interface() {
 
         case ${choice,,} in  # Convert input to lowercase
             d)
-                bash /pg/scripts/apps_personal_deploy.sh "$app_name"
+                bash /pg/scripts/apps_deploy.sh "$app_name" "personal"
                 ;;
             k)
                 bash /pg/scripts/apps_kill_remove.sh "$app_name"
