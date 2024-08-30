@@ -125,7 +125,7 @@ main_menu() {
     # Check if the plex app directory exists
     check_plex_existence
     local plex_exists=$?
-
+    clear
     echo -e "${BLUE}PG: Docker Apps${NC}"
     echo ""  # Blank line for separation
 
