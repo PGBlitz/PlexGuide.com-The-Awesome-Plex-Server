@@ -1,5 +1,7 @@
 #!/bin/bash
 
+# Combined script for official and personal app interfaces
+
 # ANSI color codes
 RED="\033[0;31m"
 GREEN="\033[0;32m"
@@ -25,17 +27,18 @@ execute_dynamic_menu() {
     local selected_option=$1
 
     # Source the app script to load the menu functions
-    echo "source /pg/apps/"$app_name/$app_name.menu""  # Debugging: Echo the source command
-    source /pg/apps/$app_name/$app_name.menu
+    if [[ "$config_type" == "personal" ]]; then
+        source "/pg/p_apps/${app_name}/${app_name}.menu"
+    else
+        source "/pg/apps/${app_name}/${app_name}.menu"
+    fi
 
     # Get the selected option name (e.g., "Admin Token" or "Token")
     local selected_name=$(echo "${dynamic_menu_items[$((selected_option-1))]}" | awk '{$1=""; print $0}' | xargs)  # Trim spaces and get full menu item name
-    echo "Selected function name: $selected_name"  # Debugging: Check the function name extracted
 
     # Convert the selected_name to lowercase and replace spaces with underscores
     local function_name=$(echo "$selected_name" | tr '[:upper:]' '[:lower:]' | tr -s ' ' '_')
     function_name=$(echo "$function_name" | sed 's/_$//')  # Remove trailing underscore
-    echo "Function name derived: $function_name"  # This will echo the function name
 
     # Check if the function exists and execute it
     if declare -f "$function_name" > /dev/null; then
@@ -52,23 +55,35 @@ execute_dynamic_menu() {
 # Function: apps_interface
 apps_interface() {
     local app_name=$1
-    local config_path="/pg/config/${app_name}.cfg"
-    local app_menu_path="/pg/apps/${app_name}/${app_name}.menu" 2>/dev/null
+    local config_type=$2  # 'personal' or 'official'
+
+    if [[ "$config_type" == "personal" ]]; then
+        config_path="/pg/personal_configs/${app_name}.cfg"
+        app_menu_path="/pg/p_apps/${app_name}/${app_name}.menu"
+    else
+        config_path="/pg/config/${app_name}.cfg"
+        app_menu_path="/pg/apps/${app_name}/${app_name}.menu"
+    fi
+
     local dynamic_menu_items=()
     local dynamic_menu_count=1
 
     # Call parse_and_store_defaults to populate the config file
-    parse_and_store_defaults "$app_name" "official"
+    parse_and_store_defaults "$app_name" "$config_type"
 
-    # Parse the .menu file for dynamic menu items
-    while IFS= read -r line; do
-        if [[ "$line" =~ ^####\  ]]; then
-            # Extract everything after the first four characters to account for multi-word titles
-            local menu_item=$(echo "$line" | cut -d' ' -f2-)
-            dynamic_menu_items+=("${dynamic_menu_count}) $menu_item")
-            ((dynamic_menu_count++))
-        fi
-    done < "$app_menu_path"  # Change: Read from the .menu file
+    # Check if the .menu file exists before parsing
+    if [[ -f "$app_menu_path" ]]; then
+        while IFS= read -r line; do
+            if [[ "$line" =~ ^####\  ]]; then
+                # Extract everything after the first four characters to account for multi-word titles
+                local menu_item=$(echo "$line" | cut -d' ' -f2-)
+                dynamic_menu_items+=("${dynamic_menu_count}) $menu_item")
+                ((dynamic_menu_count++))
+            fi
+        done < "$app_menu_path"
+    else
+        echo -e "${RED}Warning: Menu file $app_menu_path does not exist. Skipping parsing step.${NC}"
+    fi
 
     # Menu
     while true; do
@@ -92,13 +107,13 @@ apps_interface() {
 
         case ${choice,,} in  # Convert input to lowercase
             d)
-                bash /pg/scripts/apps_deploy.sh "$app_name" "official"
+                bash /pg/scripts/apps_deploy.sh "$app_name" "$config_type"
                 ;;
             k)
                 bash /pg/scripts/apps_kill_remove.sh "$app_name"
                 ;;
             c)
-                bash /pg/scripts/apps_config_menu.sh "$app_name" "official"
+                bash /pg/scripts/apps_config_menu.sh "$app_name" "$config_type"
                 ;;
             [0-9]*)
                 if [[ $choice -le ${#dynamic_menu_items[@]} ]]; then
@@ -119,5 +134,5 @@ apps_interface() {
     done
 }
 
-# Run the interface with the provided app name
-apps_interface "$1"
+# Run the interface with the provided app name and type
+apps_interface "$1" "$2"

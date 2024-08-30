@@ -82,17 +82,12 @@ display_available_apps() {
 deploy_app() {
     local app_name=$1
     local app_script
-
-    if [[ "$deployment_type" == "personal" ]]; then
-        app_script="/pg/scripts/apps_personal_interface.sh"
-    else
-        app_script="/pg/scripts/apps_interface.sh"
-    fi
+    app_script="/pg/scripts/apps_interface.sh"
 
     # Ensure the app script exists before proceeding
     if [[ -f "$app_script" ]]; then
         # Execute the apps_interface.sh script with the app name as an argument
-        bash "$app_script" "$app_name"
+        bash "$app_script" "$app_name" "$deployment_type"
     else
         echo "Error: Interface script $app_script not found!"
         read -p "Press Enter to continue..."
