@@ -87,7 +87,7 @@ deploy_app() {
     # Ensure the app script exists before proceeding
     if [[ -f "$app_script" ]]; then
         # Execute the apps_interface.sh script with the app name as an argument
-        bash "$app_script" "$app_name" "$deployment_type"
+        bash /pg/scripts/apps_interface.sh "$app_name" "$deployment_type"
     else
         echo "Error: Interface script $app_script not found!"
         read -p "Press Enter to continue..."
