@@ -17,6 +17,13 @@ source /pg/scripts/apps_restore_default_settings.sh
 config_path="/pg/${config_type}_configs/${app_name}.cfg"
 app_path="/pg/${config_type}/apps/${app_name}/${app_name}.app"
 
+# Ensure config file exists
+if [[ ! -f "$config_path" ]]; then
+    echo "Config file not found at $config_path. Creating a new one."
+    touch "$config_path"
+    parse_and_store_defaults "$app_name"  # Create default entries
+fi
+
 # Function to set port number if not present
 get_or_set_port_number() {
     if ! grep -q '^port_number=' "$config_path"; then
