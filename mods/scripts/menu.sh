@@ -5,7 +5,8 @@ CONFIG_FILE="/pg/config/config.cfg"
 
 # ANSI color codes
 RED="\033[0;31m"
-GREEN="\033[0;32m"
+ORANGE="\033[0;33m"
+WHITE="\033[1;37m"
 BLUE="\033[0;34m"
 BOLD="\033[1m"
 NC="\033[0m"  # No color
@@ -20,6 +21,17 @@ load_config() {
     else
         echo "VERSION=\"PG Alpha\"" > "$CONFIG_FILE"
         source "$CONFIG_FILE"
+    fi
+}
+
+# Function to determine the color based on the version
+get_color() {
+    if [[ "$VERSION" == *"Alpha"* ]]; then
+        echo "$RED"
+    elif [[ "$VERSION" == *".B"* ]]; then
+        echo "$ORANGE"
+    else
+        echo "$WHITE"
     fi
 }
 
@@ -74,9 +86,13 @@ options_menu() {
 main_menu() {
     while true; do
         clear
-        echo -e "${RED}${BOLD}════════════════════════════════════════════════${NC}"
-        echo -e "${RED}${BOLD}Welcome to PlexGuide: $VERSION${NC}"
-        echo -e "${RED}${BOLD}════════════════════════════════════════════════${NC}"
+        
+        # Get the color based on the version
+        COLOR=$(get_color)
+
+        echo -e "${COLOR}${BOLD}════════════════════════════════════════════════${NC}"
+        echo -e "${COLOR}${BOLD}Welcome to PlexGuide: $VERSION${NC}"
+        echo -e "${COLOR}${BOLD}════════════════════════════════════════════════${NC}"
         echo ""  # Blank line for separation
 
         echo -e "${BOLD}A)${NC} Apps Management"
