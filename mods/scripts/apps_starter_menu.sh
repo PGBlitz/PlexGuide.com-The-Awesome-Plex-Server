@@ -134,7 +134,7 @@ main_menu() {
 
         echo -e "${WHITE}────────────────────────────────────────────────────${NC}"
         # Display the prompt with colors and capture user input
-        echo -e "${BOLD}Make a selection or type [${GREEN}Z${NC}] to exit:${NC} \c"
+        echo -e "Type a Selection or [${GREEN}Z${NC}] to exit:${NC} \c"
         read -r choice
 
         case $choice in
