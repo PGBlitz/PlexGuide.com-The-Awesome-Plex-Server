@@ -75,7 +75,7 @@ main_menu() {
     while true; do
         clear
         echo -e "${RED}${BOLD}════════════════════════════════════════════════${NC}"
-        echo -e "${RED}${BOLD}     Welcome to PlexGuide: $VERSION${NC}"
+        echo -e "${RED}${BOLD}Welcome to PlexGuide: $VERSION${NC}"
         echo -e "${RED}${BOLD}════════════════════════════════════════════════${NC}"
         echo ""  # Blank line for separation
 
