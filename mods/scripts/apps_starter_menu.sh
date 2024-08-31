@@ -107,7 +107,7 @@ main_menu() {
         echo -e "${WHITE}────────────────────────────────────────────────────${NC}"
         echo ""  # Blank line for separation
 
-        echo -e "${BOLD}Official Applications${NC}"
+        echo -e "${ORANGE}${BOLD}Official Applications${NC}"
         # Display the App Store Version at the top
         printf "  A) App Store Version     [%s]\n" "$appstore_version"
         
