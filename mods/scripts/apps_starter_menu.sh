@@ -103,7 +103,7 @@ main_menu() {
         load_personal_apps_config
 
         clear
-        echo -e "${BLUE}${BOLD}PG: Docker Apps${NC}"
+        echo -e "${BLUE}${BOLD}PlexGuide: Applications Interface${NC}"
         echo -e "${WHITE}────────────────────────────────────────────────────${NC}"
         echo ""  # Blank line for separation
 
