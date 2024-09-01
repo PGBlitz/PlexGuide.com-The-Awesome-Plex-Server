@@ -35,8 +35,9 @@ redeploy_app() {
     deploy_container "$app_name"  # Call the deploy_container function
 
     # Function to Deploy Docker Compose
+    mkdir -p /pg/ymals/${app_name}
     create_docker_compose
-    docker-compose up -d --remove-orphans
+    docker-compose up -d
         
     # display app deployment information
     appverify "$app_name"
