@@ -9,10 +9,10 @@ parse_and_store_defaults() {
 
     # Determine paths based on config type
     if [[ "$app_type" == "personal" ]]; then
-        local app_file_path="/pg/p_apps/${app_name}/${app_name}.app"
+        local app_file_path="/pg/p_apps/${app_name}.app"
         local config_path="/pg/personal_configs/${app_name}.cfg"
     else
-        local app_file_path="/pg/apps/${app_name}/${app_name}.app"
+        local app_file_path="/pg/apps/${app_name}.app"
         local config_path="/pg/config/${app_name}.cfg"
     fi
 
