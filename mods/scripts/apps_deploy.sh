@@ -36,7 +36,7 @@ redeploy_app() {
 
     # Function to Deploy Docker Compose
     create_docker_compose
-    docker-compose up -d
+    docker-compose up -d --remove-orphans
         
     # display app deployment information
     appverify "$app_name"
