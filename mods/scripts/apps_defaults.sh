@@ -9,19 +9,25 @@ parse_and_store_defaults() {
 
     # Determine paths based on config type
     if [[ "$app_type" == "personal" ]]; then
-        local app_defaults_path="/pg/p_apps/${app_name}/${app_name}.defaults"
+        local app_file_path="/pg/p_apps/${app_name}/${app_name}.app"
         local config_path="/pg/personal_configs/${app_name}.cfg"
     else
-        local app_defaults_path="/pg/apps/${app_name}/${app_name}.defaults"
+        local app_file_path="/pg/apps/${app_name}/${app_name}.app"
         local config_path="/pg/config/${app_name}.cfg"
     fi
 
     # Check if the config file exists, create it if not
     [[ ! -f "$config_path" ]] && touch "$config_path"
 
-    # Read through the app defaults file for lines starting with "#####"
+    # Check if the app file exists
+    if [[ ! -f "$app_file_path" ]]; then
+        echo "Error: App file $app_file_path does not exist."
+        return 1
+    fi
+
+    # Read through the app file for lines starting with "##### "
     while IFS= read -r line; do
-        if [[ "$line" =~ ^##### ]]; then
+        if [[ "$line" =~ ^#####\  ]]; then
             # Remove leading "##### " and extract the key and value
             local trimmed_line=$(echo "$line" | sed 's/^##### //')
             local key=$(echo "$trimmed_line" | cut -d':' -f1 | tr '[:upper:]' '[:lower:]' | tr ' ' '_')
@@ -32,5 +38,5 @@ parse_and_store_defaults() {
                 echo "$key=$value" >> "$config_path"
             fi
         fi
-    done < "$app_defaults_path"
+    done < "$app_file_path"
 }
