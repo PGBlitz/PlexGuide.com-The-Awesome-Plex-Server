@@ -26,7 +26,7 @@ redeploy_app() {
         source "/pg/p_apps/$app_name/$app_name.app"
     elif [[ "$script_type" == "official" ]]; then
         source /pg/scripts/apps_support.sh "$app_name" "$script_type" && appsourcing
-        source "/pg/apps/$app_name/$app_name.app"
+        source "/pg/apps/$app_name.app"
     else
         echo -e "${RED}Invalid script type specified. Use 'personal' or 'official'.${NC}"
         exit 1
