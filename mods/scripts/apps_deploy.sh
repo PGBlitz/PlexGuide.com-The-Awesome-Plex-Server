@@ -34,14 +34,23 @@ redeploy_app() {
 
     deploy_container "$app_name"  # Call the deploy_container function
 
+    # Create the app-specific directory before writing the docker-compose.yml
+    mkdir -p /pg/ymals/${app_name}
+
     # Function to Deploy Docker Compose
     create_docker_compose
-    mkdir -p /pg/ymals/${app_name}/
+
+    # Navigate to the app-specific configuration directory
+    cd /pg/ymals/${app_name} || {
+        echo -e "${RED}Failed to navigate to /pg/ymals/${app_name}. Directory does not exist.${NC}"
+        return 1
+    }
+    
+    # Run docker-compose up within the app-specific directory
     docker-compose up -d
         
     # display app deployment information
     appverify "$app_name"
-
 }
 
 # Deployment logic
