@@ -37,7 +37,7 @@ list_available_apps() {
         app_dir="/pg/apps"
     fi
 
-    local all_apps=$(find "$app_dir" -maxdepth 1 -mindepth 1 -type d -exec basename {} \; | grep -vE '^\.' | sort)
+    local all_apps=$(find "$app_dir" -maxdepth 1 -name "*.app" -type f -exec basename {} .app \; | sort)
     local running_apps=$(docker ps --format '{{.Names}}' | sort)
 
     local available_apps=()
