@@ -17,16 +17,16 @@ MAX_LINE_LENGTH=72
 # Check if the script is being called for personal or official apps
 app_type=$1  # 'personal' for personal configurations, 'official' for official configurations
 
-# Function to list running Docker apps that match personal or official app folders
+# Function to list running Docker apps that match .app files
 list_running_docker_apps() {
     local all_running_apps=$(docker ps --format '{{.Names}}' | grep -v 'cf_tunnel' | sort)
     local matching_apps=()
 
     for app in $all_running_apps; do
-        # Only add the app if it matches a directory in the appropriate folder
-        if [[ "$app_type" == "personal" && -d "/pg/p_apps/$app" ]]; then
+        # Only add the app if it has a corresponding .app file
+        if [[ "$app_type" == "personal" && -f "/pg/p_apps/${app}.app" ]]; then
             matching_apps+=("$app")
-        elif [[ "$app_type" == "official" && -d "/pg/apps/$app" ]]; then
+        elif [[ "$app_type" == "official" && -f "/pg/apps/${app}.app" ]]; then
             matching_apps+=("$app")
         fi
     done
@@ -81,7 +81,7 @@ running_function() {
     while true; do
         clear
 
-        # Get the list of running Docker apps that match personal or official app folders
+        # Get the list of running Docker apps that match .app files
         APP_LIST=($(list_running_docker_apps))
 
         if [[ ${#APP_LIST[@]} -eq 0 ]]; then
