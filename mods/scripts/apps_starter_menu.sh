@@ -13,13 +13,13 @@ NC="\033[0m"  # No color
 DEFAULT_USER="None"
 DEFAULT_REPO="None"
 
-# Function to count running Docker containers that match official app names in /pg/apps
+# Function to count running Docker containers that match official app names from .app files in /pg/apps
 count_docker_apps() {
     local all_running_apps=$(docker ps --format '{{.Names}}' | grep -v 'cf_tunnel')
     local official_count=0
 
     for app in $all_running_apps; do
-        if [[ -d "/pg/apps/$app" ]]; then
+        if [[ -f "/pg/apps/${app}.app" ]]; then
             ((official_count++))
         fi
     done
@@ -27,13 +27,13 @@ count_docker_apps() {
     echo $official_count
 }
 
-# Function to count running Docker containers that match personal app names in /pg/p_apps
+# Function to count running Docker containers that match personal app names from .app files in /pg/p_apps
 count_personal_docker_apps() {
     local all_running_apps=$(docker ps --format '{{.Names}}' | grep -v 'cf_tunnel')
     local personal_count=0
 
     for app in $all_running_apps; do
-        if [[ -d "/pg/p_apps/$app" ]]; then
+        if [[ -f "/pg/p_apps/${app}.app" ]]; then
             ((personal_count++))
         fi
     done
