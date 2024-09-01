@@ -32,9 +32,9 @@ execute_dynamic_menu() {
 
     # Source the app script to load the menu functions
     if [[ "$config_type" == "personal" ]]; then
-        source "/pg/p_apps/${app_name}/${app_name}.menu"
+        source "/pg/p_apps/${app_name}.app"
     else
-        source "/pg/apps/${app_name}/${app_name}.menu"
+        source "/pg/apps/${app_name}.app"
     fi
 
     # Get the selected option name (e.g., "Admin Token" or "Token")
