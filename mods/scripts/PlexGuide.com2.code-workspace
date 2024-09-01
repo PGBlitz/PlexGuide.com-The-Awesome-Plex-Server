@@ -5,6 +5,10 @@
 		},
 		{
 			"path": "../../../Apps"
+		},
+		{
+			"name": "AppsFork",
+			"path": "../../../AppsFork"
 		}
 	],
 	"settings": {}
