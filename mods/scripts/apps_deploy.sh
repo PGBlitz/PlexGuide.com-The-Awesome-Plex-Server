@@ -9,7 +9,7 @@ NC="\033[0m" # No color
 app_name=$1
 script_type=$2  # personal or official
 
-# Function: redeploy_app
+# Function: Deploys / Redploys App
 redeploy_app() {
     # Check if lspci is installed; detect NVIDIA graphics cards
     if ! command -v lspci &> /dev/null; then
@@ -33,6 +33,14 @@ redeploy_app() {
     fi
 
     deploy_container "$app_name"  # Call the deploy_container function
+
+    # Function to Deploy Docker Compose
+    create_docker_compose
+    docker-compose up -d
+        
+    # display app deployment information
+    appverify "$app_name"
+
 }
 
 # Deployment logic
