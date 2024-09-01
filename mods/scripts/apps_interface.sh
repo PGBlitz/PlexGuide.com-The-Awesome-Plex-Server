@@ -59,10 +59,10 @@ execute_dynamic_menu() {
 apps_interface() {
     if [[ "$config_type" == "personal" ]]; then
         config_path="/pg/personal_configs/${app_name}.cfg"
-        app_menu_path="/pg/p_apps/${app_name}/${app_name}.menu"
+        app_file_path="/pg/p_apps/${app_name}.app"
     else
         config_path="/pg/config/${app_name}.cfg"
-        app_menu_path="/pg/apps/${app_name}/${app_name}.menu"
+        app_file_path="/pg/apps/${app_name}.app"
     fi
 
     local dynamic_menu_items=()
@@ -71,18 +71,18 @@ apps_interface() {
     # Call parse_and_store_defaults to populate the config file
     parse_and_store_defaults "$app_name" "$config_type"
 
-    # Check if the .menu file exists before parsing
-    if [[ -f "$app_menu_path" ]]; then
+    # Check if the .app file exists before parsing
+    if [[ -f "$app_file_path" ]]; then
         while IFS= read -r line; do
             if [[ "$line" =~ ^####\  ]]; then
-                # Extract everything after the first four characters to account for multi-word titles
+                # Extract everything after the four hashes to account for multi-word titles
                 local menu_item=$(echo "$line" | cut -d' ' -f2-)
                 dynamic_menu_items+=("${dynamic_menu_count}) $menu_item")
                 ((dynamic_menu_count++))
             fi
-        done < "$app_menu_path"
+        done < "$app_file_path"
     else
-        echo -e "${RED}Warning: Menu file $app_menu_path does not exist. Skipping parsing step.${NC}"
+        echo -e "${RED}Warning: App file $app_file_path does not exist. Skipping parsing step.${NC}"
     fi
 
     # Menu
