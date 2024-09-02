@@ -25,7 +25,7 @@ To Create Your Own Apps - visit & fork https://github.com/plexguide/AppsFork and
 ### Working on PG11
 
 * Simple, debloated, no fancy menus and executes for exactly what you need!
-* Works on Ubuntu 22/Ubuntu 24/Debian 12
+* Works on Ubuntu 22/Ubuntu 24/Debian 12 (Recommend Ubuntu Heavily)
 * To Test (Use Ubuntu or Debian) CMD Line; once installed, type `pg` or `plexguide`
 
 <p align="center">
