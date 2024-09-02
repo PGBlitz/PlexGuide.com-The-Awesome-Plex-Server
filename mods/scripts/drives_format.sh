@@ -19,6 +19,30 @@ list_drives() {
     echo ""
 }
 
+# Function to unmount all mount points associated with a drive
+unmount_drive() {
+    drive="$1"
+    # Get all mount points for the drive and unmount them
+    mount_points=$(lsblk -nr -o MOUNTPOINT "/dev/$drive" | grep -v '^$')
+    for mp in $mount_points; do
+        echo -e "${YELLOW}Unmounting $mp...${NC}"
+        umount "$mp"
+    done
+}
+
+# Function to remove mount point directories associated with a drive
+remove_mount_directories() {
+    drive="$1"
+    # Find directories under /mnt that correspond to the drive's mount points
+    mount_points=$(lsblk -nr -o MOUNTPOINT "/dev/$drive" | grep -v '^$')
+    for mp in $mount_points; do
+        if [[ -d "$mp" ]]; then
+            echo -e "${YELLOW}Removing directory $mp...${NC}"
+            rm -rf "$mp"
+        fi
+    done
+}
+
 # Function to prompt for drive selection and format options
 format_drive() {
     echo -e "${BLUE}Select a drive to format (e.g., sda, sdb):${NC}"
@@ -28,6 +52,10 @@ format_drive() {
         echo -e "${RED}Invalid drive. Please ensure the drive exists.${NC}"
         exit 1
     fi
+
+    # Unmount any existing mount points associated with the selected drive
+    unmount_drive "$drive"
+    remove_mount_directories "$drive"
 
     echo -e "${BLUE}Select the filesystem format type:${NC}"
     echo "1) XFS"
@@ -49,9 +77,6 @@ format_drive() {
     echo -e "${BLUE}Enter a name for the mount point (e.g., cat):${NC}"
     read -p "> " mount_name
     mount_point="/mnt/pg_${mount_name}"
-
-    # Unmount the drive if it's mounted
-    umount "/dev/$drive"1 &>/dev/null
 
     echo -e "${YELLOW}Wiping existing filesystem signatures on /dev/$drive...${NC}"
     wipefs -a "/dev/$drive"
