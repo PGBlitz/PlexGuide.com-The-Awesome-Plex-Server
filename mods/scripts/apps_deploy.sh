@@ -68,24 +68,26 @@ while true; do
         container_running=false
     fi
 
-    echo -e "Type [${RED}${deploy_code}${NC}] to proceed or [${GREEN}Z${NC}] to cancel: "
+    # Prompt user for deployment action
+    echo -n "Type [${RED}${deploy_code}${NC}] to proceed or [${GREEN}Z${NC}] to cancel: "
     
-    read -p "" deploy_choice
+    read deploy_choice
     
     if [[ "$deploy_choice" == "$deploy_code" ]]; then
         echo ""
-        
+
         # Stop and remove the container if it's running
         if [ "$container_running" = true ]; then
             echo -n "Stopping $app_name Docker container..."
-            docker stop "$app_name" &> /dev/null && echo -e " ${GREEN}Stopped${NC}"
+            docker stop "$app_name" &> /dev/null && echo -e "${GREEN} Stopped${NC}"
             
             echo -n "Removing $app_name Docker container..."
-            docker rm "$app_name" &> /dev/null && echo -e " ${GREEN}Removed${NC}"
+            docker rm "$app_name" &> /dev/null && echo -e "${GREEN} Removed${NC}"
+            
+            echo -e "${app_name} Docker Container - ${GREEN}Stopped & Removed${NC}"
         fi
         
-        echo -e "${app_name} Docker Container - ${GREEN}Stopped & Removed${NC}"
-
+        # Call the redeploy function
         redeploy_app  # Deploy the container after stopping/removing (if it existed)
         break
     elif [[ "${deploy_choice,,}" == "z" ]]; then
@@ -93,7 +95,7 @@ while true; do
         break
     else
         echo ""
-        echo "Invalid choice. Please try again."
+        echo -e "${RED}Invalid choice.${NC} Please try again."
         read -p "Press Enter to continue..."
     fi
 done

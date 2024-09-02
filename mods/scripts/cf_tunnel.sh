@@ -90,7 +90,7 @@ prompt_choice() {
             clear
             local deploy_code=$(printf "%04d" $((RANDOM % 10000)))  # Generate a 4-digit code
             while true; do
-                read -p "$(echo -e "To deploy the container, type [${RED}${deploy_code}${NC}] to proceed or [${GREEN}no${NC}] to cancel: ")" input_code
+                read -p "$(echo -e "Deploy CF Tunnel? Type [${RED}${deploy_code}${NC}] to proceed or [${GREEN}no${NC}] to cancel: ")" input_code
                 if [[ "$input_code" == "$deploy_code" ]]; then
                     deploy_container
                     break
