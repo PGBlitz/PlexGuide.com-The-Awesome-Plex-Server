@@ -9,6 +9,9 @@
 		{
 			"name": "AppsFork",
 			"path": "../../../AppsFork"
+		},
+		{
+			"path": "../../../Installer"
 		}
 	],
 	"settings": {}
