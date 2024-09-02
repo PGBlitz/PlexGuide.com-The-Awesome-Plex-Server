@@ -82,7 +82,7 @@ main_menu() {
 
     case ${choice,,} in  # Convert input to lowercase for v/V, m/M, a/A, f/F, i/I, u/U, z/Z handling
       v)
-        /pg/scripts/hd_detection.sh
+        /pg/scripts/drives_view.sh
         ;;
       m|a|f)
         if $MERGERFS_INSTALLED; then
