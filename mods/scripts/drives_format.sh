@@ -19,26 +19,36 @@ list_drives() {
     echo ""
 }
 
-# Function to unmount all mount points associated with a drive
-unmount_drive() {
+# Function to unmount and remove old mount points based on size and free space
+clean_old_mounts() {
     local drive="$1"
-    # Get all mount points for the drive and unmount them
-    local mount_points=$(lsblk -nr -o MOUNTPOINT "/dev/$drive" | grep -v '^$')
-    for mp in $mount_points; do
-        echo -e "${YELLOW}Unmounting $mp...${NC}"
-        umount "$mp"
-    done
-}
+    local selected_drive_info
+    selected_drive_info=$(df | grep "/dev/${drive}"1 | awk '{print $2, $4}')
 
-# Function to remove mount point directories associated with a drive
-remove_mount_directories() {
-    local drive="$1"
-    # Use findmnt to find all mount points for the device
-    local mount_points=$(findmnt -n -o TARGET -S "/dev/$drive" | grep '^/mnt/')
-    for mp in $mount_points; do
+    if [[ -z "$selected_drive_info" ]]; then
+        echo -e "${RED}Failed to retrieve selected drive information.${NC}"
+        return
+    fi
+
+    local selected_size selected_free
+    selected_size=$(echo "$selected_drive_info" | awk '{print $1}')
+    selected_free=$(echo "$selected_drive_info" | awk '{print $2}')
+
+    echo -e "${YELLOW}Identifying and removing old mount points for /dev/${drive}...${NC}"
+
+    # Iterate over all mount points under /mnt
+    for mp in /mnt/*; do
         if [[ -d "$mp" ]]; then
-            echo -e "${YELLOW}Removing directory $mp...${NC}"
-            rm -rf "$mp"
+            # Check if the mount point is associated with a device having the same size and free space
+            mount_info=$(df | grep "$mp" | awk '{print $2, $4}')
+            mount_size=$(echo "$mount_info" | awk '{print $1}')
+            mount_free=$(echo "$mount_info" | awk '{print $2}')
+
+            if [[ "$mount_size" == "$selected_size" && "$mount_free" == "$selected_free" ]]; then
+                echo -e "${YELLOW}Unmounting and removing $mp...${NC}"
+                umount "$mp" &>/dev/null
+                rm -rf "$mp"
+            fi
         fi
     done
 }
@@ -53,9 +63,8 @@ format_drive() {
         exit 1
     fi
 
-    # Unmount any existing mount points associated with the selected drive
-    unmount_drive "$drive"
-    remove_mount_directories "$drive"
+    # Clean old mount points for the selected drive
+    clean_old_mounts "$drive"
 
     echo -e "${BLUE}Select the filesystem format type:${NC}"
     echo "1) XFS"
