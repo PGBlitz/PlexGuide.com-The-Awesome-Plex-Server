@@ -54,11 +54,10 @@ redeploy_app() {
 }
 
 # Deployment logic
-clear
+echo ""
 deploy_code=$(printf "%04d" $((RANDOM % 10000)))
 
 while true; do
-    echo ""
 
     # Check if the container is already running
     if docker ps --format '{{.Names}}' | grep -wq "$app_name"; then
