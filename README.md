@@ -67,7 +67,6 @@ FireFox, Jackett, JellyFin, Lidarr, NetData, NZBGET, Overseer, Ombi, Opera, Port
 - [ ] Create Detailed Wiki
 - [ ] Deployment of PlexDebrid/Zurg
 - [ ] VPN Server Capabilities
-- [ ] Link PlexGuide Domain to GITHUB
 
 ** PG Futurewise will format and merge disk to act as form of UNRAID light
 <img src="https://i.imgur.com/muqXL24.jpeg" alt="Menu Example" width="500">
