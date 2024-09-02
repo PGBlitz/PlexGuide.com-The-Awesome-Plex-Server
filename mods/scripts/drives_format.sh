@@ -15,7 +15,7 @@ list_drives() {
     echo -e "=========================${NC}"
     echo -e "${GREEN}Top-Level View of Drives, Partitions, Sizes, and Filesystems:${NC}"
     echo ""
-    lsblk -o NAME,SIZE,FSTYPE,MOUNTPOINT | grep -E '^[a-z]'
+    lsblk -o NAME,SIZE,FSTYPE,MOUNTPOINT | grep -E '^[a-z]'  # Show drives, sizes, and file system types
     echo ""
 }
 
