@@ -48,9 +48,6 @@ redeploy_app() {
     
     # Run docker-compose up within the app-specific directory
     docker-compose up -d
-        
-    # display app deployment information
-    appverify "$app_name"
 }
 
 # Deployment logic
