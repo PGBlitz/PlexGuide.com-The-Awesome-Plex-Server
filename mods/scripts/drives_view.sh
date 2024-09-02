@@ -20,4 +20,5 @@ echo ""
 lsblk -d -o NAME,SIZE | column -t
 
 # Prompt the user to press [ENTER] to exit
+echo ""
 read -p "Press [ENTER] to Exit"
