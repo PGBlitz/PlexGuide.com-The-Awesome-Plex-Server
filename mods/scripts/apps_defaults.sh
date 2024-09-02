@@ -43,8 +43,6 @@ parse_and_store_defaults() {
             else
                 echo "$key=$value" >> "$config_path"
             fi
-
-            echo "Processed: $key=$value"
         fi
     done < "$app_file_path"
 
