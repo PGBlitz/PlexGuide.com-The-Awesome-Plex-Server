@@ -83,21 +83,10 @@ main_menu() {
         # Convert choice to lowercase and handle options
         case ${choice,,} in 
             v)
-                if [[ -f /pg/scripts/drives_view.sh ]]; then
-                    /pg/scripts/drives_view.sh
-                else
-                    echo -e "${RED}Error: drives_view.sh script not found.${NC}"
-                    read -p "Press Enter to return to the menu..."
-                fi
+                bash /pg/scripts/drives_view.sh
                 ;;
-            m|a|f)
-                if $MERGERFS_INSTALLED; then
-                    echo "Executing option..."
-                    # Implement your Manage/Add/Format drive functionality here
-                else
-                    echo -e "${RED}MergerFS is not installed. Install MergerFS before proceeding.${NC}"
-                    read -p "Press Enter to return to the menu..."
-                fi
+            f)
+                bash /pg/scripts/drives_format.sh
                 ;;
             i)
                 install_mergerfs
