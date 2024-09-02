@@ -20,6 +20,8 @@ The [Wiki](https://github.com/plexguide/PlexGuide.com/wiki) will also provide mo
 sudo apt-get update && sudo apt-get install -y curl && bash <(curl -s https://raw.githubusercontent.com/plexguide/Installer/v11/install_menu.sh)
 ```
 
+To Create Your Own Apps - visit & fork https://github.com/plexguide/AppsFork and make your own!
+
 ### Working on PG11
 
 * Simple, debloated, no fancy menus and executes for exactly what you need!
