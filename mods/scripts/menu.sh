@@ -95,12 +95,12 @@ main_menu() {
         echo -e "${COLOR}${BOLD}════════════════════════════════════════════════${NC}"
         echo ""  # Blank line for separation
 
-        echo -e "${BOLD}A)${NC} Apps Management"
-        echo -e "${BOLD}H)${NC} HardDisk Management"
-        echo -e "${BOLD}C)${NC} CloudFlare Tunnel (Domains)"
-        echo -e "${BOLD}O)${NC} Options"
-        echo -e "${BOLD}R)${NC} Reinstall PlexGuide"
-        echo -e "${BOLD}Z)${NC} Exit"
+        echo -e "A) Apps Management"
+        echo -e "H) HardDisk Management"
+        echo -e "C) CloudFlare Tunnel (Domains)"
+        echo -e "O) Options"
+        echo -e "R) Reinstall PlexGuide"
+        echo -e "Z) Exit"
         echo ""  # Space between options and input prompt
 
         read -p "Enter your choice: " choice
