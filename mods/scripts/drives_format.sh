@@ -33,8 +33,8 @@ unmount_drive() {
 # Function to remove mount point directories associated with a drive
 remove_mount_directories() {
     local drive="$1"
-    # Get mount points for the drive and clean up associated directories
-    local mount_points=$(lsblk -nr -o MOUNTPOINT "/dev/$drive" | grep -v '^$')
+    # Use findmnt to find all mount points for the device
+    local mount_points=$(findmnt -n -o TARGET -S "/dev/$drive" | grep '^/mnt/')
     for mp in $mount_points; do
         if [[ -d "$mp" ]]; then
             echo -e "${YELLOW}Removing directory $mp...${NC}"
