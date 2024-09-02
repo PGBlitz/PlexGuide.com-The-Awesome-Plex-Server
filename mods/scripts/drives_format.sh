@@ -19,32 +19,18 @@ list_drives() {
     echo ""
 }
 
-# Function to unmount and remove old mount points based on size and free space
+# Function to clean old mount points under /mnt associated with the selected drive
 clean_old_mounts() {
     local drive="$1"
-    local selected_drive_info
-    selected_drive_info=$(df | grep "/dev/${drive}"1 | awk '{print $2, $4}')
 
-    if [[ -z "$selected_drive_info" ]]; then
-        echo -e "${RED}Failed to retrieve selected drive information.${NC}"
-        return
-    fi
+    echo -e "${YELLOW}Searching for and cleaning old mount points for /dev/${drive}...${NC}"
 
-    local selected_size selected_free
-    selected_size=$(echo "$selected_drive_info" | awk '{print $1}')
-    selected_free=$(echo "$selected_drive_info" | awk '{print $2}')
-
-    echo -e "${YELLOW}Identifying and removing old mount points for /dev/${drive}...${NC}"
-
-    # Iterate over all mount points under /mnt
-    for mp in /mnt/*; do
-        if [[ -d "$mp" ]]; then
-            # Check if the mount point is associated with a device having the same size and free space
-            mount_info=$(df | grep "$mp" | awk '{print $2, $4}')
-            mount_size=$(echo "$mount_info" | awk '{print $1}')
-            mount_free=$(echo "$mount_info" | awk '{print $2}')
-
-            if [[ "$mount_size" == "$selected_size" && "$mount_free" == "$selected_free" ]]; then
+    # Find all mount points under /mnt that are currently mounted
+    for mp in $(mount | grep "/mnt/pg_" | awk '{print $3}'); do
+        # Check if the mount point is linked to the selected device
+        if grep -q "$mp" /proc/mounts; then
+            linked_device=$(lsblk -no NAME,MOUNTPOINT | grep "$mp" | awk '{print $1}')
+            if [[ "$linked_device" == "$drive"1 ]]; then
                 echo -e "${YELLOW}Unmounting and removing $mp...${NC}"
                 umount "$mp" &>/dev/null
                 rm -rf "$mp"
