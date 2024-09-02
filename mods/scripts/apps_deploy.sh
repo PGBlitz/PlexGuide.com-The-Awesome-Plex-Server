@@ -9,6 +9,29 @@ NC="\033[0m" # No color
 app_name=$1
 script_type=$2  # personal or official
 
+#!/bin/bash
+
+# Name of the Docker network to check or create
+network_name="plexguide"
+
+# Function to check and create the Docker network
+check_and_create_network() {
+    # Check if the Docker network exists
+    if docker network ls --format '{{.Name}}' | grep -wq "$network_name"; then
+        # Network exists, no action needed
+        return 0
+    else
+        # Network does not exist, attempt to create it
+        echo "Creating Docker network '${network_name}'..."
+        if docker network create "$network_name" --driver bridge; then
+            echo "Docker network '${network_name}' created successfully."
+        else
+            echo -e "\033[0;31mFailed to create Docker network '${network_name}'.\033[0m"
+            read -p "Press [ENTER] to acknowledge the error and continue..."
+        fi
+    fi
+}
+
 # Function: Deploys / Redploys App
 redeploy_app() {
     # Check if lspci is installed; detect NVIDIA graphics cards
@@ -17,6 +40,9 @@ redeploy_app() {
             sudo apt-get update && sudo apt-get install -y pciutils
         fi
     fi
+
+    # Run the network check and creation function
+    check_and_create_network
 
     echo "Deploying $app_name"
     
