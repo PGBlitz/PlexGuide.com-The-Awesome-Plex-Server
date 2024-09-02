@@ -21,9 +21,9 @@ list_drives() {
 
 # Function to unmount all mount points associated with a drive
 unmount_drive() {
-    drive="$1"
+    local drive="$1"
     # Get all mount points for the drive and unmount them
-    mount_points=$(lsblk -nr -o MOUNTPOINT "/dev/$drive" | grep -v '^$')
+    local mount_points=$(lsblk -nr -o MOUNTPOINT "/dev/$drive" | grep -v '^$')
     for mp in $mount_points; do
         echo -e "${YELLOW}Unmounting $mp...${NC}"
         umount "$mp"
@@ -32,9 +32,9 @@ unmount_drive() {
 
 # Function to remove mount point directories associated with a drive
 remove_mount_directories() {
-    drive="$1"
-    # Find directories under /mnt that correspond to the drive's mount points
-    mount_points=$(lsblk -nr -o MOUNTPOINT "/dev/$drive" | grep -v '^$')
+    local drive="$1"
+    # Get mount points for the drive and clean up associated directories
+    local mount_points=$(lsblk -nr -o MOUNTPOINT "/dev/$drive" | grep -v '^$')
     for mp in $mount_points; do
         if [[ -d "$mp" ]]; then
             echo -e "${YELLOW}Removing directory $mp...${NC}"
