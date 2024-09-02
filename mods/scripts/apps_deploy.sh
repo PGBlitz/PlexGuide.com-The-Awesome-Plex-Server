@@ -48,6 +48,9 @@ redeploy_app() {
     
     # Run docker-compose up within the app-specific directory
     docker-compose up -d
+
+    echo ""
+    read -p "Press [ENTER] to Continue"
 }
 
 # Deployment logic

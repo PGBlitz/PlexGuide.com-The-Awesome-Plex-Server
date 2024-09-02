@@ -17,21 +17,6 @@ appsourcing() {
     fi
 }
 
-# Function to verify if the Docker container is running
-appverify() {
-    echo ""
-    
-    # Check if the app_name is present in the list of running Docker containers
-    if docker ps | grep -q "$app_name"; then
-        echo -e "${GREEN}${app_name}${NC} has been deployed."
-    else
-        echo -e "${RED}${app_name}${NC} failed to deploy."
-    fi
-    
-    echo ""
-    read -p "Press Enter to continue"
-}
-
 # Function to source configuration from the config file
 configsource() {
     local app_name="$1"
