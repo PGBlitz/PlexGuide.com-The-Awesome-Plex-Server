@@ -58,21 +58,42 @@ clear
 deploy_code=$(printf "%04d" $((RANDOM % 10000)))
 
 while true; do
-    clear
-    echo -e "Deploy/Redeploy $app_name?"
+    echo ""
+
+    # Check if the container is already running
+    if docker ps --format '{{.Names}}' | grep -wq "$app_name"; then
+        echo -e "Redeploy $app_name?"
+        container_running=true
+    else
+        echo -e "Deploy $app_name?"
+        container_running=false
+    fi
+
     echo -e "Type [${RED}${deploy_code}${NC}] to proceed or [${GREEN}Z${NC}] to cancel: "
     
     read -p "" deploy_choice
     
     if [[ "$deploy_choice" == "$deploy_code" ]]; then
         echo ""
-        docker stop "$app_name" && docker rm "$app_name"
-        redeploy_app  # Deploy the container after stopping/removing
+        
+        # Stop and remove the container if it's running
+        if [ "$container_running" = true ]; then
+            echo -n "Stopping $app_name Docker container..."
+            docker stop "$app_name" &> /dev/null && echo -e " ${GREEN}Stopped${NC}"
+            
+            echo -n "Removing $app_name Docker container..."
+            docker rm "$app_name" &> /dev/null && echo -e " ${GREEN}Removed${NC}"
+        fi
+        
+        echo -e "${app_name} Docker Container - ${GREEN}Stopped & Removed${NC}"
+
+        redeploy_app  # Deploy the container after stopping/removing (if it existed)
         break
     elif [[ "${deploy_choice,,}" == "z" ]]; then
         echo "Operation cancelled."
         break
     else
+        echo ""
         echo "Invalid choice. Please try again."
         read -p "Press Enter to continue..."
     fi
