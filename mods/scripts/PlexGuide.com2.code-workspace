@@ -1,18 +1,7 @@
 {
-	"folders": [
-		{
-			"path": "../.."
-		},
-		{
-			"path": "../../../Apps"
-		},
-		{
-			"name": "AppsFork",
-			"path": "../../../AppsFork"
-		},
-		{
-			"path": "../../../Installer"
-		}
-	],
-	"settings": {}
+    "folders": [
+        {
+            "path": "../.."
+        }
+    ]
 }
