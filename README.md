@@ -68,3 +68,6 @@ FireFox, Jackett, JellyFin, Lidarr, NetData, NZBGET, Overseer, Ombi, Opera, Port
 - [ ] Deployment of PlexDebrid/Zurg
 - [ ] VPN Server Capabilities
 - [ ] Link PlexGuide Domain to GITHUB
+
+<img src="https://i.imgur.com/muqXL24.jpeg" alt="Menu Example" width="500">
+
