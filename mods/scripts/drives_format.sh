@@ -22,20 +22,19 @@ list_drives() {
 # Function to clean old mount points under /mnt associated with the selected drive
 clean_old_mounts() {
     local drive="$1"
-
+    
     echo -e "${YELLOW}Searching for and cleaning old mount points for /dev/${drive}...${NC}"
+    
+    # Unmount all mount points associated with the selected drive
+    mount | grep "/dev/${drive}" | awk '{print $3}' | while read mp; do
+        echo -e "${YELLOW}Unmounting $mp...${NC}"
+        umount "$mp" &>/dev/null
+    done
 
-    # Find all mount points under /mnt that are currently mounted
-    for mp in $(mount | grep "/mnt/pg_" | awk '{print $3}'); do
-        # Check if the mount point is linked to the selected device
-        if grep -q "$mp" /proc/mounts; then
-            linked_device=$(lsblk -no NAME,MOUNTPOINT | grep "$mp" | awk '{print $1}')
-            if [[ "$linked_device" == "$drive"1 ]]; then
-                echo -e "${YELLOW}Unmounting and removing $mp...${NC}"
-                umount "$mp" &>/dev/null
-                rm -rf "$mp"
-            fi
-        fi
+    # Disable swap if it's using the selected drive
+    swapon --show | grep "/dev/${drive}" | awk '{print $1}' | while read swap_partition; do
+        echo -e "${YELLOW}Disabling swap on $swap_partition...${NC}"
+        swapoff "$swap_partition"
     done
 }
 
@@ -49,7 +48,7 @@ format_drive() {
         exit 1
     fi
 
-    # Clean old mount points for the selected drive
+    # Clean old mount points and swap for the selected drive
     clean_old_mounts "$drive"
 
     echo -e "${BLUE}Select the filesystem format type:${NC}"
