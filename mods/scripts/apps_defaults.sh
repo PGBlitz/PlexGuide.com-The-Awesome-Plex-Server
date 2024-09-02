@@ -1,8 +1,3 @@
-#!/bin/bash
-
-# Combined script for parsing and storing default configurations
-
-# Function: parse_and_store_defaults
 parse_and_store_defaults() {
     local app_name="$1"
     local app_type="$2"  # 'personal' for personal apps, 'official' for official apps
@@ -27,16 +22,31 @@ parse_and_store_defaults() {
 
     # Read through the app file for lines starting with "##### "
     while IFS= read -r line; do
-        if [[ "$line" =~ ^#####\  ]]; then
-            # Remove leading "##### " and extract the key and value
-            local trimmed_line=$(echo "$line" | sed 's/^##### //')
-            local key=$(echo "$trimmed_line" | cut -d':' -f1 | tr '[:upper:]' '[:lower:]' | tr ' ' '_')
-            local value=$(echo "$trimmed_line" | cut -d':' -f2 | xargs)
+        if [[ "$line" =~ ^#####[[:space:]]+(.*?):[[:space:]]*(.*) ]]; then
+            local key="${BASH_REMATCH[1]}"
+            local value="${BASH_REMATCH[2]}"
 
-            # Check if the key already exists in the config file, add it if not
-            if ! grep -q "^$key=" "$config_path"; then
+            # Convert key to lowercase and replace spaces with underscores
+            key=$(echo "$key" | tr '[:upper:]' '[:lower:]' | tr ' ' '_')
+
+            # Trim leading and trailing whitespace from value
+            value=$(echo "$value" | sed -e 's/^[[:space:]]*//' -e 's/[[:space:]]*$//')
+
+            # If value is "null", set it to an empty string
+            if [[ "$value" == "null" ]]; then
+                value=""
+            fi
+
+            # Check if the key already exists in the config file, update if it does, add if it doesn't
+            if grep -q "^$key=" "$config_path"; then
+                sed -i "s|^$key=.*|$key=$value|" "$config_path"
+            else
                 echo "$key=$value" >> "$config_path"
             fi
+
+            echo "Processed: $key=$value"
         fi
     done < "$app_file_path"
+
+    echo "Configuration updated in $config_path"
 }
