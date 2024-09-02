@@ -62,53 +62,59 @@ uninstall_mergerfs() {
 
 # Function for the main menu
 main_menu() {
-  while true; do
-    clear
-    check_mergerfs_status
-    echo -e "${BLUE}PG: Drive Management${NC} - MergerFS Status: $MERGERFS_STATUS"
-    echo "NOTE: This is not functional yet"
-    echo ""  # Space for separation
-    echo "V) View Drives"
-    echo "M) Manage Drives"
-    echo "A) Add a Drive"
-    echo "F) Format a Drive"
-    echo "I) Install MergerFS"
-    echo "U) Uninstall MergerFS"
-    echo "Z) Exit"
-    echo ""  # Space between options and input prompt
+    while true; do
+        clear
+        check_mergerfs_status
+        echo -e "${BLUE}PG: Drive Management${NC} - MergerFS Status: $MERGERFS_STATUS"
+        echo "NOTE: This is not functional yet"
+        echo ""  # Space for separation
+        echo "V) View Drives"
+        echo "M) Manage Drives"
+        echo "A) Add a Drive"
+        echo "F) Format a Drive"
+        echo "I) Install MergerFS"
+        echo "U) Uninstall MergerFS"
+        echo "Z) Exit"
+        echo ""  # Space between options and input prompt
 
-    # Prompt the user for input
-    read -p "Enter your choice: " choice
+        # Prompt the user for input
+        read -p "Enter your choice: " choice
 
-    case ${choice,,} in  # Convert input to lowercase for v/V, m/M, a/A, f/F, i/I, u/U, z/Z handling
-      v)
-        /pg/scripts/drives_view.sh
-        ;;
-      m|a|f)
-        if $MERGERFS_INSTALLED; then
-            echo "Executing option..."
-            # Implement your Manage/Add/Format drive functionality here
-        else
-            echo -e "${RED}MergerFS is not installed. Install MergerFS before proceeding.${NC}"
-            read -p "Press Enter to return to the menu..."
-        fi
-        ;;
-      i)
-        install_mergerfs
-        ;;
-      u)
-        uninstall_mergerfs
-        ;;
-      z)
-        exit 0
-        ;;
-      *)
-        echo "Invalid option, please try again."
-        read -p "Press Enter to continue..."
-        ;;
-    esac
+        # Convert choice to lowercase and handle options
+        case ${choice,,} in 
+            v)
+                if [[ -f /pg/scripts/drives_view.sh ]]; then
+                    /pg/scripts/drives_view.sh
+                else
+                    echo -e "${RED}Error: drives_view.sh script not found.${NC}"
+                    read -p "Press Enter to return to the menu..."
+                fi
+                ;;
+            m|a|f)
+                if $MERGERFS_INSTALLED; then
+                    echo "Executing option..."
+                    # Implement your Manage/Add/Format drive functionality here
+                else
+                    echo -e "${RED}MergerFS is not installed. Install MergerFS before proceeding.${NC}"
+                    read -p "Press Enter to return to the menu..."
+                fi
+                ;;
+            i)
+                install_mergerfs
+                ;;
+            u)
+                uninstall_mergerfs
+                ;;
+            z)
+                exit 0
+                ;;
+            *)
+                echo "Invalid option, please try again."
+                read -p "Press Enter to continue..."
+                ;;
+        esac
 
-  done
+    done
 }
 
 # Call the main menu function
