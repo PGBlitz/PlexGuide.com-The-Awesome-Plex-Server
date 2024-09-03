@@ -27,7 +27,7 @@ load_config() {
 
 # Function to determine the color based on the version
 get_color() {
-    if [[ "$VERSION" == *"Alpha"* ]]; then
+    if [[ "$VERSION" == *"PG Dev"* ]]; then
         echo "$RED"
     elif [[ "$VERSION" == *".B"* ]]; then
         echo "$ORANGE"
