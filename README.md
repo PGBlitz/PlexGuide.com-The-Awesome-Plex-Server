@@ -1,4 +1,4 @@
-##### WANT TO HELP? CLICK THE ★ (STAR LOGO) in the Upper-Right! 
+# ⭐ Want to Help? Click the Star in the Upper-Right Corner! ⭐
 
 <p align="left">
   <a href="https://discord.gg/93PYgqDX9T">
@@ -8,11 +8,11 @@
 
 ## PlexGuide Installation
 
-Visit the [PlexGuide Installation Information](https://github.com/plexguide/PlexGuide.com/wiki/PlexGuide-Install-Information) area for more detailed information. 
+Visit the [PlexGuide Installation Information](https://github.com/plexguide/PlexGuide.com/wiki/PlexGuide-Install-Information) area for more detailed information.
 
+## PlexGuide Wiki
 
-## PlexGuide Wiki 
-The [Wiki](https://github.com/plexguide/PlexGuide.com/wiki) will also provide more information in regards to docker, applications, and much more!
+The [Wiki](https://github.com/plexguide/PlexGuide.com/wiki) will also provide more information in regards to Docker, applications, and much more!
 
 ### Quick Install Command
 
