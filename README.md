@@ -79,6 +79,6 @@ FireFox, Jackett, JellyFin, Lidarr, NetData, NZBGET, Overseer, Ombi, Opera, Port
 - Helps you copy plexguide and test your own changes
 - Assists with development to push back to PlexGuide
 
-** PG Futurewise will format and merge disk to act as form of UNRAID light
+** PG Futurewise will format and merge disk to act as form of UNRAID lite
 <img src="https://i.imgur.com/muqXL24.jpeg" alt="Menu Example" width="500">
 
