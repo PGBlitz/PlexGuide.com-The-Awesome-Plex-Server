@@ -44,7 +44,9 @@ To Create Your Own Apps - visit & fork https://github.com/plexguide/AppsFork and
 ----
 
 **<span style="color:green">Deployable Apps:</span>**  
-FireFox, Jackett, JellyFin, Lidarr, NetData, NZBGET, Overseer, Ombi, Opera, Portainer, Plex, Prowlarr, QBittorent, Radarr, Requestrr, TdarrServer, TdarrNodes, SABNZBD, Sonarr, Ungoogled Chromium, UpTimeKuma, VaultWarden
+CodeServer, Emby, FireFox, Jackett, JellyFin, Lidarr, NetData, NZBGET, Overseer, Ombi, Opera, Portainer, Plex, Prowlarr, QBittorent, Radarr, Requestrr, TdarrServer, TdarrNodes, SABNZBD, Sonarr, Ungoogled Chromium, UpTimeKuma, VaultWarden and more!
+
+Visit https://github.com/plexguide/Apps to see the full list of APPS.
 
 ### **Current Functionality**
 
