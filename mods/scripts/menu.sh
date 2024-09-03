@@ -97,7 +97,6 @@ main_menu() {
         echo ""  # Blank line for separation
 
         echo -e "A) Apps Management"
-        echo -e "H) HardDisk Management"
         echo -e "C) CloudFlare Tunnel (Domains)"
         echo -e "O) Options"
         echo -e "R) Reinstall PlexGuide"
