@@ -8,6 +8,7 @@ RED="\033[0;31m"
 ORANGE="\033[0;33m"
 WHITE="\033[1;37m"
 BLUE="\033[0;34m"
+CYAN="\033[0;36m"
 BOLD="\033[1m"
 NC="\033[0m"  # No color
 
@@ -30,6 +31,8 @@ get_color() {
         echo "$RED"
     elif [[ "$VERSION" == *".B"* ]]; then
         echo "$ORANGE"
+    elif [[ "$VERSION" == *"Fork"* ]]; then
+        echo "$CYAN"
     else
         echo "$WHITE"
     fi
@@ -89,7 +92,6 @@ main_menu() {
         
         # Get the color based on the version
         COLOR=$(get_color)
-
 
         echo -e "${COLOR}${BOLD}Welcome to PlexGuide: $VERSION${NC}"
         echo ""  # Blank line for separation
