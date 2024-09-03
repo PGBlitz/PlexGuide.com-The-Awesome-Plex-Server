@@ -31,7 +31,7 @@ get_color() {
         echo "$RED"
     elif [[ "$VERSION" == *".B"* ]]; then
         echo "$ORANGE"
-    elif [[ "$VERSION" == *"Fork"* ]]; then
+    elif [[ "$VERSION" == *"Fork -"* ]]; then
         echo "$CYAN"
     else
         echo "$WHITE"
