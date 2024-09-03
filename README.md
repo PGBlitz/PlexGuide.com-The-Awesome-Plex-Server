@@ -26,7 +26,6 @@ To Create Your Own Apps - visit & fork https://github.com/plexguide/AppsFork and
 
 * Simple, debloated, no fancy menus and executes for exactly what you need!
 * Works on Ubuntu 22/Ubuntu 24/Debian 12 (Recommend Ubuntu Heavily)
-* To Test (Use Ubuntu or Debian) CMD Line; once installed, type `pg` or `plexguide`
 
 <p align="center">
   <table align="center">
@@ -44,7 +43,9 @@ To Create Your Own Apps - visit & fork https://github.com/plexguide/AppsFork and
 ----
 
 **<span style="color:green">Deployable Apps:</span>**  
-FireFox, Jackett, JellyFin, Lidarr, NetData, NZBGET, Overseer, Ombi, Opera, Portainer, Plex, Prowlarr, QBittorent, Radarr, Requestrr, TdarrServer, TdarrNodes, SABNZBD, Sonarr, Ungoogled Chromium, UpTimeKuma, VaultWarden
+CodeServer, Emby, FireFox, Jackett, JellyFin, Lidarr, NetData, NZBGET, Overseer, Ombi, Opera, Portainer, Plex, Prowlarr, QBittorent, Radarr, Requestrr, TdarrServer, TdarrNodes, SABNZBD, Sonarr, Ungoogled Chromium, UpTimeKuma, VaultWarden and more!
+
+Visit https://github.com/plexguide/Apps to see the full list of APPS.
 
 ### **Current Functionality**
 
