@@ -90,9 +90,8 @@ main_menu() {
         # Get the color based on the version
         COLOR=$(get_color)
 
-        echo -e "${COLOR}${BOLD}════════════════════════════════════════════════${NC}"
+
         echo -e "${COLOR}${BOLD}Welcome to PlexGuide: $VERSION${NC}"
-        echo -e "${COLOR}${BOLD}════════════════════════════════════════════════${NC}"
         echo ""  # Blank line for separation
 
         echo -e "A) Apps Management"
