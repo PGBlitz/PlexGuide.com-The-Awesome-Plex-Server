@@ -22,7 +22,7 @@ sudo apt-get update && sudo apt-get install -y curl && bash <(curl -s https://ra
 
 To Create Your Own Apps - visit & fork https://github.com/plexguide/AppsFork and make your own!
 
-### Working on PG11
+### PlexGuide v11
 
 * Simple, debloated, no fancy menus and executes for exactly what you need!
 * Works on Ubuntu 22/Ubuntu 24/Debian 12 (Recommend Ubuntu Heavily)
@@ -55,7 +55,7 @@ FireFox, Jackett, JellyFin, Lidarr, NetData, NZBGET, Overseer, Ombi, Opera, Port
 - **Quick Reinstall/Update of PG Beta**: Streamlined process for reinstalling or updating to the latest PG Beta.
 - **SSH Installer/Manager**: Added for easy SSH management.
 - **Intel/NVIDIA GPU Manager**: Install / Uninstall GPU Drivers easily.
-- **Firewall Port Security**: View open ports; close and open additional ports
+- **App Port Security**: View open ports; close and open additional ports
 - **Dynamic Menu Intergration**: Enables custom options for docker containers
 - **Streamlined Updating**: PG Alpha and Beta Builds Intergrated. Stable will be added later
 - **Personal Apps**: Deploy your own personal apps from your own personal repo with PG!
@@ -69,6 +69,14 @@ FireFox, Jackett, JellyFin, Lidarr, NetData, NZBGET, Overseer, Ombi, Opera, Port
 - [ ] Create Detailed Wiki
 - [ ] Deployment of PlexDebrid/Zurg
 - [ ] VPN Server Capabilities
+
+### **Additional Notes**
+
+** PG Fork Works
+<img src="https://i.imgur.com/AhSpjrL.jpeg" alt="Menu Example" width="500">
+
+- Helps you copy plexguide and test your own changes
+- Assists with development to push back to PlexGuide
 
 ** PG Futurewise will format and merge disk to act as form of UNRAID light
 <img src="https://i.imgur.com/muqXL24.jpeg" alt="Menu Example" width="500">
