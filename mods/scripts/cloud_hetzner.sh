@@ -1,12 +1,20 @@
 #!/bin/bash
 
-# Title: OG PlexGuide Script
+# Title: PG Cloud Hetzner Manager Script
 # Description: Script to manage Hetzner Cloud servers using the new hcloud CLI
 
 # Configuration file path for storing the token
 TOKEN_FILE="/pg/hcloud/.token"
 
-# Check if hcloud CLI is installed and install if missing
+# ANSI color codes
+CYAN="\033[0;36m"
+RED="\033[0;31m"
+ORANGE="\033[0;33m"
+WHITE="\033[1;37m"
+BOLD="\033[1m"
+NC="\033[0m"  # No color
+
+# Function to install hcloud CLI if missing
 install_hcloud() {
   if ! command -v hcloud &> /dev/null; then
     echo "Installing Hetzner CLI..."
@@ -18,12 +26,12 @@ install_hcloud() {
   fi
 }
 
-# Validate hcloud API token
+# Function to validate the Hetzner API token
 validate_hcloud_token() {
   if [[ -f "$TOKEN_FILE" ]]; then
     export HCLOUD_TOKEN=$(cat "$TOKEN_FILE")
     if ! hcloud server list &> /dev/null; then
-      echo -e "\nWARNING! The existing token is invalid."
+      echo -e "\n${RED}WARNING! The existing token is invalid.${NC}"
       change_token
     fi
   else
@@ -34,19 +42,24 @@ validate_hcloud_token() {
 # Function to change or set the hcloud API token
 change_token() {
   echo -e "\nPlease provide a valid Hetzner API token."
-  echo -e "\nFollow these steps:\n1. Activate a Hetzner Cloud Account\n2. Create a Project\n3. Go to Security (left-hand side)\n4. Select and Click API Tokens\n5. Create a Token and Save It\n"
+  echo -e "\nFollow these steps:"
+  echo -e "1. Activate a Hetzner Cloud Account"
+  echo -e "2. Create a Project"
+  echo -e "3. Go to Security (left-hand side)"
+  echo -e "4. Select and Click API Tokens"
+  echo -e "5. Create a Token and Save It\n"
   echo -e "Type 'exit' to cancel and return to the main menu.\n"
   read -p 'Paste your API token here (or type exit): ' api_token </dev/tty
 
   # Check if the user typed exit
   if [[ "${api_token,,}" == "exit" ]]; then
-    echo -e "\nToken generation canceled. Returning to the main menu...\n"
-    main_menu
+    echo -e "\nToken generation canceled. Exiting interface...\n"
+    exit 0
   fi
 
   # Validate the token format (64 alphanumeric characters)
   if [[ ! "$api_token" =~ ^[a-zA-Z0-9]{64}$ ]]; then
-    echo -e "\nInvalid token format. Please try again."
+    echo -e "\n${RED}Invalid token format. Please try again.${NC}"
     change_token
   fi
 
@@ -56,23 +69,23 @@ change_token() {
 
   # Verify the token
   if ! hcloud server list &> /dev/null; then
-    echo -e "\nInvalid token provided. Please try again.\n"
+    echo -e "\n${RED}Invalid token provided. Please try again.${NC}\n"
     rm -f "$TOKEN_FILE"
     change_token
   else
-    echo -e "\nToken successfully configured."
+    echo -e "\n${WHITE}Token successfully configured.${NC}"
   fi
 }
 
-# Ensure necessary directories exist
+# Function to ensure necessary directories exist
 setup_directories() {
   mkdir -p /pg/hcloud
 }
 
-# Main menu
+# Main menu function
 main_menu() {
   clear
-  echo -e "\e[1;36mPG: Hetzner Cloud Manager\e[0m\n"
+  echo -e "${CYAN}${BOLD}PG: Hetzner Cloud Manager${NC}\n"
   echo -e "[1] Deploy a New Server"
   echo -e "[2] Destroy a Server"
   echo -e "[A] List Servers"
@@ -81,24 +94,24 @@ main_menu() {
   echo -e "[Z] Exit\n"
   read -p 'Select an option: ' option </dev/tty
 
-  case $option in
+  case ${option,,} in
     1) deploy_server ;;
     2) destroy_server ;;
-    [Aa]) list_servers ;;
-    [Bb]) show_initial_passwords ;;
-    [Tt]) change_token ;;
-    [Zz]) exit ;;
+    a) list_servers ;;
+    b) show_initial_passwords ;;
+    t) change_token ;;
+    z) exit 0 ;;
     *) main_menu ;;
   esac
 }
 
-# Deploy a new server
+# Function to deploy a new server
 deploy_server() {
   clear
   read -p 'Enter Server Name: ' server_name </dev/tty
 
   # Select OS
-  echo -e "\n\e[1;36mSelect OS:\e[0m\n"
+  echo -e "\n${CYAN}${BOLD}Select OS:${NC}\n"
   echo -e "[1] Ubuntu 20.04"
   echo -e "[2] Ubuntu 22.04"
   echo -e "[3] Ubuntu 24.04"
@@ -124,7 +137,7 @@ deploy_server() {
   esac
 
   # Select CPU Type: Shared or Dedicated
-  echo -e "\n\e[1;36mSelect CPU Type:\e[0m\n"
+  echo -e "\n${CYAN}${BOLD}Select CPU Type:${NC}\n"
   echo -e "[1] Shared vCPU (Lower Cost)"
   echo -e "[2] Dedicated vCPU (Higher Performance)\n"
   read -p 'Select an option: ' cpu_type_option </dev/tty
@@ -137,7 +150,7 @@ deploy_server() {
 
   # Select Server Type
   if [[ "$cpu_type" == "shared" ]]; then
-    echo -e "\n\e[1;36mSelect Shared Server Type:\e[0m\n"
+    echo -e "\n${CYAN}${BOLD}Select Shared Server Type:${NC}\n"
     echo -e "[1]  CX22  -  2vCPU |  4GB RAM  | Intel"
     echo -e "[2]  CPX11 -  2vCPU |  2GB RAM  | AMD  "
     echo -e "[3]  CX32  -  4vCPU |  8GB RAM  | Intel"
@@ -164,7 +177,7 @@ deploy_server() {
       *) deploy_server ;;
     esac
   else
-    echo -e "\n\e[1;36mSelect Dedicated Server Type:\e[0m\n"
+    echo -e "\n${CYAN}${BOLD}Select Dedicated Server Type:${NC}\n"
     echo -e "[1]  CCX13 -  2vCPU |   8GB RAM  | AMD"
     echo -e "[2]  CCX23 -  4vCPU |  16GB RAM  | AMD"
     echo -e "[3]  CCX33 -  8vCPU |  32GB RAM  | AMD"
@@ -186,7 +199,7 @@ deploy_server() {
     esac
   fi
 
-  # Create server
+  # Create the server
   echo -e "\nDeploying server..."
   hcloud server create --name "$server_name" --type "$server_type" --image "$os" > "/pg/hcloud/$server_name.info"
   echo -e "\nServer information:"
@@ -195,20 +208,20 @@ deploy_server() {
   main_menu
 }
 
-# List servers
+# Function to list servers
 list_servers() {
   clear
-  echo -e "\e[1;36mHetzner Cloud Servers:\e[0m\n"
+  echo -e "${CYAN}${BOLD}Hetzner Cloud Servers:${NC}\n"
   hcloud server list | awk 'NR>1 {print $2}'
   echo ""
   read -p 'Press [ENTER] to continue...' </dev/tty
   main_menu
 }
 
-# Destroy a server
+# Function to destroy a server
 destroy_server() {
   clear
-  echo -e "\e[1;36mAvailable Servers to Destroy:\e[0m\n"
+  echo -e "${CYAN}${BOLD}Available Servers to Destroy:${NC}\n"
   hcloud server list | awk 'NR>1 {print $2}'
   echo ""
   read -p 'Enter server name to destroy or [Z] to exit: ' server_name </dev/tty
@@ -226,10 +239,10 @@ destroy_server() {
   main_menu
 }
 
-# Show initial passwords
+# Function to show initial passwords
 show_initial_passwords() {
   clear
-  echo -e "\e[1;36mInitial Server Passwords:\e[0m\n"
+  echo -e "${CYAN}${BOLD}Initial Server Passwords:${NC}\n"
   grep -i 'password' /pg/hcloud/*.info
   echo ""
   read -p 'Press [ENTER] to continue...' </dev/tty
