@@ -39,22 +39,23 @@ services:
       - "--providers.docker=true"
       - "--entrypoints.web.address=:80"
       - "--entrypoints.websecure.address=:443"
+      - "--certificatesresolvers.mytlschallenge.acme.tlschallenge=true"
+      - "--certificatesresolvers.mytlschallenge.acme.dnschallenge=true"
+      - "--certificatesresolvers.mytlschallenge.acme.dnschallenge.domains=${domain_name}"
+      - "--certificatesresolvers.mytlschallenge.acme.email=${cf_email:-example@example.com}"
+      - "--certificatesresolvers.mytlschallenge.acme.storage=/letsencrypt/acme.json"
 EOF
 
     # Add provider-specific configurations
     if [[ "$provider" == "cloudflare" ]]; then
         cat <<EOF >> $DOCKER_COMPOSE_FILE
       - "--certificatesresolvers.mytlschallenge.acme.dnschallenge.provider=cloudflare"
-      - "--certificatesresolvers.mytlschallenge.acme.email=$cf_email"
-      - "--certificatesresolvers.mytlschallenge.acme.storage=/letsencrypt/acme.json"
     environment:
       - CLOUDFLARE_API_TOKEN=$cf_api_key
 EOF
     elif [[ "$provider" == "godaddy" ]]; then
         cat <<EOF >> $DOCKER_COMPOSE_FILE
       - "--certificatesresolvers.mytlschallenge.acme.dnschallenge.provider=godaddy"
-      - "--certificatesresolvers.mytlschallenge.acme.email=example@example.com"  # Replace with your email if needed
-      - "--certificatesresolvers.mytlschallenge.acme.storage=/letsencrypt/acme.json"
     environment:
       - GODADDY_API_KEY=$gd_api_key
       - GODADDY_API_SECRET=$gd_api_secret
