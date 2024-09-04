@@ -6,9 +6,11 @@ CONFIG_FILE="/pg/config/config.cfg"
 # ANSI color codes
 RED="\033[0;31m"
 ORANGE="\033[0;33m"
-WHITE="\033[1;37m"
-BLUE="\033[0;34m"
+YELLOW="\033[1;33m"
+GREEN="\033[0;32m"
 CYAN="\033[0;36m"
+BLUE="\033[0;34m"
+PURPLE="\033[0;35m"
 BOLD="\033[1m"
 NC="\033[0m"  # No color
 
@@ -43,8 +45,8 @@ apps_management() {
     bash /pg/scripts/apps_starter_menu.sh
 }
 
-# Updated Function to Reinstall PlexGuide
-reinstall_plexguide() {
+# Function to Update PG Interface
+update_pg_interface() {
     # Define the destination path
     INSTALL_SCRIPT_PATH="/pg/installer/install_menu.sh"
 
@@ -70,14 +72,14 @@ menu_exit() {
     exit 0  # Ensure the script exits after executing the menu_exit.sh
 }
 
-# Function for HardDisk Management
-harddisk_management() {
-    bash /pg/scripts/drivemenu.sh
-}
-
 # Function for CloudFlare Tunnel Management
 cloudflare_tunnel() {
     bash /pg/scripts/cf_tunnel.sh
+}
+
+# Function for Server Cloud Deployments
+server_cloud_deployments() {
+    bash /pg/scripts/cloud_server.sh
 }
 
 # Function for Options Menu
@@ -93,25 +95,30 @@ main_menu() {
         # Get the color based on the version
         COLOR=$(get_color)
 
+        # Display the header
         echo -e "${COLOR}${BOLD}Welcome to PlexGuide: $VERSION${NC}"
         echo ""  # Blank line for separation
 
-        echo -e "A) Apps Management"
-        echo -e "C) CloudFlare Tunnel (Domains)"
-        echo -e "O) Options"
-        echo -e "R) Reinstall PlexGuide"
-        echo -e "Z) Exit"
+        # Display menu options with bold colored letters
+        echo -e "[${YELLOW}${BOLD}A${NC}] Apps Management"
+        echo -e "[${CYAN}${BOLD}C${NC}] CloudFlare Tunnel (Domains)"
+        echo -e "[${GREEN}${BOLD}S${NC}] Server: Cloud Deployments"
+        echo -e "[${PURPLE}${BOLD}U${NC}] PG: Update Interface"
+        echo -e "[${BLUE}${BOLD}O${NC}] Options"
+        echo -e "[${RED}${BOLD}Z${NC}] Exit"
         echo ""  # Space between options and input prompt
 
+        # Prompt for user input
         read -p "Enter your choice: " choice
 
+        # Process user input
         case ${choice,,} in
             a) apps_management ;;
-            h) harddisk_management ;;
+            s) server_cloud_deployments ;;
             c) cloudflare_tunnel ;;
-            r) reinstall_plexguide ;;  # Call the updated function
+            u) update_pg_interface ;;
             o) options_menu ;;
-            z) menu_exit ;;  # Call the updated menu_exit function
+            z) menu_exit ;;
             *)
                 echo -e "${RED}Invalid option. Please try again.${NC}"
                 read -p "Press Enter to continue..."
