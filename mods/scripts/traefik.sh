@@ -59,8 +59,6 @@ EOF
 # Create a Docker Compose file for Traefik using version 3.9
 echo -e "${BLUE}Creating Docker Compose file for Traefik...${NC}"
 cat << EOF > $DOCKER_COMPOSE_FILE
-version: '3.9'
-
 services:
   traefik:
     image: traefik:$TRAEFIK_VERSION
