@@ -102,8 +102,8 @@ main_menu() {
         # Display menu options with bold colored letters
         echo -e "[${YELLOW}${BOLD}A${NC}] Apps Management"
         echo -e "[${CYAN}${BOLD}C${NC}] CloudFlare Tunnel (Domains)"
-        echo -e "[${GREEN}${BOLD}S${NC}] Server: Cloud Deployments"
-        echo -e "[${PURPLE}${BOLD}U${NC}] PG: Update Interface"
+        echo -e "[${GREEN}${BOLD}S${NC}] Cloud Servers"
+        echo -e "[${PURPLE}${BOLD}U${NC}] PG Updates"
         echo -e "[${BLUE}${BOLD}O${NC}] Options"
         echo -e "[${RED}${BOLD}Z${NC}] Exit"
         echo ""  # Space between options and input prompt
