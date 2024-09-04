@@ -82,18 +82,15 @@ execute_dynamic_menu() {
         source "/pg/apps/${app_name}.app"
     fi
 
-    # Get the selected option name (e.g., "Plex Token")
-    local selected_name=$(echo "${dynamic_menu_items[$((selected_option-1))]}" | awk '{$1=""; print $0}' | xargs)  # Trim spaces and get full menu item name
-
-    # Convert the selected_name to lowercase, replace spaces with underscores, and remove trailing underscores
-    local function_name=$(echo "$selected_name" | tr '[:upper:]' '[:lower:]' | tr ' ' '_' | sed 's/_$//')
+    # Dynamically get the function name based on menu number (menu1, menu2, etc.)
+    local function_name="menu${selected_option}"
 
     # Check if the function exists and execute it
     if declare -f "$function_name" > /dev/null; then
-        echo "Executing commands for ${function_name}..."
+        echo -e "${BLUE}Executing commands for ${function_name}...${NC}"
         "$function_name"  # Execute the function
     else
-        echo "Error: No corresponding function found for ${function_name}."
+        echo -e "${RED}Error: No corresponding function found for ${function_name}.${NC}"
     fi
 
     read -p "Press Enter to continue..."  # Pause to observe output
