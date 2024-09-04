@@ -61,7 +61,7 @@ redeploy_app() {
     deploy_container "$app_name"  # Call the deploy_container function
 
     # Create the app-specific directory before writing the docker-compose.yml
-    mkdir -p /pg/ymals/${app_name}
+    mkdir -p "/pg/ymals/${app_name}"
 
     # Function to Deploy Docker Compose
     create_docker_compose
