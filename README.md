@@ -30,7 +30,7 @@ To Create Your Own Apps - visit & fork https://github.com/plexguide/AppsFork and
 <p align="center">
   <table align="center">
     <tr>
-      <td align="center"><img src="https://i.imgur.com/kbiJfiI.jpeg" alt="Menu Example" width="500"></td>
+      <td align="center"><img src="https://i.imgur.com/W8JIqzD.jpeg" alt="Menu Example" width="500"></td>
       <td align="center"><img src="https://i.imgur.com/TNy3rmn.jpeg" alt="Plex Example" width="500"></td>
     </tr>
     <tr>
