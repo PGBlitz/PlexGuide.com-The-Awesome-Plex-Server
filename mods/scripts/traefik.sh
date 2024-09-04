@@ -35,8 +35,6 @@ deploy_traefik() {
 
     # Write the base configuration
     cat <<EOF > $DOCKER_COMPOSE_FILE
-version: '3.9'
-
 services:
   traefik:
     image: traefik:latest
