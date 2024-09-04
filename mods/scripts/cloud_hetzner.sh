@@ -34,7 +34,7 @@ validate_hcloud_token() {
 # Function to change or set the hcloud API token
 change_token() {
   echo -e "\nPlease provide a valid Hetzner API token."
-  echo -e "\nFollow these steps:\n1. Activate a Hetzner Cloud Account\n2. Create a Project\n3. Go to Access (left-hand side)\n4. Click API Tokens\n5. Create a Token and Save It\n"
+  echo -e "\nFollow these steps:\n1. Activate a Hetzner Cloud Account\n2. Create a Project\n3. Go to Security (left-hand side)\n4. Select and Click API Tokens\n5. Create a Token and Save It\n"
   echo -e "Type 'exit' to cancel and return to the main menu.\n"
   read -p 'Paste your API token here (or type exit): ' api_token </dev/tty
 
