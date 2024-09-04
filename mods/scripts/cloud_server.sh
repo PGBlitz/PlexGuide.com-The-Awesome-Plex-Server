@@ -36,6 +36,7 @@ store_last_update_check() {
 download_script() {
     echo -e "${CYAN}Downloading cloud_hetzner.sh...${NC}"
     curl -s -L "$REPO_URL" -o "$SCRIPT_PATH"
+    chown 1000:1000 "$SCRIPT_PATH"
     chmod +x "$SCRIPT_PATH"
     store_last_update_check
 }
@@ -54,13 +55,19 @@ check_for_updates() {
     fi
 }
 
-# Check if cloud_hetzner.sh exists; if not, download it
-if [[ ! -f "$SCRIPT_PATH" ]]; then
-    echo -e "${RED}cloud_hetzner.sh is missing. Downloading...${NC}"
-    download_script
-else
-    check_for_updates
-fi
+# Function to handle Hetzner operations
+handle_hetzner() {
+    # Check if cloud_hetzner.sh exists; if not, download it
+    if [[ ! -f "$SCRIPT_PATH" ]]; then
+        echo -e "${RED}cloud_hetzner.sh is missing. Downloading...${NC}"
+        download_script
+    else
+        check_for_updates
+    fi
+
+    # Execute the Hetzner script
+    bash "$SCRIPT_PATH"
+}
 
 # Clear the screen at the start
 clear
@@ -84,8 +91,12 @@ cloud_server_menu() {
 
         # Process user input
         case ${choice,,} in
-            h) bash "$SCRIPT_PATH" ;;
-            z) exit 0 ;;
+            h)
+                handle_hetzner  # Check for updates and run Hetzner script
+                ;;
+            z)
+                exit 0
+                ;;
             *)
                 echo -e "${RED}Invalid option. Please try again.${NC}"
                 read -p "Press Enter to continue..."
