@@ -27,6 +27,12 @@ deploy_traefik() {
     mkdir -p /pg/traefik
     DOCKER_COMPOSE_FILE="/pg/traefik/docker-compose.yml"
 
+    # Check if a wildcard domain is specified
+    wildcard_domain=${domain_name}
+    if [[ "$domain_name" == *.* ]]; then
+        wildcard_domain="*.$domain_name"
+    fi
+
     # Write the base configuration
     cat <<EOF > $DOCKER_COMPOSE_FILE
 version: '3.9'
@@ -40,9 +46,7 @@ services:
       - "--entrypoints.web.address=:80"
       - "--entrypoints.websecure.address=:443"
       - "--certificatesresolvers.mytlschallenge.acme.tlschallenge=true"
-      - "--certificatesresolvers.mytlschallenge.acme.dnschallenge=true"
-      - "--certificatesresolvers.mytlschallenge.acme.dnschallenge.domains=${domain_name}"
-      - "--certificatesresolvers.mytlschallenge.acme.email=${cf_email:-example@example.com}"
+      - "--certificatesresolvers.mytlschallenge.acme.email=${letsencrypt_email:-example@example.com}"
       - "--certificatesresolvers.mytlschallenge.acme.storage=/letsencrypt/acme.json"
 EOF
 
@@ -50,15 +54,17 @@ EOF
     if [[ "$provider" == "cloudflare" ]]; then
         cat <<EOF >> $DOCKER_COMPOSE_FILE
       - "--certificatesresolvers.mytlschallenge.acme.dnschallenge.provider=cloudflare"
+      - "--certificatesresolvers.mytlschallenge.acme.dnschallenge.domains=${wildcard_domain}"
     environment:
-      - CLOUDFLARE_API_TOKEN=$cf_api_key
+      - CLOUDFLARE_API_TOKEN=$api_key
 EOF
     elif [[ "$provider" == "godaddy" ]]; then
         cat <<EOF >> $DOCKER_COMPOSE_FILE
       - "--certificatesresolvers.mytlschallenge.acme.dnschallenge.provider=godaddy"
+      - "--certificatesresolvers.mytlschallenge.acme.dnschallenge.domains=${wildcard_domain}"
     environment:
-      - GODADDY_API_KEY=$gd_api_key
-      - GODADDY_API_SECRET=$gd_api_secret
+      - GODADDY_API_KEY=$api_key
+      - GODADDY_API_SECRET=$api_secret
 EOF
     else
         echo -e "${RED}Invalid provider configuration.${NC}"
