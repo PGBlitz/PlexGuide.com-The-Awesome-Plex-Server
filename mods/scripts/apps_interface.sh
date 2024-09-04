@@ -9,7 +9,7 @@ BLUE="\033[0;34m"
 NC="\033[0m" # No color
 
 # Source the defaults script
-source /pg/scripts/apps_defaults.sh
+source /pg/scripts/apps_parse.sh
 
 # Arguments
 app_name=$1

@@ -1,45 +1,55 @@
-parse_and_store_defaults() {
+#!/bin/bash
+
+# ANSI color codes
+RED="\033[0;31m"
+GREEN="\033[0;32m"
+NC="\033[0m" # No color
+
+source /pg/scripts/apps_parse.sh
+
+# Function: reset_config_file
+reset_config_file() {
     local app_name="$1"
-    local app_type="$2"  # 'personal' for personal apps, 'official' for official apps
+    local app_type="$2"
+    local config_path
 
-    # Determine paths based on app type
+    # Determine the config path based on the app type
     if [[ "$app_type" == "personal" ]]; then
-        local config_path="/pg/personal_configs/${app_name}.cfg"
-        local app_path="/pg/p_apps/${app_name}.app"
+        config_path="/pg/personal_configs/${app_name}.cfg"
     else
-        local config_path="/pg/config/${app_name}.cfg"
-        local app_path="/pg/apps/${app_name}.app"
+        config_path="/pg/config/${app_name}.cfg"
     fi
 
-    # Check if the config file exists, create it if not
-    [[ ! -f "$config_path" ]] && touch "$config_path"
-
-    # Check if the app file exists
-    if [[ ! -f "$app_path" ]]; then
-        echo "Error: App file $app_path does not exist."
-        return 1
-    fi
-
-    # Source the app's default_variables function
-    source "$app_path"
-
-    # Call the default_variables function for the specific app
-    default_variables
-
-    # Parse the default_variables function and write to config if not exist
-    declare -f default_variables | while read line; do
-        if [[ $line =~ ^[[:space:]]*([a-zA-Z_][a-zA-Z0-9_]*)=(.*)$ ]]; then
-            var="${BASH_REMATCH[1]}"
-            value="${BASH_REMATCH[2]}"
+    while true; do
+        clear
+        local reset_code=$(printf "%04d" $((RANDOM % 10000)))
+        echo -e "${RED}Warning: This is an advanced option.${NC}"
+        echo "Visit https://plexguide.com/wiki/link-not-set for more information."
+        echo ""
+        echo "This will erase the current config file and restore a default config file."
+        echo "The Docker container will be stopped and removed if running."
+        echo "This will not erase any data; your data will remain in its original location."
+        echo ""
+        read -p "$(echo -e "Do you want to proceed? Type [${RED}${reset_code}${NC}] to proceed or [${GREEN}Z${NC}] to cancel: ")" reset_choice
+        
+        if [[ "$reset_choice" == "$reset_code" ]]; then
+            # Stop and remove the Docker container
+            docker stop "$app_name" && docker rm "$app_name"
+            echo "Docker container $app_name has been stopped and removed."
             
-            # Remove any existing quotes and semicolons from the value
-            value=$(echo "$value" | sed -e 's/^"//' -e 's/"$//' -e "s/^'//" -e "s/'$//" -e 's/;$//')
-            
-            # Check if the variable exists in the config file
-            if ! grep -q "^${var}=" "$config_path"; then
-                # Add quotes around the value (without semicolon) and write to config
-                echo "${var}=\"${value}\"" >> "$config_path"
-            fi
+            # Reset the config file
+            rm -f "$config_path"
+            echo "Config file has been reset to default."
+            touch "$config_path"
+            parse_and_store_defaults "$app_name" "$app_type"
+            echo "The config file has been regenerated."
+            return
+        elif [[ "${reset_choice,,}" == "z" ]]; then
+            echo "Operation Cancelled."
+            return
+        else
+            # Invalid response: clear the screen and repeat the prompt
+            clear
         fi
     done
 }
