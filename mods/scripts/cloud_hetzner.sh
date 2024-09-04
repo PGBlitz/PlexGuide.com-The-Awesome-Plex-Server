@@ -1,7 +1,10 @@
 #!/bin/bash
 
-# Title: PGBlitz (Simplified)
+# Title: OG PlexGuide Script
 # Description: Script to manage Hetzner Cloud servers using the new hcloud CLI
+
+# Configuration file path for storing the token
+TOKEN_FILE="/pg/hcloud/.token"
 
 # Check if hcloud CLI is installed and install if missing
 install_hcloud() {
@@ -17,27 +20,47 @@ install_hcloud() {
 
 # Validate hcloud API token
 validate_hcloud_token() {
-  if ! hcloud server list &> /dev/null; then
-    echo -e "\nWARNING! Please configure Hetzner API token first!"
-    echo -e "\nFollow these steps:\n1. Activate a Hetzner Cloud Account\n2. Create a Project\n3. Go to Access (left-hand side)\n4. Click API Tokens\n5. Create a Token and Save It\n"
-    echo -e "Type 'exit' to cancel and return to the main menu.\n"
-    read -p 'Paste your API token here (or type exit): ' api_token </dev/tty
-
-    # Check if the user typed exit
-    if [[ "${api_token,,}" == "exit" ]]; then
-      echo -e "\nToken generation canceled. Returning to the main menu...\n"
-      main_menu
-    fi
-
-    # Create a new context with the provided API token
-    hcloud context create plexguide --token "$api_token"
-
-    # Verify the token again
+  if [[ -f "$TOKEN_FILE" ]]; then
+    export HCLOUD_TOKEN=$(cat "$TOKEN_FILE")
     if ! hcloud server list &> /dev/null; then
-      hcloud context delete plexguide
-      echo -e "\nInvalid token provided. Please try again.\n"
-      exit 1
+      echo -e "\nWARNING! The existing token is invalid."
+      change_token
     fi
+  else
+    change_token
+  fi
+}
+
+# Function to change or set the hcloud API token
+change_token() {
+  echo -e "\nPlease provide a valid Hetzner API token."
+  echo -e "\nFollow these steps:\n1. Activate a Hetzner Cloud Account\n2. Create a Project\n3. Go to Access (left-hand side)\n4. Click API Tokens\n5. Create a Token and Save It\n"
+  echo -e "Type 'exit' to cancel and return to the main menu.\n"
+  read -p 'Paste your API token here (or type exit): ' api_token </dev/tty
+
+  # Check if the user typed exit
+  if [[ "${api_token,,}" == "exit" ]]; then
+    echo -e "\nToken generation canceled. Returning to the main menu...\n"
+    main_menu
+  fi
+
+  # Validate the token format (64 alphanumeric characters)
+  if [[ ! "$api_token" =~ ^[a-zA-Z0-9]{64}$ ]]; then
+    echo -e "\nInvalid token format. Please try again."
+    change_token
+  fi
+
+  # Save the token to the TOKEN_FILE
+  echo "$api_token" > "$TOKEN_FILE"
+  export HCLOUD_TOKEN="$api_token"
+
+  # Verify the token
+  if ! hcloud server list &> /dev/null; then
+    echo -e "\nInvalid token provided. Please try again.\n"
+    rm -f "$TOKEN_FILE"
+    change_token
+  else
+    echo -e "\nToken successfully configured."
   fi
 }
 
@@ -54,6 +77,7 @@ main_menu() {
   echo -e "[2] Destroy a Server"
   echo -e "[A] List Servers"
   echo -e "[B] Show Initial Passwords"
+  echo -e "[T] Change API Token"
   echo -e "[Z] Exit\n"
   read -p 'Select an option: ' option </dev/tty
 
@@ -62,6 +86,7 @@ main_menu() {
     2) destroy_server ;;
     [Aa]) list_servers ;;
     [Bb]) show_initial_passwords ;;
+    [Tt]) change_token ;;
     [Zz]) exit ;;
     *) main_menu ;;
   esac
@@ -213,6 +238,6 @@ show_initial_passwords() {
 
 # Execute script
 install_hcloud
-validate_hcloud_token
 setup_directories
+validate_hcloud_token
 main_menu
