@@ -9,6 +9,20 @@ NC="\033[0m" # No color
 # Configuration file path for reading the DNS provider details
 CONFIG_FILE="/pg/config/dns_provider.cfg"
 
+# Function to stop and remove any running Traefik container
+remove_existing_traefik() {
+    existing_container=$(docker ps -aq --filter "name=traefik")
+
+    if [[ -n "$existing_container" ]]; then
+        echo -e "${CYAN}Stopping and removing existing Traefik container...${NC}"
+        docker stop traefik >/dev/null 2>&1
+        docker rm traefik >/dev/null 2>&1
+        echo -e "${GREEN}Existing Traefik container removed.${NC}"
+    else
+        echo -e "${GREEN}No existing Traefik container found.${NC}"
+    fi
+}
+
 # Function to deploy Traefik with the chosen DNS provider
 deploy_traefik() {
     # Load the DNS provider configuration
@@ -20,6 +34,9 @@ deploy_traefik() {
         exit 1
     fi
 
+    # Stop and remove any existing Traefik container
+    remove_existing_traefik
+
     # Create a Docker Compose file dynamically based on the provider
     echo -e "${CYAN}Creating Docker Compose file for Traefik...${NC}"
 
@@ -29,11 +46,11 @@ deploy_traefik() {
 
     # Write the base configuration
     cat <<EOF > $DOCKER_COMPOSE_FILE
-version: '3'
-
 services:
   traefik:
     image: traefik:latest
+    container_name: traefik
+    hostname: traefik
     command:
       - "--api.insecure=true"
       - "--providers.docker=true"
