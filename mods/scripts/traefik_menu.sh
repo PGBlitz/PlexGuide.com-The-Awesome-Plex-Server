@@ -13,13 +13,13 @@ CONFIG_FILE="/pg/config/dns_provider.cfg"
 setup_dns_provider() {
     while true; do
         clear
-        echo -e "${CYAN}DNS Configuration Interface${NC}"
+        echo -e "${CYAN}PG: Traefki DNS Configuration Interface${NC}"
+        echo ""
         echo -e "1) Configure DNS Provider"
         echo -e "2) Set Email for Let's Encrypt"
         echo -e "3) Deploy Traefik"
         echo -e "4) Exit"
         read -p "Enter your choice (1-4): " choice
-
         case $choice in
             1)
                 configure_provider
@@ -66,6 +66,7 @@ configure_provider() {
     else
         echo -e "${RED}Invalid choice. Please try again.${NC}"
         configure_provider
+        return
     fi
 
     read -p "Enter the domain name to use (e.g., example.com): " domain_name
@@ -76,8 +77,8 @@ configure_provider() {
 
 # Function to set email for Let's Encrypt
 set_email() {
-    read -p "Enter your email for Let's Encrypt notifications: " user_email
-    echo "letsencrypt_email=$user_email" >> "$CONFIG_FILE"
+    read -p "Enter your email for Let's Encrypt notifications: " letsencrypt_email
+    echo "letsencrypt_email=$letsencrypt_email" >> "$CONFIG_FILE"
     echo -e "${GREEN}Email has been configured successfully.${NC}"
     read -p "Press Enter to continue..."
 }

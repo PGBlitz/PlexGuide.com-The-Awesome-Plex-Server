@@ -27,14 +27,10 @@ deploy_traefik() {
     mkdir -p /pg/traefik
     DOCKER_COMPOSE_FILE="/pg/traefik/docker-compose.yml"
 
-    # Check if a wildcard domain is specified
-    wildcard_domain=${domain_name}
-    if [[ "$domain_name" == *.* ]]; then
-        wildcard_domain="*.$domain_name"
-    fi
-
     # Write the base configuration
     cat <<EOF > $DOCKER_COMPOSE_FILE
+version: '3'
+
 services:
   traefik:
     image: traefik:latest
@@ -52,14 +48,12 @@ EOF
     if [[ "$provider" == "cloudflare" ]]; then
         cat <<EOF >> $DOCKER_COMPOSE_FILE
       - "--certificatesresolvers.mytlschallenge.acme.dnschallenge.provider=cloudflare"
-      - "--certificatesresolvers.mytlschallenge.acme.dnschallenge.domains=${wildcard_domain}"
     environment:
       - CLOUDFLARE_API_TOKEN=$api_key
 EOF
     elif [[ "$provider" == "godaddy" ]]; then
         cat <<EOF >> $DOCKER_COMPOSE_FILE
       - "--certificatesresolvers.mytlschallenge.acme.dnschallenge.provider=godaddy"
-      - "--certificatesresolvers.mytlschallenge.acme.dnschallenge.domains=${wildcard_domain}"
     environment:
       - GODADDY_API_KEY=$api_key
       - GODADDY_API_SECRET=$api_secret
@@ -79,6 +73,11 @@ EOF
       - /pg/traefik/letsencrypt:/letsencrypt
     networks:
       - plexguide
+    labels:
+      - "traefik.http.routers.traefik.rule=Host(\`traefik.${domain_name}\`)"
+      - "traefik.http.routers.traefik.entrypoints=websecure"
+      - "traefik.http.routers.traefik.tls.certresolver=mytlschallenge"
+      - "traefik.http.routers.traefik.service=api@internal"
 
 networks:
   plexguide:
@@ -88,7 +87,6 @@ EOF
     echo -e "${GREEN}Docker Compose file for Traefik has been created at $DOCKER_COMPOSE_FILE.${NC}"
     echo -e "${GREEN}Starting Traefik using Docker Compose...${NC}"
     docker-compose -f "$DOCKER_COMPOSE_FILE" up -d
-
     echo -e "${GREEN}Traefik has been deployed successfully.${NC}"
 }
 
