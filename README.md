@@ -30,7 +30,7 @@ To Create Your Own Apps - visit & fork https://github.com/plexguide/AppsFork and
 <p align="center">
   <table align="center">
     <tr>
-      <td align="center"><img src="https://i.imgur.com/kbiJfiI.jpeg" alt="Menu Example" width="500"></td>
+      <td align="center"><img src="https://i.imgur.com/W8JIqzD.jpeg" alt="Menu Example" width="500"></td>
       <td align="center"><img src="https://i.imgur.com/TNy3rmn.jpeg" alt="Plex Example" width="500"></td>
     </tr>
     <tr>
@@ -60,6 +60,7 @@ Visit https://github.com/plexguide/Apps to see the full list of APPS.
 - **Dynamic Menu Intergration**: Enables custom options for docker containers
 - **Streamlined Updating**: PG Alpha and Beta Builds Intergrated. Stable will be added later
 - **Personal Apps**: Deploy your own personal apps from your own personal repo with PG!
+- **Deploy Cloud Servers**: Added the ability to deploy Hetzner Cloud Servers
 
 ### **In Progress**
  
