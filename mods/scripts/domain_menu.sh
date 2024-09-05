@@ -13,6 +13,7 @@ NC='\033[0m' # No Color
 
 # Function to display the menu
 display_menu() {
+    clear
     echo -e "${CYAN}PG Domain Configuration Interface${NC}"
     echo
     echo -e "[${BOLD}${GOLD}C${NC}] CloudFlare Tunnel"
