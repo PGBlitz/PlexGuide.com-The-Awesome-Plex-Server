@@ -25,7 +25,7 @@ check_traefik_status() {
 load_dns_provider() {
     if [[ -f "$CONFIG_FILE" ]]; then
         source "$CONFIG_FILE"
-        if [[ -n "$provider" && "$provider" == "cloudflare" && -n "$api_key" && -n "$cf_email" ]]; then
+        if [[ -n "$provider" && "$provider" == "cloudflare" && -n "$api_key" && -n "$cf_email" && -n "$domain_name" ]]; then
             if test_cloudflare_credentials; then
                 provider_display="${GREEN}[SET]${NC}"
                 deploy_option_visible=true
@@ -45,11 +45,11 @@ load_dns_provider() {
 
 # Function to test Cloudflare credentials
 test_cloudflare_credentials() {
-    response=$(curl -s -o /dev/null -w "%{http_code}" -X GET "https://api.cloudflare.com/client/v4/user/tokens/verify" \
-        -H "Authorization: Bearer $api_key" \
-        -H "Content-Type: application/json")
+    response=$(curl -s -X GET "https://api.cloudflare.com/client/v4/user/tokens/verify" \
+      -H "Authorization: Bearer $api_key" \
+      -H "Content-Type: application/json")
 
-    if [[ "$response" == "200" ]]; then
+    if echo "$response" | grep -q "valid and active"; then
         return 0  # Valid credentials
     else
         return 1  # Invalid credentials
@@ -111,8 +111,13 @@ configure_provider() {
     echo ""
     echo -e "${CYAN}Configuring Cloudflare DNS Provider${NC}"
     provider="cloudflare"
+    
+    # Prompt for Cloudflare email and API key
     read -p "Enter your Cloudflare email: " cf_email
-    read -p "Enter your Cloudflare API key: " cf_api_key
+    read -p "Enter your Cloudflare API key: " api_key
+
+    # Trim any leading/trailing whitespace from the API key
+    api_key=$(echo "$api_key" | xargs)
 
     # Test the credentials before saving
     echo -e "${YELLOW}Testing Cloudflare credentials...${NC}"
@@ -120,7 +125,7 @@ configure_provider() {
         read -p "Enter the domain name to use (e.g., example.com): " domain_name
         echo "provider=cloudflare" > "$CONFIG_FILE"
         echo "email=$cf_email" >> "$CONFIG_FILE"
-        echo "api_key=$cf_api_key" >> "$CONFIG_FILE"
+        echo "api_key=$api_key" >> "$CONFIG_FILE"
         echo "domain_name=$domain_name" >> "$CONFIG_FILE"
         echo ""
         echo -e "${GREEN}Cloudflare DNS provider and domain have been configured successfully.${NC}"
@@ -137,9 +142,8 @@ configure_provider() {
 set_email() {
     read -p "Enter your email for Let's Encrypt notifications: " letsencrypt_email
     echo "letsencrypt_email=$letsencrypt_email" >> "$CONFIG_FILE"
-    echo ""
     echo -e "${GREEN}Email has been configured successfully.${NC}"
-    read -p "Press [ENTER] to continue..."
+    read -p "Press Enter to continue..."
 }
 
 # Execute the setup function
