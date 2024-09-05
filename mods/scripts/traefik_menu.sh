@@ -25,12 +25,28 @@ check_traefik_status() {
 load_dns_provider() {
     if [[ -f "$CONFIG_FILE" ]]; then
         source "$CONFIG_FILE"
-        provider_display="${provider:-${RED}[Not-Set]${NC}}"
+        if [[ -n "$provider" && "$provider" == "cloudflare" && -n "$api_key" && -n "$cf_email" ]]; then
+            provider_display="${GREEN}[SET]${NC}"
+        else
+            provider_display="${RED}[Not-Set]${NC}"
+        fi
     else
         provider_display="${RED}[Not-Set]${NC}"
     fi
 }
 
+# Function to test Cloudflare credentials
+test_cloudflare_credentials() {
+    response=$(curl -s -o /dev/null -w "%{http_code}" -X GET "https://api.cloudflare.com/client/v4/zones" \
+        -H "Authorization: Bearer $api_key" \
+        -H "Content-Type: application/json")
+
+    if [[ "$response" == "200" ]]; then
+        return 0  # Valid credentials
+    else
+        return 1  # Invalid credentials
+    fi
+}
 
 # Function to setup DNS provider
 setup_dns_provider() {
@@ -56,9 +72,15 @@ setup_dns_provider() {
                 set_email
                 ;;
             [Dd])
+                if [[ "$provider_display" != "${GREEN}[SET]${NC}" ]]; then
+                    echo ""
+                    echo -e "${RED}CloudFlare is not configured. Please configure CloudFlare first before deploying Traefik.${NC}"
+                    read -p "Press Enter to continue..."
+                else
                     bash /pg/scripts/traefik_deploy.sh
                     echo ""
                     read -p "Press Enter to continue..."
+                fi
                 ;;
             [Zz])
                 exit 0
@@ -81,11 +103,22 @@ configure_provider() {
     echo "provider=cloudflare" > "$CONFIG_FILE"
     echo "email=$cf_email" >> "$CONFIG_FILE"
     echo "api_key=$cf_api_key" >> "$CONFIG_FILE"
-    
-    read -p "Enter the domain name to use (e.g., example.com): " domain_name
-    echo "domain_name=$domain_name" >> "$CONFIG_FILE"
-    echo ""
-    echo -e "${GREEN}Cloudflare DNS provider and domain have been configured successfully.${NC}"
+
+    # Test the credentials before saving
+    echo -e "${YELLOW}Testing Cloudflare credentials...${NC}"
+    if test_cloudflare_credentials; then
+        read -p "Enter the domain name to use (e.g., example.com): " domain_name
+        echo "domain_name=$domain_name" >> "$CONFIG_FILE"
+        echo ""
+        echo -e "${GREEN}Cloudflare DNS provider and domain have been configured successfully.${NC}"
+    else
+        echo ""
+        echo -e "${RED}CloudFlare Information is Incorrect and/or the API Key may not have the proper permissions.${NC}"
+        echo ""
+        # Reset the configuration in case of invalid credentials
+        > "$CONFIG_FILE"
+    fi
+
     read -p "Press [ENTER] to continue..."
 }
 
@@ -93,8 +126,9 @@ configure_provider() {
 set_email() {
     read -p "Enter your email for Let's Encrypt notifications: " letsencrypt_email
     echo "letsencrypt_email=$letsencrypt_email" >> "$CONFIG_FILE"
+    echo ""
     echo -e "${GREEN}Email has been configured successfully.${NC}"
-    read -p "Press Enter to continue..."
+    read -p "Press [ENTER] to continue..."
 }
 
 # Execute the setup function
