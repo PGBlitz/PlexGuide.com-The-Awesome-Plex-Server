@@ -21,16 +21,6 @@ check_traefik_status() {
     fi
 }
 
-# Function to load the DNS provider configuration
-load_dns_provider() {
-    if [[ -f "$CONFIG_FILE" ]]; then
-        source "$CONFIG_FILE"
-        provider_display="${provider:-${RED}[Not-Set]${NC}}"
-    else
-        provider_display="${RED}[Not-Set]${NC}"
-    fi
-}
-
 # Function to setup DNS provider
 setup_dns_provider() {
     while true; do
@@ -40,7 +30,7 @@ setup_dns_provider() {
         
         echo -e "${CYAN}PG: Traefik Interface ${traefik_status}${NC}"
         echo ""
-        echo -e "[${CYAN}${BOLD}C${NC}] DNS Provider: ${provider_display}"
+        echo -e "[${CYAN}${BOLD}C${NC}] DNS Provider: ${provider_display:-${RED}[Not-Set]${NC}}"
         echo -e "[${MAGENTA}${BOLD}E${NC}] E-Mail for Let's Encrypt: ${letsencrypt_email:-${RED}[Not-Set]${NC}}"
         echo -e "[${BLUE}${BOLD}D${NC}] Deploy Traefik"
         echo -e "[${RED}${BOLD}Z${NC}] Exit"
