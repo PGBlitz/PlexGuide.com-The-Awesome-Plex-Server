@@ -19,7 +19,7 @@ parse_and_store_defaults() {
 
     # Check if the app file exists
     if [[ ! -f "$app_path" ]]; then
-        echo "Error: App file $app_path does not exist."
+        # echo "Error: App file $app_path does not exist."
         return 1
     fi
 
