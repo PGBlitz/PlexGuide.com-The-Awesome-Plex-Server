@@ -64,9 +64,6 @@ services:
       - "--certificatesresolvers.mytlschallenge.acme.email=${letsencrypt_email:-example@example.com}"
       - "--certificatesresolvers.mytlschallenge.acme.storage=/letsencrypt/acme.json"
       - "--certificatesresolvers.mytlschallenge.acme.dnschallenge.resolvers=1.1.1.1:53,8.8.8.8:53"
-      - "--log.level=ERROR"
-      - "--accesslog=true"
-      - "--accesslog.filepath=/pg/traefik/access.log"
 EOF
 
     # Add provider-specific configurations
