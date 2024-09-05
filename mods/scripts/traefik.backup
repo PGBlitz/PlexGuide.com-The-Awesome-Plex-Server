@@ -46,8 +46,6 @@ deploy_traefik() {
 
     # Write the base configuration
     cat <<EOF > $DOCKER_COMPOSE_FILE
-version: '3'
-
 services:
   traefik:
     image: traefik:latest
@@ -58,12 +56,9 @@ services:
       - "--providers.docker=true"
       - "--entrypoints.web.address=:80"
       - "--entrypoints.websecure.address=:443"
-      - "--entrypoints.web.http.redirections.entrypoint.to=websecure"
-      - "--entrypoints.web.http.redirections.entrypoint.scheme=https"
-      - "--certificatesresolvers.mytlschallenge.acme.dnschallenge=true"
+      - "--certificatesresolvers.mytlschallenge.acme.tlschallenge=true"
       - "--certificatesresolvers.mytlschallenge.acme.email=${letsencrypt_email:-example@example.com}"
       - "--certificatesresolvers.mytlschallenge.acme.storage=/letsencrypt/acme.json"
-      - "--certificatesresolvers.mytlschallenge.acme.dnschallenge.resolvers=1.1.1.1:53,8.8.8.8:53"
 EOF
 
     # Add provider-specific configurations
@@ -71,7 +66,7 @@ EOF
         cat <<EOF >> $DOCKER_COMPOSE_FILE
       - "--certificatesresolvers.mytlschallenge.acme.dnschallenge.provider=cloudflare"
     environment:
-      - CLOUDFLARE_DNS_API_TOKEN=$api_key
+      - CLOUDFLARE_API_TOKEN=$api_key
 EOF
     elif [[ "$provider" == "godaddy" ]]; then
         cat <<EOF >> $DOCKER_COMPOSE_FILE
@@ -96,12 +91,10 @@ EOF
     networks:
       - plexguide
     labels:
-      - "traefik.enable=true"
       - "traefik.http.routers.traefik.rule=Host(\`traefik.${domain_name}\`)"
       - "traefik.http.routers.traefik.entrypoints=websecure"
       - "traefik.http.routers.traefik.tls.certresolver=mytlschallenge"
       - "traefik.http.routers.traefik.service=api@internal"
-      - "traefik.http.middlewares.traefik-auth.basicauth.users=${TRAEFIK_AUTH}"
 
 networks:
   plexguide:
