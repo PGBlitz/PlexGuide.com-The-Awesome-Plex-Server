@@ -74,8 +74,8 @@ setup_dns_provider() {
 
 # Function to configure DNS provider (Cloudflare only)
 configure_provider() {
-    clear
-    echo -e "${CYAN}Configuring Cloudflare DNS Provider:${NC}"
+    echo ""
+    echo -e "${CYAN}Configuring Cloudflare DNS Provider${NC}"
     provider="cloudflare"
     read -p "Enter your Cloudflare email: " cf_email
     read -p "Enter your Cloudflare API key: " cf_api_key
@@ -85,8 +85,9 @@ configure_provider() {
     
     read -p "Enter the domain name to use (e.g., example.com): " domain_name
     echo "domain_name=$domain_name" >> "$CONFIG_FILE"
+    echo ""
     echo -e "${GREEN}Cloudflare DNS provider and domain have been configured successfully.${NC}"
-    read -p "Press Enter to continue..."
+    read -p "Press [ENTER] to continue..."
 }
 
 # Function to set email for Let's Encrypt
