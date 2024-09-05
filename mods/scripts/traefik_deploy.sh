@@ -9,6 +9,9 @@ NC="\033[0m" # No color
 # Configuration file path for reading the DNS provider details
 CONFIG_FILE="/pg/config/dns_provider.cfg"
 
+# Cloudflare IP ranges (you may need to update these periodically)
+CLOUDFLARE_IPS="173.245.48.0/20,103.21.244.0/22,103.22.200.0/22,103.31.4.0/22,141.101.64.0/18,108.162.192.0/18,190.93.240.0/20,188.114.96.0/20,197.234.240.0/22,198.41.128.0/17,162.158.0.0/15,104.16.0.0/13,104.24.0.0/14,172.64.0.0/13,131.0.72.0/22"
+
 # Function to stop and remove any running Traefik container
 remove_existing_traefik() {
     existing_container=$(docker ps -aq --filter "name=traefik")
@@ -56,6 +59,7 @@ services:
     command:
       - "--api.insecure=true"
       - "--providers.docker=true"
+      - "--providers.docker.exposedbydefault=false"
       - "--entrypoints.web.address=:80"
       - "--entrypoints.websecure.address=:443"
       - "--entrypoints.web.http.redirections.entrypoint.to=websecure"
@@ -64,6 +68,12 @@ services:
       - "--certificatesresolvers.mytlschallenge.acme.email=${letsencrypt_email:-example@example.com}"
       - "--certificatesresolvers.mytlschallenge.acme.storage=/letsencrypt/acme.json"
       - "--certificatesresolvers.mytlschallenge.acme.dnschallenge.resolvers=1.1.1.1:53,8.8.8.8:53"
+      - "--log.level=${TRAEFIK_LOG_LEVEL:-ERROR}"
+      - "--accesslog=${TRAEFIK_ENABLE_ACCESS_LOG:-false}"
+      - "--accesslog.filepath=/etc/traefik/access.log"
+      - "--accesslog.bufferingsize=100"
+      - "--entrypoints.web.forwardedHeaders.trustedIPs=${CLOUDFLARE_IPS}"
+      - "--entrypoints.websecure.forwardedHeaders.trustedIPs=${CLOUDFLARE_IPS}"
 EOF
 
     # Add provider-specific configurations
@@ -85,6 +95,13 @@ EOF
         exit 1
     fi
 
+    # Add HTTP3 support if enabled - experimental feature not enabled yet
+    if [[ "${TRAEFIK_ENABLE_HTTP3:-false}" == "true" ]]; then
+        cat <<EOF >> $DOCKER_COMPOSE_FILE
+      - "--experimental.http3=true"
+EOF
+    fi
+
     # Finalize Docker Compose file
     cat <<EOF >> $DOCKER_COMPOSE_FILE
     ports:
@@ -93,6 +110,7 @@ EOF
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
       - /pg/traefik/letsencrypt:/letsencrypt
+      - /pg/traefik:/etc/traefik
     networks:
       - plexguide
     labels:
@@ -102,6 +120,7 @@ EOF
       - "traefik.http.routers.traefik.tls.certresolver=mytlschallenge"
       - "traefik.http.routers.traefik.service=api@internal"
       - "traefik.http.middlewares.traefik-auth.basicauth.users=${TRAEFIK_AUTH}"
+      - "traefik.http.routers.traefik.middlewares=traefik-auth"
 
 networks:
   plexguide:
