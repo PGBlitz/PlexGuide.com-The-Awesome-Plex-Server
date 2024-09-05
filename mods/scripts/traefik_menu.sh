@@ -4,36 +4,67 @@
 CYAN="\033[0;36m"
 GREEN="\033[0;32m"
 RED="\033[0;31m"
-NC="\033[0m" # No color
+YELLOW="\033[0;33m"
+BLUE="\033[0;34m"
+MAGENTA="\033[0;35m"
+NC="\033[0m"  # No color
 
 # Configuration file path for storing DNS provider and domain details
 CONFIG_FILE="/pg/config/dns_provider.cfg"
+
+# Function to check if Traefik is deployed
+check_traefik_status() {
+    if docker ps --filter "name=traefik" --format '{{.Names}}' | grep -q 'traefik'; then
+        traefik_status="${GREEN}[Deployed]${NC}"
+    else
+        traefik_status="${RED}[Not Deployed]${NC}"
+    fi
+}
+
+# Function to load the DNS provider configuration
+load_dns_provider() {
+    if [[ -f "$CONFIG_FILE" ]]; then
+        source "$CONFIG_FILE"
+        provider_display="${provider:-${RED}[Not-Set]${NC}}"
+    else
+        provider_display="${RED}[Not-Set]${NC}"
+    fi
+}
 
 # Function to setup DNS provider
 setup_dns_provider() {
     while true; do
         clear
-        echo -e "${CYAN}PG: Traefki DNS Configuration Interface${NC}"
+        check_traefik_status
+        load_dns_provider
+        
+        echo -e "${CYAN}PG: Traefik Interface ${traefik_status}${NC}"
         echo ""
-        echo -e "1) Configure DNS Provider"
-        echo -e "2) Set Email for Let's Encrypt"
-        echo -e "3) Deploy Traefik"
-        echo -e "4) Exit"
+        echo -e "[${CYAN}${BOLD}C${NC}] DNS Provider: ${provider_display}"
+        echo -e "[${MAGENTA}${BOLD}E${NC}] Set E-Mail"
+        echo -e "[${BLUE}${BOLD}D${NC}] Deploy Traefik"
+        echo -e "[${RED}${BOLD}Z${NC}] Exit"
         echo ""
-        read -p "Enter your choice (1-4): " choice
+        
+        read -p "Enter your choice: " choice
         case $choice in
-            1)
+            [Cc])
                 configure_provider
                 ;;
-            2)
+            [Ee])
                 set_email
                 ;;
-            3)
-                bash /pg/scripts/traefik_deploy.sh
-                echo ""
-                read -p "Press Enter to continue..."
+            [Dd])
+                if [[ "$provider_display" == "${RED}[Not-Set]${NC}" ]]; then
+                    echo -e "${RED}DNS Provider must be set before deploying Traefik.${NC}"
+                    read -p "Press Enter to continue..."
+                else
+                    bash /pg/scripts/traefik_deploy.sh
+                    echo ""
+                    read -p "Press Enter to continue..."
+                fi
                 ;;
-            4)
+            [Zz])
                 exit 0
                 ;;
             *)
