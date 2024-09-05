@@ -65,7 +65,6 @@ services:
       - "--certificatesresolvers.mytlschallenge.acme.storage=/letsencrypt/acme.json"
       - "--certificatesresolvers.mytlschallenge.acme.dnschallenge.resolvers=1.1.1.1:53,8.8.8.8:53"
       - "--certificatesresolvers.mytlschallenge.acme.dnschallenge.delaybeforecheck=60"
-
 EOF
 
     # Add provider-specific configurations
