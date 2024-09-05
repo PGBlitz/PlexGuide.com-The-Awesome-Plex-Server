@@ -56,6 +56,39 @@ test_cloudflare_credentials() {
     fi
 }
 
+# Function to handle Traefik stop and removal warning with PINs
+warn_traefik_removal() {
+    echo ""
+    echo -e "${RED}Warning: Changing the Cloudflare credentials will stop and remove Traefik.${NC}"
+    echo ""
+
+    # Generate two random 4-digit PINs
+    proceed_pin=$(shuf -i 1000-9999 -n 1)
+    cancel_pin=$(shuf -i 1000-9999 -n 1)
+
+    # Display the PINs to the user
+    echo -e "If you want to proceed and remove Traefik, enter: ${RED}${proceed_pin}${NC}"
+    echo -e "If you do NOT want to proceed, enter: ${GREEN}${cancel_pin}${NC}"
+    echo ""
+
+    # Read user input for PIN
+    read -p "Enter your choice (PIN): " user_pin
+
+    # Check user's choice
+    if [[ "$user_pin" == "$proceed_pin" ]]; then
+        echo -e "${RED}Stopping and removing Traefik...${NC}"
+        docker stop traefik >/dev/null 2>&1
+        docker rm traefik >/dev/null 2>&1
+        return 0  # Proceed with changing credentials
+    elif [[ "$user_pin" == "$cancel_pin" ]]; then
+        echo -e "${GREEN}Operation canceled. Traefik will not be stopped or removed.${NC}"
+        return 1  # Do not proceed
+    else
+        echo -e "${RED}Invalid PIN entered. Operation aborted.${NC}"
+        return 1  # Invalid entry, cancel operation
+    fi
+}
+
 # Function to setup DNS provider
 setup_dns_provider() {
     while true; do
@@ -79,6 +112,12 @@ setup_dns_provider() {
         read -p "Enter your choice: " choice
         case $choice in
             [Cc])
+                if docker ps --filter "name=traefik" --format '{{.Names}}' | grep -q 'traefik'; then
+                    warn_traefik_removal
+                    if [[ $? -eq 1 ]]; then
+                        continue  # Skip changing credentials if the user canceled
+                    fi
+                fi
                 configure_provider
                 ;;
             [Ee])
@@ -130,6 +169,8 @@ configure_provider() {
         echo ""
         echo -e "${GREEN}Cloudflare DNS provider and domain have been configured successfully.${NC}"
     else
+        # Blank out all information in the config file if credentials are invalid
+        echo "" > "$CONFIG_FILE"
         echo ""
         echo -e "${RED}CloudFlare Information is Incorrect and/or the API Key may not have the proper permissions.${NC}"
         echo ""
