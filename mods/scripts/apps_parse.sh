@@ -20,6 +20,24 @@ parse_and_store_defaults() {
         return 1
     fi
 
+    # Load the domain_name from /pg/config/dns_provider.cfg
+    local dns_config_path="/pg/config/dns_provider.cfg"
+    if [[ -f "$dns_config_path" ]]; then
+        source "$dns_config_path"
+        traefik_domain="${domain_name:-nodomain}"
+    else
+        traefik_domain="nodomain"
+    fi
+
+    # Update or add traefik_domain to the config file
+    if grep -q "^traefik_domain=" "$config_path"; then
+        # Update existing variable
+        sed -i "s|^traefik_domain=.*|traefik_domain=\"$traefik_domain\"|" "$config_path"
+    else
+        # Add variable if it doesn't exist
+        echo "traefik_domain=\"$traefik_domain\"" >> "$config_path"
+    fi
+
     # Source the app's default_variables function
     source "$app_path"
 
