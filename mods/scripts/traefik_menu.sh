@@ -41,7 +41,7 @@ setup_dns_provider() {
         echo -e "${CYAN}PG: Traefik Interface ${traefik_status}${NC}"
         echo ""
         echo -e "[${CYAN}${BOLD}C${NC}] DNS Provider: ${provider_display}"
-        echo -e "[${MAGENTA}${BOLD}E${NC}] Set E-Mail"
+        echo -e "[${MAGENTA}${BOLD}E${NC}] E-Mail for Let's Encrypt: ${letsencrypt_email:-${RED}[Not-Set]${NC}}"
         echo -e "[${BLUE}${BOLD}D${NC}] Deploy Traefik"
         echo -e "[${RED}${BOLD}Z${NC}] Exit"
         echo ""
