@@ -39,10 +39,11 @@ setup_dns_provider() {
         check_traefik_status
         load_dns_provider
         
-        echo -e "${CYAN}PG: Traefik Interface ${traefik_status}${NC}"
+        echo -e "${CYAN}PG: CloudFlare Traefik Interface ${traefik_status}${NC}"
+        echo: NOTE: More DNS Providers will be Added Futurewise
         echo ""
-        echo -e "[${CYAN}${BOLD}C${NC}] DNS Provider: ${provider_display}"
-        echo -e "[${MAGENTA}${BOLD}E${NC}] E-Mail for LetsEncrypt"
+        echo -e "[${CYAN}${BOLD}C${NC}] CF Information: ${provider_display}"
+        echo -e "[${MAGENTA}${BOLD}E${NC}] E-Mail for Let's Encrypt"
         echo -e "[${BLUE}${BOLD}D${NC}] Deploy Traefik"
         echo -e "[${RED}${BOLD}Z${NC}] Exit"
         echo ""
@@ -56,10 +57,6 @@ setup_dns_provider() {
                 set_email
                 ;;
             [Dd])
-                if [[ "$provider_display" == "${RED}[Not-Set]${NC}" ]]; then
-                    echo -e "${RED}DNS Provider must be set before deploying Traefik.${NC}"
-                    read -p "Press Enter to continue..."
-                else
                     bash /pg/scripts/traefik_deploy.sh
                     echo ""
                     read -p "Press Enter to continue..."
@@ -76,37 +73,20 @@ setup_dns_provider() {
     done
 }
 
-# Function to configure DNS provider
+# Function to configure DNS provider (Cloudflare only)
 configure_provider() {
     clear
-    echo -e "${CYAN}Choose a DNS Provider:${NC}"
-    echo -e "1) Cloudflare"
-    echo -e "2) GoDaddy"
-    read -p "Enter your choice (1 or 2): " provider_choice
-
-    if [[ "$provider_choice" == "1" ]]; then
-        provider="cloudflare"
-        read -p "Enter your Cloudflare email: " cf_email
-        read -p "Enter your Cloudflare API key: " cf_api_key
-        echo "provider=cloudflare" > "$CONFIG_FILE"
-        echo "email=$cf_email" >> "$CONFIG_FILE"
-        echo "api_key=$cf_api_key" >> "$CONFIG_FILE"
-    elif [[ "$provider_choice" == "2" ]]; then
-        provider="godaddy"
-        read -p "Enter your GoDaddy API key: " gd_api_key
-        read -p "Enter your GoDaddy API secret: " gd_api_secret
-        echo "provider=godaddy" > "$CONFIG_FILE"
-        echo "api_key=$gd_api_key" >> "$CONFIG_FILE"
-        echo "api_secret=$gd_api_secret" >> "$CONFIG_FILE"
-    else
-        echo -e "${RED}Invalid choice. Please try again.${NC}"
-        configure_provider
-        return
-    fi
-
+    echo -e "${CYAN}Configuring Cloudflare DNS Provider:${NC}"
+    provider="cloudflare"
+    read -p "Enter your Cloudflare email: " cf_email
+    read -p "Enter your Cloudflare API key: " cf_api_key
+    echo "provider=cloudflare" > "$CONFIG_FILE"
+    echo "email=$cf_email" >> "$CONFIG_FILE"
+    echo "api_key=$cf_api_key" >> "$CONFIG_FILE"
+    
     read -p "Enter the domain name to use (e.g., example.com): " domain_name
     echo "domain_name=$domain_name" >> "$CONFIG_FILE"
-    echo -e "${GREEN}DNS provider and domain have been configured successfully.${NC}"
+    echo -e "${GREEN}Cloudflare DNS provider and domain have been configured successfully.${NC}"
     read -p "Press Enter to continue..."
 }
 
