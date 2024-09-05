@@ -40,7 +40,7 @@ setup_dns_provider() {
         load_dns_provider
         
         echo -e "${CYAN}PG: CloudFlare Traefik Interface ${traefik_status}${NC}"
-        echo "NOTE: More DNS Providers will be Added Futurewise"
+        echo "NOTE: More DNS Providers will be added futurewise"
         echo ""
         echo -e "[${CYAN}${BOLD}C${NC}] CF Information: ${provider_display}"
         echo -e "[${MAGENTA}${BOLD}E${NC}] E-Mail for Let's Encrypt"
