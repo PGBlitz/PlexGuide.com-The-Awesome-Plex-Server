@@ -16,9 +16,9 @@ display_menu() {
     clear
     echo -e "${CYAN}PG Domain Configuration Interface${NC}"
     echo
-    echo -e "[${BOLD}${GOLD}C${NC}] CloudFlare Tunnel"
-    echo -e "[${BOLD}${BLUE}T${NC}] Traefik Reverse Proxy"
-    echo -e "[${BOLD}${RED}Z${NC}] Exit"
+    echo -e "[${YELLOW}${BOLD}C${NC}] CloudFlare Tunnel"
+    echo -e "[${CYAN}${BOLD}T${NC}] Traefik Reverse Proxy"
+    echo -e "[${RED}${BOLD}Z${NC}] Exit"
     echo
 }
 
