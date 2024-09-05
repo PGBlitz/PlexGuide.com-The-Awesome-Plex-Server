@@ -114,5 +114,5 @@ EOF
     echo -e "${GREEN}Traefik has been deployed successfully.${NC}"
 }
 
-# Deploy Traefik with the chosen DNS provider 
+# Deploy Traefik with the chosen DNS provider
 deploy_traefik
