@@ -73,7 +73,7 @@ menu_exit() {
 }
 
 # Traefik & Cloudflare Tunnel
-domain_interfacel() {
+domain_interface() {
     bash /pg/scripts/domain_menu.sh
 }
 
@@ -100,8 +100,8 @@ main_menu() {
         echo ""  # Blank line for separation
 
         # Display menu options with bold colored letters
-        echo -e "[${YELLOW}${BOLD}A${NC}] Apps Management"
-        echo -e "[${CYAN}${BOLD}C${NC}] CF Tunnel / Traefik"
+        echo -e "[${YELLOW}${BOLD}A${NC}] Application Management"
+        echo -e "[${CYAN}${BOLD}C${NC}] CloudFlare Tunnel & Traefik"
         echo -e "[${GREEN}${BOLD}S${NC}] Cloud Servers"
         echo -e "[${PURPLE}${BOLD}U${NC}] PG Updates"
         echo -e "[${BLUE}${BOLD}O${NC}] Options"
