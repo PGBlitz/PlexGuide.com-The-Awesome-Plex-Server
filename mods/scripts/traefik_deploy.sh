@@ -64,6 +64,8 @@ services:
       - "--certificatesresolvers.mytlschallenge.acme.email=${letsencrypt_email:-example@example.com}"
       - "--certificatesresolvers.mytlschallenge.acme.storage=/letsencrypt/acme.json"
       - "--certificatesresolvers.mytlschallenge.acme.dnschallenge.resolvers=1.1.1.1:53,8.8.8.8:53"
+      - "--certificatesresolvers.mytlschallenge.acme.dnschallenge.delaybeforecheck=60"
+
 EOF
 
     # Add provider-specific configurations
@@ -102,6 +104,8 @@ EOF
       - "traefik.http.routers.traefik.tls.certresolver=mytlschallenge"
       - "traefik.http.routers.traefik.service=api@internal"
       - "traefik.http.middlewares.traefik-auth.basicauth.users=${TRAEFIK_AUTH}"
+    restart: unless-stopped
+
 
 networks:
   plexguide:
