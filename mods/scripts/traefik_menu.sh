@@ -38,7 +38,6 @@ setup_dns_provider() {
         clear
         check_traefik_status
         load_dns_provider
-        load_email
         
         echo -e "${CYAN}PG: Traefik Interface ${traefik_status}${NC}"
         echo ""
