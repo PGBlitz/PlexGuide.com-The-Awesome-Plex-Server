@@ -29,7 +29,9 @@ setup_dns_provider() {
                 set_email
                 ;;
             3)
-                bash /pg/scripts/traefik_menu.sh
+                bash /pg/scripts/traefik_deploy.sh
+                echo ""
+                read -p "Press Enter to continue..."
                 ;;
             4)
                 exit 0
