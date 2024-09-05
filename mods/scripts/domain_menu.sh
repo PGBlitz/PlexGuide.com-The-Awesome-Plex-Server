@@ -29,10 +29,10 @@ while true; do
 
     case $choice in
         [Cc])
-            /pg/scripts/cf_tunnel.sh
+            bash /pg/scripts/cf_tunnel.sh
             ;;
         [Tt])
-            /pg/scripts/traefik_menu.sh
+            bash /pg/scripts/traefik_menu.sh
             ;;
         [Zz])
             echo "Exiting..."
