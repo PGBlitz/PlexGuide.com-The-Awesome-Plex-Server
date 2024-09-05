@@ -60,7 +60,6 @@ setup_dns_provider() {
                     bash /pg/scripts/traefik_deploy.sh
                     echo ""
                     read -p "Press Enter to continue..."
-                fi
                 ;;
             [Zz])
                 exit 0
