@@ -19,6 +19,7 @@ setup_dns_provider() {
         echo -e "2) Set Email for Let's Encrypt"
         echo -e "3) Deploy Traefik"
         echo -e "4) Exit"
+        echo ""
         read -p "Enter your choice (1-4): " choice
         case $choice in
             1)
@@ -28,7 +29,7 @@ setup_dns_provider() {
                 set_email
                 ;;
             3)
-                bash /pg/scripts/traefik.sh
+                bash /pg/scripts/traefik_menu.sh
                 ;;
             4)
                 exit 0
