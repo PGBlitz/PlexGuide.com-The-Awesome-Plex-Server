@@ -1,19 +1,5 @@
 ## ⭐ Want to Help? Click the Star in the Upper-Right Corner! ⭐
 
-<p align="left">
-  <a href="https://discord.gg/93PYgqDX9T">
-    <img src="https://i.imgur.com/XI1WGxi.png" alt="Menu Example" width="15%">
-  </a>
-</p>
-
-### PlexGuide Installation
-
-Visit the [PlexGuide Installation Information](https://github.com/plexguide/PlexGuide.com/wiki/PlexGuide-Install-Information) area for more detailed information.
-
-### PlexGuide Wiki
-
-The [Wiki](https://github.com/plexguide/PlexGuide.com/wiki) will also provide more information in regards to Docker, applications, and much more!
-
 ### Quick Install Command
 
 ```bash
