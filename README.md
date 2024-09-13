@@ -1,14 +1,15 @@
 ## Want to Help? Click the Star in the Upper-Right Corner! ⭐
 
 <p align="center">
-  <table align="center">
+  <table align="center" border="0">
     <tr>
-      <td align="center"><img src="https://i.imgur.com/uUZlvY6.png" alt="Discussions" width="150"></td>
-      <td align="center"><img src="https://i.imgur.com/5sZSukx.png" alt="ChangeLog" width="150"></td>
-      <td align="center"><img src="https://i.imgur.com/YNf9ps0.png" alt="Wiki" width="150"></td>
+      <td align="center"><a href="https://github.com/plexguide/PlexGuide.com/discussions"><img src="https://i.imgur.com/uUZlvY6.png" alt="Discussions" width="150"></a></td>
+      <td align="center"><a href="https://github.com/plexguide/PlexGuide.com/wiki/Change-Log"><img src="https://i.imgur.com/5sZSukx.png" alt="ChangeLog" width="150"></a></td>
+      <td align="center"><a href="https://github.com/plexguide/PlexGuide.com/wiki"><img src="https://i.imgur.com/YNf9ps0.png" alt="Wiki" width="150"></td>
     </tr>
   </table>
 </p>
+
 
 
 ### Quick Install Command
