@@ -3,9 +3,9 @@
 <p align="center">
   <table align="center">
     <tr>
-      <td align="center"><img src="https://i.imgur.com/uUZlvY6.png" alt="Image 1" width="200"></td>
-      <td align="center"><img src="https://imgur.com/dVavlTB" alt="Image 2" width="200"></td>
-      <td align="center"><img src="https://i.imgur.com/YNf9ps0.png" alt="Image 3" width="200"></td>
+      <td align="center"><img src="https://i.imgur.com/uUZlvY6.png" alt="Image 1" width="150"></td>
+      <td align="center"><img src="https://imgur.com/dVavlTB" alt="Image 2" width="150"></td>
+      <td align="center"><img src="https://i.imgur.com/YNf9ps0.png" alt="Image 3" width="150"></td>
     </tr>
   </table>
 </p>
