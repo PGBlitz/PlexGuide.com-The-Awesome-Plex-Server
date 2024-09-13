@@ -11,7 +11,7 @@
   </table>
 </p>
 
-Why No Discord - To Down the Noise! Have an issue? Post Here - [Issues](https://github.com/plexguide/PlexGuide.com/issues)
+No Discord to Focus!
 ### ⚡ Quick Install Command
 
 ```bash
