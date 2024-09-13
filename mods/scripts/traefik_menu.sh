@@ -73,7 +73,6 @@ setup_dns_provider() {
     while true; do
         clear
         check_traefik_status
-        load_dns_provider
         
         echo -e "${CYAN}PG: CloudFlare Traefik Interface ${traefik_status}${NC}"
         echo ""
