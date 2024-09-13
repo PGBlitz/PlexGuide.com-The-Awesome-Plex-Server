@@ -11,6 +11,9 @@
   </table>
 </p>
 
+## Lastest Stable Version
+11.0.0
+
 ### Quick Install Command
 
 ```bash
