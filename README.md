@@ -54,9 +54,10 @@ sudo apt-get update && sudo apt-get install -y curl && bash <(curl -s https://ra
 ----
 
 ### **In Progress**
-_Primary Focus PG:_ 11.1 (Mass Port Management such as all ports closed by default - useful for Traefik and CloudFlare Tunnel)
 
-_Future Focuses _
+**Primary Focus PG:** 11.1 (Mass Port Management such as all ports closed by default - useful for Traefik and CloudFlare Tunnel)
+
+Additional Tasks
 - [ ] HD Management - Formatting, SnapRaid, and MergerFS
 - [ ] Incorporate CloudDrives (low priority)
 - [ ] AppData Backup & Restore  
@@ -66,9 +67,8 @@ _Future Focuses _
 
 ### **Additional Notes**
 
-** PG Fork Works
-
+**PG Fork Works**
 <img src="https://i.imgur.com/AhSpjrL.jpeg" alt="Menu Example" width="500">
 
-** Example of HD Management with PlexGuide
+**Example of HD Management with PlexGuide**
 <img src="https://i.imgur.com/muqXL24.jpeg" alt="Menu Example" width="500">
