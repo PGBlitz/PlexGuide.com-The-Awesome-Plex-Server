@@ -1,14 +1,11 @@
 ## Want to Help? Click the Star in the Upper-Right Corner! ⭐
 
-<<<<<<< HEAD
 <p align="left">
   <a href="https://discord.gg/93PYgqDX9T">
     <img src="https://i.imgur.com/XI1WGxi.png" alt="Menu Example" width="15%">
   </a>
 </p>
 
-=======
->>>>>>> ba17e7a3e6e7b9131b1877de3ba3d7d930fa9ef6
 ### Quick Install Command
 
 ```bash
