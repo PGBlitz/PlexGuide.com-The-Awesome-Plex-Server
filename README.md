@@ -32,7 +32,7 @@ sudo apt-get update && sudo apt-get install -y curl && bash <(curl -s https://ra
 | **App Management** | Change, Close, or Open Ports and AppData Storage Location |
 | **Personal Apps**  | Create Your Own Apps | [Click Here](https://github.com/plexguide/AppsFork) & Fork
 | **PG Fork**  | Customize Your own Version of PlexGuide (Great for Dev) | Fork PlexGuide and Install Your Own Version
-| **Cloud Servers**  | Deploy Cloud Servers in a Breeze | List: Hetzner
+| **Cloud Servers**  | Deploy Cloud Servers in a Breeze | Hetzner (HCloud)
 
 
 
