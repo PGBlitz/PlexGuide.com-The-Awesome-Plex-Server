@@ -10,6 +10,7 @@ sudo apt-get update && sudo apt-get install -y curl && bash <(curl -s https://ra
 - [ChangeLog](https://github.com/plexguide/PlexGuide.com/wiki/Change-Log)
 - [Lastest Deployable Apps](https://github.com/plexguide/Apps)
 - [Wiki](https://github.com/plexguide/PlexGuide.com/wiki)
+- [Discussions](https://github.com/plexguide/PlexGuide.com/discussions)
 
 ### PlexGuide v11
 
