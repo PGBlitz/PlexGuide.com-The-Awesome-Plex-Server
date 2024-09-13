@@ -6,12 +6,10 @@
       <td align="center"><a href="https://github.com/plexguide/PlexGuide.com/discussions"><img src="https://i.imgur.com/uUZlvY6.png" alt="Discussions" width="150"></a></td>
       <td align="center"><a href="https://github.com/plexguide/PlexGuide.com/wiki/Change-Log"><img src="https://i.imgur.com/5sZSukx.png" alt="ChangeLog" width="150"></a></td>
       <td align="center"><a href="https://github.com/plexguide/PlexGuide.com/wiki"><img src="https://i.imgur.com/YNf9ps0.png" alt="Wiki" width="150"></a></td>
-      <td align="center"><a href="https://gibhub.com/plexguide/PlexGuide.com/wiki/Donations"><img src="https://i.imgur.com/1TAkRpM.png" alt="Donate" width="150"></a></td>
+      <td align="center"><a href="https://github.com/plexguide/PlexGuide.com/wiki/Donations"><img src="https://i.imgur.com/1TAkRpM.png" alt="Donate" width="150"></a></td>
     </tr>
   </table>
 </p>
-
-
 
 ### Quick Install Command
 
