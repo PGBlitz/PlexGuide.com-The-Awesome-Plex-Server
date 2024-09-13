@@ -11,13 +11,13 @@
   </table>
 </p>
 
-### Quick Install Command
+### ⚡ Quick Install Command
 
 ```bash
 sudo apt-get update && sudo apt-get install -y curl && bash <(curl -s https://raw.githubusercontent.com/plexguide/Installer/v11/install_menu.sh)
 ```
 
-### Lastest Stable Version
+### ⚡ Lastest Stable Version
 ```bash
 11.0.0
 ```
@@ -53,7 +53,7 @@ sudo apt-get update && sudo apt-get install -y curl && bash <(curl -s https://ra
 
 ----
 
-### Primary Focus PG: 
+### ⚡ Primary Focus PG: 
 ```bash
 11.1
 ```
