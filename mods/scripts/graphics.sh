@@ -216,7 +216,7 @@ main_menu() {
         echo
 
         # Prompt the user for input
-        read -p "Make a Selection: " user_choice
+        read -p "Make a Choice > " user_choice
 
         case "$user_choice" in
             I|i)
