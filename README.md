@@ -26,9 +26,10 @@ sudo apt-get update && sudo apt-get install -y curl && bash <(curl -s https://ra
 
 | **Feature**        | Description                                                                                           | **Extra Notes**
 |--------------------|-------------------------------------------------------------------------------------------------------|----------------------------|
-| **Compatibility**  | Ubuntu 24 / Ubuntu 22 / Debian 12 ✅                                                                   | Updated for UB 24
+| **Compatibility**  | Ubuntu 24 / Ubuntu 22 / Debian 12 ✅                                                                   |
 | **Domain Access**  | CloudFlare Tunnel & Traefik Reverse Proxy v3                                                          | Access via a CF Domain
 | **App Deployment** | Deploy Multiple Docker Apps - Plex / Sonarr / Emby & More  | Entire App List [Click Here](https://github.com/plexguide/Apps)
+| **Personal Apps**  | Create Your Own Apps | [Click Here](https://github.com/plexguide/AppsFork) & Fork                                                      | Access via a CF Domain
 
 
 
@@ -49,7 +50,7 @@ sudo apt-get update && sudo apt-get install -y curl && bash <(curl -s https://ra
 
 ----
 ### Create Your Own Apps
-To Create Your Own Apps - visit & fork https://github.com/plexguide/AppsFork and make your own!
+To Create Your Own Apps - visit & fork  and make your own!
 
 ### **Current Functionality**
 
