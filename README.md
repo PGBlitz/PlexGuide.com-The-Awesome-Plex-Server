@@ -31,7 +31,9 @@ sudo apt-get update && sudo apt-get install -y curl && bash <(curl -s https://ra
 | **App Deployment** | Deploy Multiple Docker Apps   | Plex - Emby - Tautulli & [More](https://github.com/plexguide/Apps)
 
 <br>
+
 ### ⚡ PlexGuide Snippets
+
 <p align="center">
   <table align="center">
     <tr>
