@@ -29,7 +29,10 @@ sudo apt-get update && sudo apt-get install -y curl && bash <(curl -s https://ra
 | **Compatibility**  | Ubuntu 24 / Ubuntu 22 / Debian 12 ✅                                                                   |
 | **Domain Access**  | CloudFlare Tunnel & Traefik Reverse Proxy v3                                                          | Access via a CF Domain
 | **App Deployment** | Deploy Multiple Docker Apps - Plex / Sonarr / Emby & More  | Entire App List [Click Here](https://github.com/plexguide/Apps)
-| **Personal Apps**  | Create Your Own Apps | [Click Here](https://github.com/plexguide/AppsFork) & Fork                                                      | Access via a CF Domain
+| **App Management** | Change, Close, or Open Ports and AppData Storage Location |
+| **Personal Apps**  | Create Your Own Apps | [Click Here](https://github.com/plexguide/AppsFork) & Fork
+| **PG Fork**  | Customize Your own Version of PlexGuide (Great for Dev) | Fork PlexGuide and Install Your Own Version
+| **Cloud Servers**  | Deploy Cloud Servers in a Breeze | List: Hetzner
 
 
 
@@ -49,20 +52,12 @@ sudo apt-get update && sudo apt-get install -y curl && bash <(curl -s https://ra
 </p>
 
 ----
-### Create Your Own Apps
-To Create Your Own Apps - visit & fork  and make your own!
-
-### **Current Functionality**
-
-- **Port Management**: Easily expose or close ports as needed.
-- **Port and AppData Management**: Change app ports and appdata locations.
-- **Personal Apps**: Deploy your own personal apps from your own personal repo with PG!
-- **Deploy Cloud Servers**: Added the ability to deploy Hetzner Cloud Servers
 
 ### **In Progress**
  
 - [ ] Incorporate MergerFS to Merge Multiple Local Drives (Main Focus)  
-- [ ] Incorporate CloudDrives (Secondary Focus)  
+- [ ] Incorporate CloudDrives (Secondary Focus)
+- [ ] Mass Port Management such as all ports closed by default (useful for Traefik and CloudFlare Tunnel) 
 - [ ] AppData Backup & Restore  
 - [ ] Create Detailed Wiki
 - [ ] Deployment of PlexDebrid/Zurg
