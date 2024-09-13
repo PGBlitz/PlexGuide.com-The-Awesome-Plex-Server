@@ -4,7 +4,7 @@
   <table align="center">
     <tr>
       <td align="center"><img src="https://i.imgur.com/uUZlvY6.png" alt="Discussions" width="150"></td>
-      <td align="center"><img src="https://imgur.com/dVavlTB.jpg" alt="Image 2" width="150"></td>
+      <td align="center"><img src="https://imgur.com/dVavlTB.jpg" alt="ChangeLog" width="150"></td>
       <td align="center"><img src="https://i.imgur.com/YNf9ps0.png" alt="Wiki" width="150"></td>
     </tr>
   </table>
