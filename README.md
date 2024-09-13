@@ -1,11 +1,5 @@
 ## Want to Help? Click the Star in the Upper-Right Corner! ⭐
 
-<p align="left">
-  <a href="https://discord.gg/93PYgqDX9T">
-    <img src="https://i.imgur.com/XI1WGxi.png" alt="Menu Example" width="15%">
-  </a>
-</p>
-
 ### Quick Install Command
 
 ```bash
