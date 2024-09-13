@@ -41,7 +41,7 @@ sudo apt-get update && sudo apt-get install -y curl && bash <(curl -s https://ra
 <p align="center">
   <table align="center">
     <tr>
-      <td align="center"><img src="https://i.imgur.com/60GtUzl.jpeg" alt="Menu Example" width="500"></td>
+      <td align="center"><img src="https://i.imgur.com/HDJ6kPL.jpeg" alt="Menu Example" width="500"></td>
       <td align="center"><img src="https://i.imgur.com/TNy3rmn.jpeg" alt="Plex Example" width="500"></td>
     </tr>
     <tr>
