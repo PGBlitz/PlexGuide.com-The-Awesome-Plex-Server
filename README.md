@@ -16,6 +16,7 @@ sudo apt-get update && sudo apt-get install -y curl && bash <(curl -s https://ra
 
 * Simple, debloated, no fancy menus and executes for exactly what you need!
 * Works on Ubuntu 22/Ubuntu 24/Debian 12 (Recommend Ubuntu Heavily)
+* Works with CloudFlare Tunnel & Traefik
 
 <p align="center">
   <table align="center">
