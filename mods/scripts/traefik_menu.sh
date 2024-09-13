@@ -78,12 +78,7 @@ setup_dns_provider() {
         echo ""
         echo -e "[${CYAN}${BOLD}C${NC}] CF Information"
         echo -e "[${MAGENTA}${BOLD}E${NC}] E-Mail for Let's Encrypt"
-
-        # Only show "D) Deploy" if credentials are valid
-        if [[ "$deploy_option_visible" == true ]]; then
-            echo -e "[${BLUE}${BOLD}D${NC}] Deploy Traefik"
-        fi
-
+        echo -e "[${BLUE}${BOLD}D${NC}] Deploy Traefik"
         echo -e "[${RED}${BOLD}Z${NC}] Exit"
         echo ""
         
@@ -102,15 +97,9 @@ setup_dns_provider() {
                 set_email
                 ;;
             [Dd])
-                if [[ "$deploy_option_visible" == false ]]; then
-                    echo ""
-                    echo -e "${RED}CloudFlare is not configured. Please configure CloudFlare first before deploying Traefik.${NC}"
-                    read -p "Press Enter to continue..."
-                else
                     bash /pg/scripts/traefik_deploy.sh
                     echo ""
                     read -p "Press Enter to continue..."
-                fi
                 ;;
             [Zz])
                 exit 0
