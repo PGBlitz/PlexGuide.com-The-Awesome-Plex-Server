@@ -1,4 +1,6 @@
-## Want to Help? Click the Star in the Upper-Right Corner! ⭐
+<p align="center">
+  ## Want to Help? Click the Star in the Upper-Right Corner! ⭐
+</p>
 
 <p align="center">
   <table align="center" border="0">
