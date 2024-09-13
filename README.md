@@ -3,7 +3,7 @@
 <p align="center">
   <table align="center" border="0">
     <tr>
-      <td align="center"><a href="https://discord.com"><img src="https://i.imgur.com/qwZEVKG.jpeg" alt="Discussions" width="150"></a></td>
+      <td align="center"><a href="https://discord.gg/xePSHN56"><img src="https://i.imgur.com/qwZEVKG.jpeg" alt="Discussions" width="150"></a></td>
       <td align="center"><a href="https://github.com/plexguide/PlexGuide.com/wiki/Change-Log"><img src="https://i.imgur.com/5sZSukx.png" alt="ChangeLog" width="150"></a></td>
       <td align="center"><a href="https://github.com/plexguide/PlexGuide.com/wiki"><img src="https://i.imgur.com/YNf9ps0.png" alt="Wiki" width="150"></a></td>
       <td align="center"><a href="https://github.com/plexguide/PlexGuide.com/wiki/Donations"><img src="https://i.imgur.com/1TAkRpM.png" alt="Donate" width="150"></a></td>
