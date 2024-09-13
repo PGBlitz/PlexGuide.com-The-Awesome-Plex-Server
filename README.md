@@ -54,10 +54,11 @@ sudo apt-get update && sudo apt-get install -y curl && bash <(curl -s https://ra
 ----
 
 ### **In Progress**
- 
-- [ ] Incorporate MergerFS to Merge Multiple Local Drives (Main Focus)  
-- [ ] Incorporate CloudDrives (Secondary Focus)
-- [ ] Mass Port Management such as all ports closed by default (useful for Traefik and CloudFlare Tunnel) 
+_Primary Focus PG:_ 11.1 (Mass Port Management such as all ports closed by default - useful for Traefik and CloudFlare Tunnel)
+
+_Future Focuses _
+- [ ] HD Management - Formatting, SnapRaid, and MergerFS
+- [ ] Incorporate CloudDrives (low priority)
 - [ ] AppData Backup & Restore  
 - [ ] Create Detailed Wiki
 - [ ] Deployment of PlexDebrid/Zurg
@@ -69,8 +70,5 @@ sudo apt-get update && sudo apt-get install -y curl && bash <(curl -s https://ra
 
 <img src="https://i.imgur.com/AhSpjrL.jpeg" alt="Menu Example" width="500">
 
-- Helps you copy plexguide and test your own changes
-- Assists with development to push back to PlexGuide
-
-** PG Futurewise will format and merge disk to act as form of UNRAID lite
+** Example of HD Management with PlexGuide
 <img src="https://i.imgur.com/muqXL24.jpeg" alt="Menu Example" width="500">
