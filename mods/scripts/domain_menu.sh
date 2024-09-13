@@ -45,7 +45,7 @@ display_menu() {
 # Main loop
 while true; do
     display_menu
-    read -p "Enter your choice: " choice
+    read -p "Make a Choice > " choice
 
     case $choice in
         [Aa])
