@@ -11,7 +11,6 @@
   </table>
 </p>
 
-No Discord to Focus!
 ### ⚡ Quick Install Command
 
 ```bash
