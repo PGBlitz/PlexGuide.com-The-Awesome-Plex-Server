@@ -56,15 +56,14 @@ sudo apt-get update && sudo apt-get install -y curl && bash <(curl -s https://ra
 
 ### ⚡ Primary Focus PG: 
 ```bash
-11.1
+11.0.2
 ```
-- [ ] Mass Port Management (Close all ports by default - useful for Traefik and CloudFlare Tunnel)
+- [ ] AppData Backup & Restore  
 - [ ] Wiki
 
 Additional Tasks
 - [ ] HD Management - Formatting, SnapRaid, and MergerFS
 - [ ] Incorporate CloudDrives (low priority)
-- [ ] AppData Backup & Restore  
 - [ ] Deployment of PlexDebrid/Zurg
 - [ ] VPN Server Capabilities
 
