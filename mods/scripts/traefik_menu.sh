@@ -21,27 +21,6 @@ check_traefik_status() {
     fi
 }
 
-# Function to load the DNS provider configuration
-load_dns_provider() {
-    if [[ -f "$CONFIG_FILE" ]]; then
-        source "$CONFIG_FILE"
-        if [[ -n "$provider" && "$provider" == "cloudflare" && -n "$api_key" && -n "$cf_email" && -n "$domain_name" ]]; then
-            if test_cloudflare_credentials; then
-                provider_display="${GREEN}[SET]${NC}"
-                deploy_option_visible=true
-            else
-                provider_display="${RED}[Not-Set]${NC}"
-                deploy_option_visible=false
-            fi
-        else
-            provider_display="${RED}[Not-Set]${NC}"
-            deploy_option_visible=false
-        fi
-    else
-        provider_display="${RED}[Not-Set]${NC}"
-        deploy_option_visible=false
-    fi
-}
 
 # Function to test Cloudflare credentials
 test_cloudflare_credentials() {
@@ -94,11 +73,10 @@ setup_dns_provider() {
     while true; do
         clear
         check_traefik_status
-        load_dns_provider
         
         echo -e "${CYAN}PG: CloudFlare Traefik Interface ${traefik_status}${NC}"
         echo ""
-        echo -e "[${CYAN}${BOLD}C${NC}] CF Information: ${provider_display}"
+        echo -e "[${CYAN}${BOLD}C${NC}] CF Information"
         echo -e "[${MAGENTA}${BOLD}E${NC}] E-Mail for Let's Encrypt"
 
         # Only show "D) Deploy" if credentials are valid
