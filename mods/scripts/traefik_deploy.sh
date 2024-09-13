@@ -53,6 +53,7 @@ services:
     image: traefik:latest
     container_name: traefik
     hostname: traefik
+    network_mode: host
     command:
       - "--api.insecure=true"
       - "--providers.docker=true"
@@ -76,14 +77,9 @@ EOF
 
     # Finalize Docker Compose file
     cat <<EOF >> $DOCKER_COMPOSE_FILE
-    ports:
-      - "80:80"
-      - "443:443"
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
       - /pg/traefik/letsencrypt:/letsencrypt
-    networks:
-      - plexguide
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.traefik.rule=Host(\`traefik.${domain_name}\`)"
@@ -94,7 +90,7 @@ EOF
     restart: unless-stopped
 
 networks:
-  plexguide:
+  host:
     external: true
 EOF
 
