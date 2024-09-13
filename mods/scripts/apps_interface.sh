@@ -17,7 +17,7 @@ config_type=$2  # 'personal' for personal configurations, 'official' for officia
 
 # Function: check_deployment_status
 check_deployment_status() {
-    # Load the configuration file to get the port_number
+    # Load the configuration file to get the port_number and expose value
     if [[ "$config_type" == "personal" ]]; then
         config_file="/pg/personal_configs/${app_name}.cfg"
     else
@@ -28,10 +28,18 @@ check_deployment_status() {
         source "$config_file"
     fi
 
+    # Determine port status based on the 'expose' variable
+    if [[ "$expose" == "127.0.0.1"* ]]; then
+        port_status="Closed"
+    else
+        port_status="Open"
+    fi
+
+    # Check if the app's Docker container is running
     local container_status=$(docker ps --filter "name=^/${app_name}$" --format "{{.Names}}")
 
     if [[ "$container_status" == "$app_name" ]]; then
-        echo -e "${GREEN}[Deployed]${NC} $app_name - Port: $port_number"
+        echo -e "${GREEN}[Deployed]${NC} $app_name - Port: $port_number/$port_status"
     else
         echo -e "${RED}[Not Deployed]${NC} $app_name"
     fi
