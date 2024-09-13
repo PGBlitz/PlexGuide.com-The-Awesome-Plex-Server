@@ -64,7 +64,6 @@ Additional Tasks
 - [ ] HD Management - Formatting, SnapRaid, and MergerFS
 - [ ] Incorporate CloudDrives (low priority)
 - [ ] AppData Backup & Restore  
-- [ ] Create Detailed Wiki
 - [ ] Deployment of PlexDebrid/Zurg
 - [ ] VPN Server Capabilities
 
