@@ -23,10 +23,9 @@ sudo apt-get update && sudo apt-get install -y curl && bash <(curl -s https://ra
 ### Important Links
 - [Lastest Deployable Apps](https://github.com/plexguide/Apps) - See All the Latest Apps You Can Deploy!
 
-### PlexGuide v11
+### ⚡ PlexGuide v11
 
-* Simple, debloated, no fancy menus and executes for exactly what you need!
-* Works on Ubuntu 22/Ubuntu 24/Debian 12 (Recommend Ubuntu Heavily)
+* ✅ Comptability : Ubuntu 24 / Ubuntu 22 / Debian 12
 * Works with CloudFlare Tunnel & Traefik
 
 <p align="center">
