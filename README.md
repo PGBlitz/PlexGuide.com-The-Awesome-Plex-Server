@@ -12,18 +12,10 @@
 sudo apt-get update && sudo apt-get install -y curl && bash <(curl -s https://raw.githubusercontent.com/plexguide/Installer/v11/install_menu.sh)
 ```
 
-## ChangeLog
-Looking for the latest updates? Visit the [ChangeLog]https://github.com/plexguide/PlexGuide.com/wiki/Change-Log
-
-### Current List of Official Apps
-Visit to see official apps that can be deployed - https://github.com/plexguide/Apps
-
-### PlexGuide Wiki
-
-The [Wiki](https://github.com/plexguide/PlexGuide.com/wiki) will also provide more information in regards to Docker, applications, and much more!
-
-### Create Your Own Apps
-To Create Your Own Apps - visit & fork https://github.com/plexguide/AppsFork and make your own!
+## Important Links
+[PG ChangeLog](https://github.com/plexguide/PlexGuide.com/wiki/Change-Log)
+[Lastest Deployable Apps](https://github.com/plexguide/Apps)
+[Wiki](https://github.com/plexguide/PlexGuide.com/wiki)
 
 ### PlexGuide v11
 
@@ -44,11 +36,8 @@ To Create Your Own Apps - visit & fork https://github.com/plexguide/AppsFork and
 </p>
 
 ----
-
-**<span style="color:green">Deployable Apps:</span>**  
-CodeServer, Emby, FireFox, Jackett, JellyFin, Lidarr, NetData, NZBGET, Overseer, Ombi, Opera, Portainer, Plex, Prowlarr, QBittorent, Radarr, Requestrr, TdarrServer, TdarrNodes, SABNZBD, Sonarr, Ungoogled Chromium, UpTimeKuma, VaultWarden and more!
-
-Visit  to see the full list of APPS.
+### Create Your Own Apps
+To Create Your Own Apps - visit & fork https://github.com/plexguide/AppsFork and make your own!
 
 ### **Current Functionality**
 
