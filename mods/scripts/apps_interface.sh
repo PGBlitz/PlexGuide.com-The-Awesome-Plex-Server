@@ -41,7 +41,12 @@ check_deployment_status() {
     if [[ "$container_status" == "$app_name" ]]; then
         echo -e "${GREEN}[Deployed]${NC} $app_name - Port: $port_number/$port_status"
     else
-        echo -e "${RED}[Not Deployed]${NC} $app_name"
+        # App is not deployed, show potential port status if deployed
+        if [[ "$port_status" == "Closed" ]]; then
+            echo -e "${RED}[Not Deployed]${NC} $app_name - Port Closed if Deployed"
+        else
+            echo -e "${RED}[Not Deployed]${NC} $app_name - Port Open if Deployed"
+        fi
     fi
 }
 
