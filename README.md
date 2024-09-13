@@ -30,6 +30,7 @@ sudo apt-get update && sudo apt-get install -y curl && bash <(curl -s https://ra
 | **Domain Access**  | CloudFlare Tunnel & Traefik Reverse Proxy v3                                                          | Access via a CF Domain
 | **App Deployment** | Deploy Multiple Docker Apps | App List [Click Here](https://github.com/plexguide/Apps)
 | **App Management** | Change, Close, or Open Ports and AppData |
+| **Port Protection**  | Default Open/Closed Ports | Useful with CF Tunnel and Traefik
 | **Personal Apps**  | Create Your Own Apps | [Click Here](https://github.com/plexguide/AppsFork) & Fork
 | **PG Fork**  | Customize Your own PG (Great for Dev) | Fork PG
 | **Cloud Servers**  | Deploy Cloud Servers in a Breeze | Hetzner (HCloud)
