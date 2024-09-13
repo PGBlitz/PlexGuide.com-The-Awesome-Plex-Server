@@ -66,8 +66,8 @@ Additional Tasks
 
 ### **Additional Notes**
 
-**PG Fork Works**
+**PG Fork Works**<br>
 <img src="https://i.imgur.com/AhSpjrL.jpeg" alt="Menu Example" width="500">
 
-**Example of HD Management with PlexGuide**
+**Example of HD Management with PlexGuide**<br>
 <img src="https://i.imgur.com/muqXL24.jpeg" alt="Menu Example" width="500">
