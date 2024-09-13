@@ -180,7 +180,7 @@ main_menu() {
     echo ""  # Space between options and input prompt
 
     # Prompt the user for input
-    read -p "Enter your choice [I/E/D/P/U/Z]: " choice
+    read -p "Make a Choice > " choice
 
     case ${choice,,} in  # Convert input to lowercase for i/I, e/E, d/D, p/P, u/U, z/Z handling
       i) install_ssh ;;
