@@ -11,12 +11,6 @@ clear
 # Load the configuration
 load_config
 
-# Function for SSH Management option
-ssh_management() {
-    clear
-    /pg/scripts/ssh.sh
-}
-
 # Function to exit the script
 exit_script() {
     clear
@@ -46,7 +40,7 @@ main_menu() {
         bash /pg/scripts/graphics.sh
         ;;
       s)
-        ssh_management
+        bash /pg/scripts/ssh.sh
         ;;
       z)
         exit_script
