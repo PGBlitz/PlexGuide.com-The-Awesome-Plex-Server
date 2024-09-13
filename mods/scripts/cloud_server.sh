@@ -87,7 +87,7 @@ cloud_server_menu() {
         echo ""  # Space between options and input prompt
 
         # Prompt for user input
-        read -p "Enter your choice: " choice
+        read -p "Make a Choice > " choice
 
         # Process user input
         case ${choice,,} in

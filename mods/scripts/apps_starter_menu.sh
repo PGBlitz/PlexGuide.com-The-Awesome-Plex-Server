@@ -160,7 +160,7 @@ main_menu() {
         echo ""  # Space between options and input prompt
         echo -e "${WHITE}────────────────────────────────────────────────────${NC}"
         # Display the prompt with colors and capture user input
-        echo -e "Select an Option or [${GREEN}Z${NC}] to Exit >${NC} \c"
+        echo -e "Make a Choice or [${GREEN}Z${NC}] to Exit >${NC} \c"
         read -r choice
 
         case $choice in

@@ -158,7 +158,7 @@ apps_interface() {
         echo "Z) Exit"
         echo ""
 
-        read -p "Choose an option: " choice
+        read -p "Make a Choice > " choice
 
         case ${choice,,} in  # Convert input to lowercase
             d)
