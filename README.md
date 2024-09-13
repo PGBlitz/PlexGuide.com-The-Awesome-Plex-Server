@@ -19,7 +19,7 @@ sudo apt-get update && sudo apt-get install -y curl && bash <(curl -s https://ra
 
 ### ⚡ Lastest Stable Version
 ```bash
-11.0.1
+11.0.2
 ```
 
 ### ⚡ PlexGuide v11
