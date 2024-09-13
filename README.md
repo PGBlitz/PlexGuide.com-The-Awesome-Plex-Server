@@ -20,13 +20,11 @@
 sudo apt-get update && sudo apt-get install -y curl && bash <(curl -s https://raw.githubusercontent.com/plexguide/Installer/v11/install_menu.sh)
 ```
 
-### Important Links
-- [Lastest Deployable Apps](https://github.com/plexguide/Apps) - See All the Latest Apps You Can Deploy!
-
 ### ⚡ PlexGuide v11
 
-* ✅ Comptability : Ubuntu 24 / Ubuntu 22 / Debian 12
-* Works with CloudFlare Tunnel & Traefik
+* **Comptability :** Ubuntu 24 / Ubuntu 22 / Debian 12 ✅ 
+* **Domain Access:** CloudFlare Tunnel & Traefik Reverse Proxy v3
+* App Deployment: Deploy multiple apps such as Plex - Emby - Tautulli & More [See the App List](https://github.com/plexguide/Apps)
 
 <p align="center">
   <table align="center">
@@ -47,14 +45,8 @@ To Create Your Own Apps - visit & fork https://github.com/plexguide/AppsFork and
 
 ### **Current Functionality**
 
-- **Utilize CloudFlare Tunnel and/or Traefik**: Tunnel or Reverse Proxy Your Applications
 - **Port Management**: Easily expose or close ports as needed.
 - **Port and AppData Management**: Change app ports and appdata locations.
-- **Quick Reinstall/Update of PG Beta**: Streamlined process for reinstalling or updating to the latest PG Beta.
-- **SSH Installer/Manager**: Added for easy SSH management.
-- **Intel/NVIDIA GPU Manager**: Install / Uninstall GPU Drivers easily.
-- **Dynamic Menu Intergration**: Enables custom options for docker containers
-- **Streamlined Updating**: PG Alpha and Beta Builds Intergrated. Stable will be added later
 - **Personal Apps**: Deploy your own personal apps from your own personal repo with PG!
 - **Deploy Cloud Servers**: Added the ability to deploy Hetzner Cloud Servers
 
