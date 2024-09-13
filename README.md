@@ -53,8 +53,6 @@ sudo apt-get update && sudo apt-get install -y curl && bash <(curl -s https://ra
 
 ----
 
-### **In Progress**
-
 **Primary Focus PG:** 11.1
 - [ ] Mass Port Management (Close all ports by default - useful for Traefik and CloudFlare Tunnel)
 
