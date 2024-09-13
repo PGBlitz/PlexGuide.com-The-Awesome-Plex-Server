@@ -28,7 +28,7 @@ sudo apt-get update && sudo apt-get install -y curl && bash <(curl -s https://ra
 |--------------------|-------------------------------------------------------------------------------------------------------|----------------------------|
 | **Compatibility**  | Ubuntu 24 / Ubuntu 22 / Debian 12 ✅                                                                   |
 | **Domain Access**  | CloudFlare Tunnel & Traefik Reverse Proxy v3                                                          |
-| **App Deployment** | Deploy Multiple Docker Apps   | Plex - Emby - Tautulli & [More](https://github.com/plexguide/Apps)
+| **App Deployment** | Deploy Multiple Docker Apps - Plex & More  | See the entire App List - [Here](https://github.com/plexguide/Apps)
 
 
 
