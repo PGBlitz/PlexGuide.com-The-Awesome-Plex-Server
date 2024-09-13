@@ -63,6 +63,7 @@ sudo apt-get update && sudo apt-get install -y curl && bash <(curl -s https://ra
 
 Additional Tasks
 - [ ] HD Management - Formatting, SnapRaid, and MergerFS
+- [ ] Custom Subdomains for Traefik and Primary Domain for an App
 - [ ] Incorporate CloudDrives (low priority)
 - [ ] Deployment of PlexDebrid/Zurg
 - [ ] VPN Server Capabilities
