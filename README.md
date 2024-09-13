@@ -18,10 +18,7 @@ sudo apt-get update && sudo apt-get install -y curl && bash <(curl -s https://ra
 ```
 
 ## Important Links
-- [ChangeLog](https://github.com/plexguide/PlexGuide.com/wiki/Change-Log)
-- [Lastest Deployable Apps](https://github.com/plexguide/Apps)
-- [Wiki](https://github.com/plexguide/PlexGuide.com/wiki)
-- [Discussions](https://github.com/plexguide/PlexGuide.com/discussions)
+- [Lastest Deployable Apps](https://github.com/plexguide/Apps) - See All the Latest Apps You Can Deploy!
 
 ### PlexGuide v11
 
