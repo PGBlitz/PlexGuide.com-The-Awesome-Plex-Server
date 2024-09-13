@@ -6,20 +6,23 @@
   </a>
 </p>
 
-### PlexGuide Installation
-
-Visit the [PlexGuide Installation Information](https://github.com/plexguide/PlexGuide.com/wiki/PlexGuide-Install-Information) area for more detailed information.
-
-### PlexGuide Wiki
-
-The [Wiki](https://github.com/plexguide/PlexGuide.com/wiki) will also provide more information in regards to Docker, applications, and much more!
-
 ### Quick Install Command
 
 ```bash
 sudo apt-get update && sudo apt-get install -y curl && bash <(curl -s https://raw.githubusercontent.com/plexguide/Installer/v11/install_menu.sh)
 ```
 
+## ChangeLog
+Looking for the latest updates? Visit the [ChangeLog]https://github.com/plexguide/PlexGuide.com/wiki/Change-Log
+
+### Current List of Official Apps
+Visit to see official apps that can be deployed - https://github.com/plexguide/Apps
+
+### PlexGuide Wiki
+
+The [Wiki](https://github.com/plexguide/PlexGuide.com/wiki) will also provide more information in regards to Docker, applications, and much more!
+
+### Create Your Own Apps
 To Create Your Own Apps - visit & fork https://github.com/plexguide/AppsFork and make your own!
 
 ### PlexGuide v11
@@ -45,18 +48,16 @@ To Create Your Own Apps - visit & fork https://github.com/plexguide/AppsFork and
 **<span style="color:green">Deployable Apps:</span>**  
 CodeServer, Emby, FireFox, Jackett, JellyFin, Lidarr, NetData, NZBGET, Overseer, Ombi, Opera, Portainer, Plex, Prowlarr, QBittorent, Radarr, Requestrr, TdarrServer, TdarrNodes, SABNZBD, Sonarr, Ungoogled Chromium, UpTimeKuma, VaultWarden and more!
 
-Visit https://github.com/plexguide/Apps to see the full list of APPS.
+Visit  to see the full list of APPS.
 
 ### **Current Functionality**
 
-- **Advanced Configuration of App Variables**: Allows for detailed customization of app settings.
+- **Utilize CloudFlare Tunnel and/or Traefik**: Tunnel or Reverse Proxy Your Applications
 - **Port Management**: Easily expose or close ports as needed.
-- **CloudFlare Tunnel Integration**: Seamlessly integrates CloudFlare Tunnel for secure access.
-- **Port and AppData Management**: Change app ports and AppData locations.
+- **Port and AppData Management**: Change app ports and appdata locations.
 - **Quick Reinstall/Update of PG Beta**: Streamlined process for reinstalling or updating to the latest PG Beta.
 - **SSH Installer/Manager**: Added for easy SSH management.
 - **Intel/NVIDIA GPU Manager**: Install / Uninstall GPU Drivers easily.
-- **App Port Security**: View open ports; close and open additional ports
 - **Dynamic Menu Intergration**: Enables custom options for docker containers
 - **Streamlined Updating**: PG Alpha and Beta Builds Intergrated. Stable will be added later
 - **Personal Apps**: Deploy your own personal apps from your own personal repo with PG!
@@ -67,7 +68,6 @@ Visit https://github.com/plexguide/Apps to see the full list of APPS.
 - [ ] Incorporate MergerFS to Merge Multiple Local Drives (Main Focus)  
 - [ ] Incorporate CloudDrives (Secondary Focus)  
 - [ ] AppData Backup & Restore  
-- [ ] Add More Applications  
 - [ ] Create Detailed Wiki
 - [ ] Deployment of PlexDebrid/Zurg
 - [ ] VPN Server Capabilities
@@ -83,4 +83,3 @@ Visit https://github.com/plexguide/Apps to see the full list of APPS.
 
 ** PG Futurewise will format and merge disk to act as form of UNRAID lite
 <img src="https://i.imgur.com/muqXL24.jpeg" alt="Menu Example" width="500">
-
