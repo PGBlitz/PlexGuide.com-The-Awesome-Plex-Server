@@ -11,13 +11,15 @@
   </table>
 </p>
 
-### Lastest Stable Version
-11.0.0
-
 ### Quick Install Command
 
 ```bash
 sudo apt-get update && sudo apt-get install -y curl && bash <(curl -s https://raw.githubusercontent.com/plexguide/Installer/v11/install_menu.sh)
+```
+
+### Lastest Stable Version
+```bash
+11.0.0
 ```
 
 ### ⚡ PlexGuide v11
