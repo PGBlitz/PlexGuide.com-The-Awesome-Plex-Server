@@ -82,12 +82,12 @@ display_available_apps() {
 deploy_app() {
     local app_name=$1
     local app_script
-    app_script="/pg/scripts/apps_interface.sh"
+    app_script="/pg/scripts/apps/interface.sh"
 
     # Ensure the app script exists before proceeding
     if [[ -f "$app_script" ]]; then
         # Execute the apps_interface.sh script with the app name as an argument
-        bash /pg/scripts/apps_interface.sh "$app_name" "$deployment_type"
+        bash /pg/scripts/apps/interface.sh "$app_name" "$deployment_type"
     else
         echo "Error: Interface script $app_script not found!"
         read -p "Press Enter to continue..."

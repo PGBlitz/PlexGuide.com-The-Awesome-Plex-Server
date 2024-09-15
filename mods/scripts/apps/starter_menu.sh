@@ -146,7 +146,7 @@ main_menu() {
                     echo -e "${RED}Option B is not available. Please select an App Store version first.${NC}"
                     read -p "Press Enter to continue..."
                 else
-                    bash /pg/scripts/apps_running.sh "official"
+                    bash /pg/scripts/apps/running.sh "official"
                 fi
                 ;;
             C|c)
@@ -154,18 +154,18 @@ main_menu() {
                     echo -e "${RED}Option C is not available. Please select an App Store version first.${NC}"
                     read -p "Press Enter to continue..."
                 else
-                    bash /pg/scripts/apps_stage.sh "official"
+                    bash /pg/scripts/apps/stage.sh "official"
                 fi
                 ;;
             P|p)
-                bash /pg/scripts/apps_personal_select.sh
+                bash /pg/scripts/apps/personal_select.sh
                 ;;
             Q|q)
                 if [[ "$repo" == "None" ]]; then
                     echo -e "${RED}Option Q is not available. Please use P to set a User and Repo first.${NC}"
                     read -p "Press Enter to continue..."
                 else
-                    bash /pg/scripts/apps_running.sh "personal"
+                    bash /pg/scripts/apps/running.sh "personal"
                 fi
                 ;;
             R|r)
@@ -173,7 +173,7 @@ main_menu() {
                     echo -e "${RED}Option R is not available. Please use P to set a User and Repo first.${NC}"
                     read -p "Press Enter to continue..."
                 else
-                    bash /pg/scripts/apps_stage.sh "personal"
+                    bash /pg/scripts/apps/stage.sh "personal"
                 fi
                 ;;
             Z|z)

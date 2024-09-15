@@ -12,7 +12,7 @@ app_name=$1
 config_type=$2  # 'personal' for personal configurations, 'official' for official configurations
 
 # Source default settings script
-source /pg/scripts/apps_restore_default_settings.sh
+source /pg/scripts/apps/restore_default_settings.sh
 
 # Determine paths based on config type
 if [[ "$config_type" == "personal" ]]; then
@@ -150,8 +150,8 @@ while true; do
     case ${choice,,} in
         a) change_appdata_path;;
         p) [[ -n "$port_number" ]] && change_port_number || continue;;
-        e) [[ -n "$port_number" ]] && bash /pg/scripts/apps_expose.sh "$app_name" "$config_type" || continue;;
-        c) bash /pg/scripts/apps_config_edit.sh "$app_name" "$config_type";;
+        e) [[ -n "$port_number" ]] && bash /pg/scripts/apps/expose.sh "$app_name" "$config_type" || continue;;
+        c) bash /pg/scripts/apps/config_edit.sh "$app_name" "$config_type";;
         r) reset_config_file "$app_name" "$config_type";;
         z) break;;
         *) echo "Invalid option, please try again." && read -p "Press Enter to continue...";;

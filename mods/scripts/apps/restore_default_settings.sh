@@ -5,7 +5,7 @@ RED="\033[0;31m"
 GREEN="\033[0;32m"
 NC="\033[0m" # No color
 
-source /pg/scripts/apps_defaults.sh
+source /pg/scripts/apps/defaults.sh
 
 # Function: reset_config_file
 reset_config_file() {

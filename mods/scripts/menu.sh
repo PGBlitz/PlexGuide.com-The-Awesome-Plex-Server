@@ -42,7 +42,7 @@ get_color() {
 
 # Function for Apps Management
 apps_management() {
-    bash /pg/scripts/apps_starter_menu.sh
+    bash /pg/scripts/apps/starter_menu.sh
 }
 
 # Function to Update PG Interface

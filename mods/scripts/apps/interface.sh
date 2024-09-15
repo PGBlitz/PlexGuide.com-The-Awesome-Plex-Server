@@ -9,7 +9,7 @@ BLUE="\033[0;34m"
 NC="\033[0m" # No color
 
 # Source the defaults script
-source /pg/scripts/apps_defaults.sh
+source /pg/scripts/apps/defaults.sh
 
 # Arguments
 app_name=$1
@@ -118,13 +118,13 @@ apps_interface() {
 
         case ${choice,,} in  # Convert input to lowercase
             d)
-                bash /pg/scripts/apps_deploy.sh "$app_name" "$config_type"
+                bash /pg/scripts/apps/deploy.sh "$app_name" "$config_type"
                 ;;
             k)
-                bash /pg/scripts/apps_kill_remove.sh "$app_name"
+                bash /pg/scripts/apps/kill_remove.sh "$app_name"
                 ;;
             c)
-                bash /pg/scripts/apps_config_menu.sh "$app_name" "$config_type"
+                bash /pg/scripts/apps/config_menu.sh "$app_name" "$config_type"
                 ;;
             [0-9]*)
                 if [[ $choice -le ${#dynamic_menu_items[@]} ]]; then
