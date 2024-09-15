@@ -63,6 +63,7 @@ update_pg_interface() {
     # Execute the downloaded script
     bash "$INSTALL_SCRIPT_PATH"
     
+    menu_exit
     exit 0  # Ensure the script exits after executing the menu_exit.sh
 }
 
@@ -117,7 +118,7 @@ main_menu() {
             s) server_cloud_deployments ;;
             c) cloudflare_tunnel ;;
             u) update_pg_interface ;;
-            o) options_menu && main_menu ;;
+            o) options_menu ;;
             z) menu_exit ;;
             *)
                 echo -e "${RED}Invalid option. Please try again.${NC}"
