@@ -14,7 +14,7 @@
 ### ⚡ Quick Install Command
 
 ```bash
-sudo apt-get update && sudo apt-get install -y curl && bash <(curl -s https://raw.githubusercontent.com/plexguide/Installer/v11/install_menu.sh)
+sudo apt-get update && sudo apt-get install -y curl && bash <(curl -fsSL https://raw.githubusercontent.com/plexguide/Installer/v11/install_menu.sh)
 ```
 
 ### ⚡ Lastest Stable Version
