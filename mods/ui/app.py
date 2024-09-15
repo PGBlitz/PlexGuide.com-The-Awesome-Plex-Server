@@ -1,72 +1,53 @@
-from flask import Flask, render_template, jsonify, request
 import os
-import subprocess
+from flask import Flask, render_template, request
 
 app = Flask(__name__)
 
+# Route for the main page
 @app.route('/')
 def index():
-    return render_template('index.html')
+    # Directory where YML files are stored
+    app_dir = "/pg/ymals/"
+    
+    # Get the list of folders in the /pg/ymals/ directory
+    if os.path.exists(app_dir):
+        folders = [folder for folder in os.listdir(app_dir) if os.path.isdir(os.path.join(app_dir, folder))]
+    else:
+        folders = []
 
-@app.route('/get-yml-files')
-def get_yml_files():
-    ymals_dir = '/pg/ymals/'
-    try:
-        files = sorted([f for f in os.listdir(ymals_dir) if os.path.isdir(os.path.join(ymals_dir, f))])
-        return jsonify(files=files)
-    except Exception as e:
-        return jsonify(files=[], error=str(e))
+    return render_template('index.html', folders=folders)
 
-@app.route('/get-yml-content/<folder>')
-def get_yml_content(folder):
-    yml_file = f'/pg/ymals/{folder}/docker-compose.yml'
-    try:
-        with open(yml_file, 'r') as file:
-            content = file.read()
-        return jsonify(content=content)
-    except Exception as e:
-        return jsonify(content=f"Error loading {yml_file}: {str(e)}")
+# Route to load the content of a selected YML file (assuming it's named docker-compose.yml)
+@app.route('/load_yml', methods=['POST'])
+def load_yml():
+    selected_folder = request.form.get('folder')
+    app_dir = "/pg/ymals/"
 
-@app.route('/save-yml/<folder>', methods=['POST'])
-def save_yml(folder):
-    yml_file = f'/pg/ymals/{folder}/docker-compose.yml'
-    try:
-        content = request.json.get('content')
-        with open(yml_file, 'w') as file:
-            file.write(content)
-        return jsonify(success=True)
-    except Exception as e:
-        return jsonify(success=False, error=str(e))
+    yml_file_path = os.path.join(app_dir, selected_folder, 'docker-compose.yml')
 
-@app.route('/check-docker-status/<folder>')
-def check_docker_status(folder):
-    try:
-        result = subprocess.run(['docker', 'ps', '--filter', f'name={folder}', '--format', '{{.Names}}'], capture_output=True, text=True)
-        if folder in result.stdout:
-            return jsonify(running=True)
-        else:
-            return jsonify(running=False)
-    except Exception as e:
-        return jsonify(running=False, error=str(e))
+    if os.path.exists(yml_file_path):
+        with open(yml_file_path, 'r') as f:
+            yml_content = f.read()
+    else:
+        yml_content = "YML file not found."
 
-@app.route('/deploy-yml/<folder>', methods=['POST'])
-def deploy_yml(folder):
-    yml_dir = f'/pg/ymals/{folder}'
-    try:
-        result = subprocess.run(['docker-compose', '-f', f'{yml_dir}/docker-compose.yml', 'up', '-d'], capture_output=True, text=True)
-        return jsonify(success=True, output=result.stdout)
-    except Exception as e:
-        return jsonify(success=False, error=str(e))
+    return yml_content
 
-@app.route('/kill-yml/<folder>', methods=['POST'])
-def kill_yml(folder):
-    yml_dir = f'/pg/ymals/{folder}'
+# Route to save changes to the YML file
+@app.route('/save_yml', methods=['POST'])
+def save_yml():
+    selected_folder = request.form.get('folder')
+    yml_content = request.form.get('yml_content')
+    app_dir = "/pg/ymals/"
+
+    yml_file_path = os.path.join(app_dir, selected_folder, 'docker-compose.yml')
+
     try:
-        # Stop and remove the container
-        result = subprocess.run(['docker-compose', '-f', f'{yml_dir}/docker-compose.yml', 'down'], capture_output=True, text=True)
-        return jsonify(success=True, output=result.stdout)
+        with open(yml_file_path, 'w') as f:
+            f.write(yml_content)
+        return "YML file saved successfully."
     except Exception as e:
-        return jsonify(success=False, error=str(e))
+        return f"Error saving YML file: {str(e)}"
 
 if __name__ == '__main__':
-    app.run(host='0.0.0.0', port=5000, debug=True)
+    app.run(host='0.0.0.0', port=5000)
