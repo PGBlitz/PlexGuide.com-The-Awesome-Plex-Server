@@ -4,209 +4,94 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>PlexGuide UI: Docker Compose</title>
-    <style>
-        body {
-            background-color: black;
-            color: white;
-            font-family: Arial, sans-serif;
-        }
-        h1 {
-            text-align: center;
-            margin-top: 50px;
-        }
-        hr {
-            border: 1px solid white;
-            width: 100%;
-            margin: 20px auto;
-        }
-        .dropdown {
-            margin: 20px 0;
-            display: inline-block;
-        }
-        textarea {
-            width: 80%;
-            height: 300px;
-            background-color: #222;
-            color: white;
-            border: 1px solid #fff;
-            padding: 10px;
-            font-family: monospace;
-        }
-        button {
-            margin-top: 10px;
-            padding: 10px 20px;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            margin-right: 10px; /* Adds space between buttons */
-        }
-        button#deploy-button {
-            background-color: #b8860b; /* Dark gold color */
-        }
-        button:hover {
-            background-color: #218838;
-        }
-        button#kill-button {
-            background-color: #dc3545;
-        }
-        button#save-button {
-            background-color: #28a745;
-        }
-        #docker-status {
-            display: inline-block;
-            margin-left: 20px;
-        }
-        #log-box {
-            width: 80%;
-            background-color: #222;
-            color: white;
-            border: 1px solid #fff;
-            padding: 10px;
-            font-family: monospace;
-            height: 50px;
-            margin-top: 10px;
-        }
-        .status-green {
-            color: #28a745;
-        }
-        .status-red {
-            color: #dc3545;
-        }
-    </style>
+    <link rel="stylesheet" href="/static/style.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 </head>
-<body>
+<body style="background-color: black; color: white;">
     <h1>PlexGuide UI: Docker Compose</h1>
     <hr>
 
-    <!-- Application YMLs Tab Content -->
-    <div id="ymls-content">
-        <div class="dropdown">
-            <label for="yml-files">Select Application:</label>
-            <select id="yml-files" onchange="loadYmlContent()">
-                <option value="">Make a Selection</option>
-                <option value="">--------</option>
-                <!-- Populated dynamically with YML files -->
-            </select>
-        </div>
+    <!-- Application Selection -->
+    <label for="app-select">Select Application:</label>
+    <select id="app-select">
+        <option value="">Make a Selection</option>
+        {% for folder in folders %}
+        <option value="{{ folder }}">{{ folder }}</option>
+        {% endfor %}
+    </select>
 
-        <div id="docker-status">Docker Status: <span id="status-message"></span></div>
+    <label for="docker-status">Docker Status:</label>
+    <span id="docker-status"></span>
 
-        <textarea id="yml-content"></textarea><br>
-
-        <!-- Added proper spacing between buttons -->
-        <button id="save-button" onclick="saveYml()">Save</button>
-        <button id="deploy-button" onclick="deployYml()">Deploy</button>
-        <button id="kill-button" onclick="killYml()">Kill</button>
-
-        <div id="log-box"></div>
+    <!-- Textarea to display and edit docker-compose.yml -->
+    <div>
+        <textarea id="yml-content" rows="20" cols="80" placeholder="YML content will appear here..." disabled></textarea>
     </div>
 
+    <!-- Action buttons -->
+    <button id="save-btn" style="background-color: green; color: white;">Save</button>
+    <button id="deploy-btn" style="background-color: darkgoldenrod; color: white;">Deploy</button>
+    <button id="kill-btn" style="background-color: red; color: white;">Kill</button>
+
+    <!-- Status update box -->
+    <div id="status-box" style="margin-top: 10px; background-color: black; color: white; padding: 10px; border: 1px solid white;"></div>
+
     <script>
-        // Fetch available YML files and populate the dropdown
-        fetch('/get-yml-files')
-            .then(response => response.json())
-            .then(data => {
-                const select = document.getElementById('yml-files');
-                data.files.forEach(file => {
-                    const option = document.createElement('option');
-                    option.value = file;
-                    option.textContent = file;
-                    select.appendChild(option);
-                });
-            });
+        // Load docker-compose.yml content when an app is selected
+        $('#app-select').on('change', function () {
+            var selectedApp = $(this).val();
 
-        // Load YML content and check Docker status
-        function loadYmlContent() {
-            const selectedFile = document.getElementById('yml-files').value;
-            if (!selectedFile) {
-                document.getElementById('status-message').textContent = '';
-                document.getElementById('yml-content').value = '';
-                return;
+            if (selectedApp) {
+                $.post('/load_yml', { folder: selectedApp }, function (data) {
+                    $('#yml-content').val(data).prop('disabled', false);
+                    $('#docker-status').text("Checking status...");
+                    // You can add logic here to check Docker status and update the Docker status
+                });
+            } else {
+                $('#yml-content').val("").prop('disabled', true);
+                $('#docker-status').text("");
             }
+        });
 
-            fetch(`/get-yml-content/${selectedFile}`)
-                .then(response => response.json())
-                .then(data => {
-                    document.getElementById('yml-content').value = data.content;
+        // Save changes to the docker-compose.yml file
+        $('#save-btn').on('click', function () {
+            var selectedApp = $('#app-select').val();
+            var ymlContent = $('#yml-content').val();
+
+            if (selectedApp && ymlContent) {
+                $.post('/save_yml', { folder: selectedApp, yml_content: ymlContent }, function (response) {
+                    $('#status-box').text("* YML file saved successfully at " + new Date().toLocaleTimeString());
+                }).fail(function () {
+                    $('#status-box').text("* Error saving YML file");
                 });
+            } else {
+                alert("Please select an application and load the YML file.");
+            }
+        });
 
-            // Check Docker status
-            checkDockerStatus(selectedFile);
-        }
+        // Deploy the docker-compose.yml file
+        $('#deploy-btn').on('click', function () {
+            var selectedApp = $('#app-select').val();
 
-        function checkDockerStatus(selectedFile) {
-            fetch(`/check-docker-status/${selectedFile}`)
-                .then(response => response.json())
-                .then(data => {
-                    const statusMessage = document.getElementById('status-message');
-                    if (data.running) {
-                        statusMessage.textContent = '[Deployed] Running';
-                        statusMessage.classList.remove('status-red');
-                        statusMessage.classList.add('status-green');
-                    } else {
-                        statusMessage.textContent = '[Not Deployed]';
-                        statusMessage.classList.remove('status-green');
-                        statusMessage.classList.add('status-red');
-                    }
-                });
-        }
+            if (selectedApp) {
+                $('#status-box').text("* Deploying the application at " + new Date().toLocaleTimeString());
+                // Call your deploy function here (e.g., a Docker command via Flask)
+            } else {
+                alert("Please select an application to deploy.");
+            }
+        });
 
-        // Save YML content and log the time
-        function saveYml() {
-            const selectedFile = document.getElementById('yml-files').value;
-            if (!selectedFile) return;
+        // Kill the running Docker container
+        $('#kill-btn').on('click', function () {
+            var selectedApp = $('#app-select').val();
 
-            const ymlContent = document.getElementById('yml-content').value;
-            fetch(`/save-yml/${selectedFile}`, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ content: ymlContent })
-            })
-                .then(response => response.json())
-                .then(data => {
-                    const now = new Date();
-                    const timeString = now.toTimeString().split(' ')[0]; // HH:MM:SS
-                    document.getElementById('log-box').textContent = `* Saved YML file - ${timeString}`;
-                });
-        }
-
-        // Deploy selected YML and log the time
-        function deployYml() {
-            const selectedFile = document.getElementById('yml-files').value;
-            if (!selectedFile) return;
-
-            const logBox = document.getElementById('log-box');
-            const now = new Date();
-            const timeString = now.toTimeString().split(' ')[0]; // HH:MM:SS
-            logBox.textContent = `* Deploying/Redeploying application - ${timeString}`;
-
-            fetch(`/deploy-yml/${selectedFile}`, { method: 'POST' })
-                .then(response => response.json())
-                .then(data => {
-                    setTimeout(() => {
-                        checkDockerStatus(selectedFile); // Check Docker status after deployment
-                    }, 5000); // Check Docker status after 5 seconds
-                });
-        }
-
-        // Kill selected YML container and log the time
-        function killYml() {
-            const selectedFile = document.getElementById('yml-files').value;
-            if (!selectedFile) return;
-
-            fetch(`/kill-yml/${selectedFile}`, { method: 'POST' })
-                .then(response => response.json())
-                .then(data => {
-                    const now = new Date();
-                    const timeString = now.toTimeString().split(' ')[0]; // HH:MM:SS
-                    document.getElementById('log-box').textContent = `* Docker Application Killed & Removed - ${timeString}`;
-
-                    // Check Docker status after kill
-                    setTimeout(() => {
-                        checkDockerStatus(selectedFile);
-                    }, 5000); // Delay to ensure container is fully stopped before checking status
-                });
-        }
+            if (selectedApp) {
+                $('#status-box').text("* Killing the application at " + new Date().toLocaleTimeString());
+                // Call your kill function here (e.g., a Docker stop command via Flask)
+            } else {
+                alert("Please select an application to kill.");
+            }
+        });
     </script>
 </body>
 </html>
