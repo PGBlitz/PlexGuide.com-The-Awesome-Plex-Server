@@ -97,8 +97,8 @@ while true; do
     # Prompt user for deployment action with colors maintained
     echo "" && echo -en "To proceed, enter this PIN [${HOTPINK}${BOLD}${deploy_proceed_code}${NC}]\n"
     echo -en "To cancel, enter this PIN [${GREEN}${BOLD}${deploy_exit_code}${NC}]"
-    echo ""
-    read -p "Enter PIN > " deploy_choice
+
+    echo && read -p "Enter PIN > " deploy_choice
 
     if [[ "$deploy_choice" == "$deploy_proceed_code" ]]; then
         echo ""
