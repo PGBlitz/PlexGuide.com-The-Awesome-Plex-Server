@@ -17,7 +17,7 @@ echo "Running the Docker container..."
 docker run -d -p 5000:5000 \
   --name $APP_NAME \
   -v /pg/ymals:/pg/ymals:ro \  # Mount /pg/ymals from host to container (read-only)
-  $APP_NAME
+  $APP_NAME  # Use the correct image name (plexguide-ui)
 
 # Confirm the container is running
 if [ "$(docker ps -q -f name=$APP_NAME)" ]; then
