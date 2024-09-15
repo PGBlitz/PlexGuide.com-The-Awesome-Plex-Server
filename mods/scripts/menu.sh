@@ -117,7 +117,7 @@ main_menu() {
             s) server_cloud_deployments ;;
             c) cloudflare_tunnel ;;
             u) update_pg_interface ;;
-            o) options_menu ;;
+            o) options_menu && main_menu ;;
             z) menu_exit ;;
             *)
                 echo -e "${RED}Invalid option. Please try again.${NC}"
