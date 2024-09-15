@@ -6,7 +6,8 @@ SSH_CONFIG_FILE="/pg/config/ssh.cfg"
 # ANSI color codes
 RED="\033[0;31m"
 GREEN="\033[0;32m"
-BLUE="\033[0;34m"
+HOTPINK="\033[1;35m"
+BOLD="\033[1m"
 NC="\033[0m" # No color
 
 # Function to load or initialize SSH configuration
@@ -36,26 +37,32 @@ detect_ssh_port() {
 display_ssh_info() {
     check_ssh_status
     detect_ssh_port
-    echo -e "${BLUE}PlexGuide SSH Management${NC}"
+    echo -e "${HOTPINK}PlexGuide SSH Management${NC}"
     echo ""  # Space for separation
     echo -e "SSH Status: $SSH_STATUS"
     echo "SSH Port: $SSH_PORT"
     echo ""  # Space for separation
 }
 
-# Function to prompt for a random 4-digit PIN
+# Function to prompt for a two-line random 4-digit PIN
 require_pin() {
     clear
-    local pin=$(printf "%04d" $((RANDOM % 10000)))
+    local proceed_code=$(printf "%04d" $((RANDOM % 10000)))
+    local exit_code=$(printf "%04d" $((RANDOM % 10000)))
+    
     while true; do
-        read -p "$(echo -e "To proceed, type [${GREEN}${pin}${NC}] or type [${RED}exit${NC}] to cancel: ")" user_input
-        if [[ "$user_input" == "$pin" ]]; then
+        echo -e "To proceed, enter this PIN [${HOTPINK}${BOLD}${proceed_code}${NC}]"
+        echo -e "To cancel, enter this PIN [${GREEN}${BOLD}${exit_code}${NC}]"
+        echo ""
+        read -p "Enter PIN > " user_input
+
+        if [[ "$user_input" == "$proceed_code" ]]; then
             return 0  # PIN is correct
-        elif [[ "${user_input,,}" == "exit" ]]; then
+        elif [[ "$user_input" == "$exit_code" ]]; then
             echo "Operation cancelled."
             return 1  # User chose to exit
         else
-            echo -e "${RED}Invalid response.${NC} Please type [${GREEN}${pin}${NC}] or [${RED}exit${NC}]."
+            echo -e "${RED}Invalid response.${NC} Please try again."
         fi
     done
 }
