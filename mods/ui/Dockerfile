@@ -7,14 +7,11 @@ WORKDIR /app
 # Copy the current directory contents into the container at /app
 COPY . /app
 
-# Install dependencies
+# Install any Python dependencies
 RUN pip install --no-cache-dir -r requirements.txt
 
-# Expose port 5000 to the outside world
+# Make port 5000 available to the outside world
 EXPOSE 5000
-
-# Define environment variable to prevent Python from buffering logs
-ENV PYTHONUNBUFFERED=1
 
 # Run the Flask app
 CMD ["python3", "app.py"]
