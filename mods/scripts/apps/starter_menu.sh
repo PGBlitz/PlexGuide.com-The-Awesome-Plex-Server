@@ -139,7 +139,7 @@ main_menu() {
 
         case $choice in
             A|a)
-                bash /pg/scripts/apps_version.sh
+                bash /pg/scripts/apps/version.sh
                 ;;
             B|b)
                 if [[ "$appstore_version" == "None" ]]; then
