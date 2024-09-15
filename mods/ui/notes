@@ -1,0 +1,8 @@
+deploy app
+
+python3 /pg/ui/app.py
+
+install prior
+
+apt install python3-pip - y
+apt install python3-flask -y
