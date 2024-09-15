@@ -5,7 +5,8 @@
 # ANSI color codes
 RED="\033[0;31m"
 GREEN="\033[0;32m"
-BLUE="\033[0;34m"
+HOTPINK="\033[1;35m"
+BOLD="\033[1m"
 NC="\033[0m" # No color
 
 # Function to check if Intel Top is installed
@@ -86,7 +87,7 @@ generate_code() {
 intel_top_menu() {
     while true; do
         clear
-        echo -e "${BLUE}PG: Intel Top Management${NC}"
+        echo -e "${HOTPINK}PG: Intel Top Management${NC}"
         echo -n "Status: "
         
         if check_intel_top_installed; then
@@ -102,16 +103,21 @@ intel_top_menu() {
         echo ""  # Space between options and input prompt
 
         # Prompt the user for input
-        read -p "Enter your choice: " choice
+        read -p "Select an Option > " choice
 
         case ${choice,,} in  # Convert input to lowercase for i/I, u/U, z/Z handling
             i)
                 clear
-                code=$(generate_code)
-                read -p "$(echo -e "Enter the 4-digit code [${RED}${code}${NC}] to proceed or [${GREEN}exit${NC}] to go back: ")" input_code
-                if [[ "$input_code" == "$code" ]]; then
+                proceed_code=$(generate_code)
+                exit_code=$(generate_code)
+
+                echo -e "To proceed, enter this PIN [${HOTPINK}${BOLD}${proceed_code}${NC}]"
+                echo -e "To cancel, enter this PIN [${GREEN}${BOLD}${exit_code}${NC}]"
+                read -p "Enter PIN > " input_code
+
+                if [[ "$input_code" == "$proceed_code" ]]; then
                     install_intel_top
-                elif [[ "${input_code,,}" == "exit" ]]; then
+                elif [[ "$input_code" == "$exit_code" ]]; then
                     continue
                 else
                     echo "Incorrect code. Returning to the menu..."
@@ -120,11 +126,16 @@ intel_top_menu() {
                 ;;
             u)
                 clear
-                code=$(generate_code)
-                read -p "$(echo -e "Enter the 4-digit code [${RED}${code}${NC}] to proceed or [${GREEN}exit${NC}] to go back: ")" input_code
-                if [[ "$input_code" == "$code" ]]; then
+                proceed_code=$(generate_code)
+                exit_code=$(generate_code)
+
+                echo -e "To proceed, enter this PIN [${HOTPINK}${BOLD}${proceed_code}${NC}]"
+                echo -e "To cancel, enter this PIN [${GREEN}${BOLD}${exit_code}${NC}]"
+                read -p "Enter PIN > " input_code
+
+                if [[ "$input_code" == "$proceed_code" ]]; then
                     uninstall_intel_top
-                elif [[ "${input_code,,}" == "exit" ]]; then
+                elif [[ "$input_code" == "$exit_code" ]]; then
                     continue
                 else
                     echo "Incorrect code. Returning to the menu..."
@@ -147,7 +158,7 @@ intel_top_menu() {
 nvidia_drivers_menu() {
     while true; do
         clear
-        echo -e "${BLUE}PG: NVIDIA Drivers Management${NC}"
+        echo -e "${HOTPINK}PG: NVIDIA Drivers Management${NC}"
         echo -n "Status: "
         
         if check_nvidia_drivers_installed; then
@@ -163,16 +174,21 @@ nvidia_drivers_menu() {
         echo ""  # Space between options and input prompt
 
         # Prompt the user for input
-        read -p "Enter your choice: " choice
+        read -p "Select an Option > " choice
 
         case ${choice,,} in  # Convert input to lowercase for i/I, u/U, z/Z handling
             i)
-                clear
-                code=$(generate_code)
-                read -p "$(echo -e "Enter the 4-digit code [${RED}${code}${NC}] to proceed or [${GREEN}exit${NC}] to go back: ")" input_code
-                if [[ "$input_code" == "$code" ]]; then
+                echo ""
+                proceed_code=$(generate_code)
+                exit_code=$(generate_code)
+
+                echo -e "To proceed, enter this PIN [${HOTPINK}${BOLD}${proceed_code}${NC}]"
+                echo -e "To cancel, enter this PIN [${GREEN}${BOLD}${exit_code}${NC}]"
+                read -p "Enter PIN > " input_code
+
+                if [[ "$input_code" == "$proceed_code" ]]; then
                     install_nvidia_drivers
-                elif [[ "${input_code,,}" == "exit" ]]; then
+                elif [[ "$input_code" == "$exit_code" ]]; then
                     continue
                 else
                     echo "Incorrect code. Returning to the menu..."
@@ -180,12 +196,17 @@ nvidia_drivers_menu() {
                 read -p "Press Enter to continue..."
                 ;;
             u)
-                clear
-                code=$(generate_code)
-                read -p "$(echo -e "Enter the 4-digit code [${RED}${code}${NC}] to proceed or [${GREEN}exit${NC}] to go back: ")" input_code
-                if [[ "$input_code" == "$code" ]]; then
+                echo ""
+                proceed_code=$(generate_code)
+                exit_code=$(generate_code)
+
+                echo -e "To proceed, enter this PIN [${HOTPINK}${BOLD}${proceed_code}${NC}]"
+                echo -e "To cancel, enter this PIN [${GREEN}${BOLD}${exit_code}${NC}]"
+                read -p "Enter PIN > " input_code
+
+                if [[ "$input_code" == "$proceed_code" ]]; then
                     uninstall_nvidia_drivers
-                elif [[ "${input_code,,}" == "exit" ]]; then
+                elif [[ "$input_code" == "$exit_code" ]]; then
                     continue
                 else
                     echo "Incorrect code. Returning to the menu..."
@@ -208,7 +229,7 @@ nvidia_drivers_menu() {
 main_menu() {
     while true; do
         clear
-        echo "PG: GPU Driver Management"
+        echo "GPU Driver Management"
         echo
         echo "I) Intel"
         echo "N) NVIDIA"
@@ -216,7 +237,7 @@ main_menu() {
         echo
 
         # Prompt the user for input
-        read -p "Make a Choice > " user_choice
+        read -p "Select an Option > " user_choice
 
         case "$user_choice" in
             I|i)

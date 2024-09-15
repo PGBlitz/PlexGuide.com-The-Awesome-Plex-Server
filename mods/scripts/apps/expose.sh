@@ -7,6 +7,8 @@ RED="\033[0;31m"
 GREEN="\033[0;32m"
 BLUE="\033[0;34m"
 ORANGE="\033[0;33m"
+HOTPINK="\033[1;35m"
+BOLD="\033[1m"
 NC="\033[0m" # No color
 
 # Arguments
@@ -43,14 +45,15 @@ echo ""
 echo "Current Setting: ${expose:-"Port Exposed"}"
 echo ""
 echo -e "Would you like to expose the port?"
-echo -e " - Type [${GREEN}${yes_code}${NC}] to expose the port. (access remotely)"
-echo -e " - Type [${RED}${no_code}${NC}] to keep it private (127.0.0.1; localhost only)."
+
+# Prompt user with the new two-line PIN format
+echo -e "To expose the port, enter this PIN [${HOTPINK}${BOLD}${yes_code}${NC}]"
+echo -e "To keep it private (localhost only), enter this PIN [${GREEN}${BOLD}${no_code}${NC}]"
 echo ""
 
 # Prompt the user for input and validate
 while true; do
-    echo -e "Type [${GREEN}${yes_code}${NC}] [${RED}${no_code}${NC}] or [${ORANGE}Z${NC}]: "
-    read -p "" user_input
+    read -p "Enter PIN > " user_input
 
     if [[ "$user_input" == "$yes_code" ]]; then
         echo "Port will be exposed."
@@ -60,12 +63,9 @@ while true; do
         echo "Port will remain private."
         sed -i 's|^expose=.*|expose=127.0.0.1:|' "$config_path"
         break
-    elif [[ "${user_input,,}" == "z" ]]; then
-        echo "Operation cancelled."
-        exit 0
     else
         clear
-        echo -e "${RED}Invalid input. Please try again.${NC}"
+        echo -e "${RED}Invalid input. Please enter the correct PIN.${NC}"
     fi
 done
 

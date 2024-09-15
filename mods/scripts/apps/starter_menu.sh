@@ -6,30 +6,12 @@ GREEN="\033[0;32m"
 ORANGE="\033[0;33m"
 BLUE="\033[0;34m"
 WHITE="\033[1;37m"
-CYAN="\033[0;36m"
 BOLD="\033[1m"
 NC="\033[0m"  # No color
 
 # Default values for personal apps configuration
 DEFAULT_USER="None"
 DEFAULT_REPO="None"
-
-# Function to get the Default Port Status from /pg/config/default_ports.cfg
-get_port_status() {
-    config_file="/pg/config/default_ports.cfg"
-    if [[ -f "$config_file" ]]; then
-        source "$config_file"
-        if [[ "$ports" == "open" ]]; then
-            port_status="Open"
-        elif [[ "$ports" == "closed" ]]; then
-            port_status="Closed"
-        else
-            port_status="Unknown"
-        fi
-    else
-        port_status="Unknown"
-    fi
-}
 
 # Function to count running Docker containers that match official app names from .app files in /pg/apps
 count_docker_apps() {
@@ -120,9 +102,6 @@ main_menu() {
         # Load personal apps configuration
         load_personal_apps_config
 
-        # Get Default Port Status
-        get_port_status
-
         clear
         echo -e "${BLUE}${BOLD}PlexGuide: Applications Interface${NC}"
         echo -e "${WHITE}────────────────────────────────────────────────────${NC}"
@@ -147,32 +126,27 @@ main_menu() {
                 printf "  R) Personal: Deploy Apps\n"
             fi
             
-            echo ""  # Space for separation
+            echo ""  # Space between options and input prompt
         else
             echo ""  # Space for separation
             echo -e "${RED}Please select an App Store version by choosing option A.${NC}"
         fi
 
-        # Default Ports section
-        echo -e "${CYAN}${BOLD}Default Ports${NC}"
-        printf "  Y) Default Port Status:  [%s]\n" "$port_status"
-        
-        echo ""  # Space between options and input prompt
         echo -e "${WHITE}────────────────────────────────────────────────────${NC}"
         # Display the prompt with colors and capture user input
-        echo -e "Make a Choice or [${GREEN}Z${NC}] to Exit >${NC} \c"
+        echo -e "Type a Selection or [${GREEN}Z${NC}] to Exit:${NC} \c"
         read -r choice
 
         case $choice in
             A|a)
-                bash /pg/scripts/apps_version.sh
+                bash /pg/scripts/apps/version.sh
                 ;;
             B|b)
                 if [[ "$appstore_version" == "None" ]]; then
                     echo -e "${RED}Option B is not available. Please select an App Store version first.${NC}"
                     read -p "Press Enter to continue..."
                 else
-                    bash /pg/scripts/apps_running.sh "official"
+                    bash /pg/scripts/apps/running.sh "official"
                 fi
                 ;;
             C|c)
@@ -180,18 +154,18 @@ main_menu() {
                     echo -e "${RED}Option C is not available. Please select an App Store version first.${NC}"
                     read -p "Press Enter to continue..."
                 else
-                    bash /pg/scripts/apps_stage.sh "official"
+                    bash /pg/scripts/apps/stage.sh "official"
                 fi
                 ;;
             P|p)
-                bash /pg/scripts/apps_personal_select.sh
+                bash /pg/scripts/apps/personal_select.sh
                 ;;
             Q|q)
                 if [[ "$repo" == "None" ]]; then
                     echo -e "${RED}Option Q is not available. Please use P to set a User and Repo first.${NC}"
                     read -p "Press Enter to continue..."
                 else
-                    bash /pg/scripts/apps_running.sh "personal"
+                    bash /pg/scripts/apps/running.sh "personal"
                 fi
                 ;;
             R|r)
@@ -199,11 +173,8 @@ main_menu() {
                     echo -e "${RED}Option R is not available. Please use P to set a User and Repo first.${NC}"
                     read -p "Press Enter to continue..."
                 else
-                    bash /pg/scripts/apps_stage.sh "personal"
+                    bash /pg/scripts/apps/stage.sh "personal"
                 fi
-                ;;
-            Y|y)
-                bash /pg/scripts/default_ports.sh
                 ;;
             Z|z)
                 exit 0

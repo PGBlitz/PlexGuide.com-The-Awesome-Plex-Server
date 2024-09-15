@@ -64,7 +64,7 @@ show_menu() {
 
 # Function to prompt the user with a choice
 prompt_choice() {
-    read -p "Make a Choice > " choice
+    read -p "Select an option: " choice
     case ${choice,,} in  # Convert input to lowercase for v/V, c/C, d/D, s/S, z/Z handling
         v)
             clear

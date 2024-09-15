@@ -9,7 +9,7 @@ BLUE="\033[0;34m"
 NC="\033[0m" # No color
 
 # Source the defaults script
-source /pg/scripts/apps_parse.sh
+source /pg/scripts/apps/defaults.sh
 
 # Arguments
 app_name=$1
@@ -17,7 +17,7 @@ config_type=$2  # 'personal' for personal configurations, 'official' for officia
 
 # Function: check_deployment_status
 check_deployment_status() {
-    # Load the configuration file to get the port_number and expose value
+    # Load the configuration file to get the port_number
     if [[ "$config_type" == "personal" ]]; then
         config_file="/pg/personal_configs/${app_name}.cfg"
     else
@@ -28,60 +28,13 @@ check_deployment_status() {
         source "$config_file"
     fi
 
-    # Determine port status based on the 'expose' variable
-    if [[ "$expose" == "127.0.0.1"* ]]; then
-        port_status="Closed"
-    else
-        port_status="Open"
-    fi
-
-    # Check if the app's Docker container is running
     local container_status=$(docker ps --filter "name=^/${app_name}$" --format "{{.Names}}")
 
     if [[ "$container_status" == "$app_name" ]]; then
-        echo -e "${GREEN}[Deployed]${NC} $app_name - Port: $port_number/$port_status"
+        echo -e "${GREEN}[Deployed]${NC} $app_name - Port: $port_number"
     else
-        # App is not deployed, show potential port status if deployed
-        if [[ "$port_status" == "Closed" ]]; then
-            echo -e "${RED}[Not Deployed]${NC} $app_name - Port Closed if Deployed"
-        else
-            echo -e "${RED}[Not Deployed]${NC} $app_name - Port Open if Deployed"
-        fi
+        echo -e "${RED}[Not Deployed]${NC} $app_name"
     fi
-}
-
-# Function: stop_and_remove_app
-stop_and_remove_app() {
-    while true; do
-        clear
-        echo "This action will stop and remove the Docker container for $app_name."
-        echo "Your appdata will not be lost."
-        echo ""
-        
-        # Generate a random 4-digit code
-        pin_code=$(printf "%04d" $((RANDOM % 10000)))
-        
-        # Prompt the user to confirm with the generated pin code or to cancel with 'Z'
-        echo -e "To proceed, type [${RED}${pin_code}${NC}] to proceed or [${GREEN}Z${NC}] to cancel: "
-        
-        read -p "" user_input
-        
-        if [[ "$user_input" == "$pin_code" ]]; then
-            # If the user enters the correct pin code, proceed to stop and remove the container
-            echo ""
-            echo "Stopping and removing the existing container for $app_name ..."
-            docker stop "$app_name" && docker rm "$app_name"
-            break
-        elif [[ "${user_input,,}" == "z" ]]; then
-            # If the user types 'Z' or 'z', cancel the operation
-            echo "Operation cancelled."
-            break
-        else
-            # If the input is invalid, clear the screen and repeat the prompt
-            clear
-            echo -e "${RED}Invalid input. Please enter the correct pin code or [Z] to cancel.${NC}"
-        fi
-    done
 }
 
 # Function: execute_dynamic_menu
@@ -95,15 +48,18 @@ execute_dynamic_menu() {
         source "/pg/apps/${app_name}.app"
     fi
 
-    # Dynamically get the function name based on menu number (menu1, menu2, etc.)
-    local function_name="menu${selected_option}"
+    # Get the selected option name (e.g., "Plex Token")
+    local selected_name=$(echo "${dynamic_menu_items[$((selected_option-1))]}" | awk '{$1=""; print $0}' | xargs)  # Trim spaces and get full menu item name
+
+    # Convert the selected_name to lowercase, replace spaces with underscores, and remove trailing underscores
+    local function_name=$(echo "$selected_name" | tr '[:upper:]' '[:lower:]' | tr ' ' '_' | sed 's/_$//')
 
     # Check if the function exists and execute it
     if declare -f "$function_name" > /dev/null; then
-        echo -e "${BLUE}Executing commands for ${function_name}...${NC}"
+        echo "Executing commands for ${function_name}..."
         "$function_name"  # Execute the function
     else
-        echo -e "${RED}Error: No corresponding function found for ${function_name}.${NC}"
+        echo "Error: No corresponding function found for ${function_name}."
     fi
 
     read -p "Press Enter to continue..."  # Pause to observe output
@@ -158,17 +114,17 @@ apps_interface() {
         echo "Z) Exit"
         echo ""
 
-        read -p "Make a Choice > " choice
+        read -p "Choose an option > " choice
 
         case ${choice,,} in  # Convert input to lowercase
             d)
-                bash /pg/scripts/apps_deploy.sh "$app_name" "$config_type"
+                bash /pg/scripts/apps/deploy.sh "$app_name" "$config_type"
                 ;;
             k)
-                stop_and_remove_app
+                bash /pg/scripts/apps/kill_remove.sh "$app_name"
                 ;;
             c)
-                bash /pg/scripts/apps_config_menu.sh "$app_name" "$config_type"
+                bash /pg/scripts/apps/config_menu.sh "$app_name" "$config_type"
                 ;;
             [0-9]*)
                 if [[ $choice -le ${#dynamic_menu_items[@]} ]]; then

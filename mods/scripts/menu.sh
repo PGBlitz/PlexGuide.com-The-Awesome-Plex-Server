@@ -42,7 +42,7 @@ get_color() {
 
 # Function for Apps Management
 apps_management() {
-    bash /pg/scripts/apps_starter_menu.sh
+    bash /pg/scripts/apps/starter_menu.sh
 }
 
 # Function to Update PG Interface
@@ -63,6 +63,7 @@ update_pg_interface() {
     # Execute the downloaded script
     bash "$INSTALL_SCRIPT_PATH"
     
+    menu_exit
     exit 0  # Ensure the script exits after executing the menu_exit.sh
 }
 
@@ -72,9 +73,9 @@ menu_exit() {
     exit 0  # Ensure the script exits after executing the menu_exit.sh
 }
 
-# Traefik & Cloudflare Tunnel
-domain_interface() {
-    bash /pg/scripts/domain_menu.sh
+# Function for CloudFlare Tunnel Management
+cloudflare_tunnel() {
+    bash /pg/scripts/cf_tunnel.sh
 }
 
 # Function for Server Cloud Deployments
@@ -100,22 +101,22 @@ main_menu() {
         echo ""  # Blank line for separation
 
         # Display menu options with bold colored letters
-        echo -e "[${YELLOW}${BOLD}A${NC}] Application Management"
-        echo -e "[${CYAN}${BOLD}C${NC}] CloudFlare Tunnel & Traefik"
-        echo -e "[${GREEN}${BOLD}S${NC}] Cloud Servers"
-        echo -e "[${PURPLE}${BOLD}U${NC}] PG Updates"
+        echo -e "[${YELLOW}${BOLD}A${NC}] Apps Management"
+        echo -e "[${CYAN}${BOLD}C${NC}] CloudFlare Tunnel (Domains)"
+        echo -e "[${GREEN}${BOLD}S${NC}] Server: Cloud Deployments"
+        echo -e "[${PURPLE}${BOLD}U${NC}] PG: Update Interface"
         echo -e "[${BLUE}${BOLD}O${NC}] Options"
         echo -e "[${RED}${BOLD}Z${NC}] Exit"
         echo ""  # Space between options and input prompt
 
         # Prompt for user input
-        read -p "Make a Choice > " choice
+        read -p "Choose and Option > " choice
 
         # Process user input
         case ${choice,,} in
             a) apps_management ;;
             s) server_cloud_deployments ;;
-            c) domain_interface ;;
+            c) cloudflare_tunnel ;;
             u) update_pg_interface ;;
             o) options_menu ;;
             z) menu_exit ;;

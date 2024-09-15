@@ -11,6 +11,12 @@ clear
 # Load the configuration
 load_config
 
+# Function for SSH Management option
+ssh_management() {
+    clear
+    /pg/scripts/ssh.sh
+}
+
 # Function to exit the script
 exit_script() {
     clear
@@ -33,14 +39,14 @@ main_menu() {
     echo ""  # Space between options and input prompt
 
     # Prompt the user for input
-    read -p "Make a Choice > " choice
+    read -p "Select an Option > " choice
 
     case ${choice,,} in  # Convert input to lowercase for g/G, s/S, z/Z handling
       g)
         bash /pg/scripts/graphics.sh
         ;;
       s)
-        bash /pg/scripts/ssh.sh
+        ssh_management
         ;;
       z)
         exit_script
