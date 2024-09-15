@@ -103,7 +103,7 @@ intel_top_menu() {
         echo ""  # Space between options and input prompt
 
         # Prompt the user for input
-        read -p "Enter your choice: " choice
+        read -p "Select an Option > " choice
 
         case ${choice,,} in  # Convert input to lowercase for i/I, u/U, z/Z handling
             i)
@@ -174,7 +174,7 @@ nvidia_drivers_menu() {
         echo ""  # Space between options and input prompt
 
         # Prompt the user for input
-        read -p "Enter your choice: " choice
+        read -p "Select an Option > " choice
 
         case ${choice,,} in  # Convert input to lowercase for i/I, u/U, z/Z handling
             i)
