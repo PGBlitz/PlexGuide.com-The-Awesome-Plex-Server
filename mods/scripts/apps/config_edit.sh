@@ -5,6 +5,8 @@
 # ANSI color codes
 RED="\033[0;31m"
 GREEN="\033[0;32m"
+HOTPINK="\033[1;35m"
+BOLD="\033[1m"
 NC="\033[0m" # No color
 
 # Arguments
@@ -49,7 +51,8 @@ install_nano_if_missing() {
 install_nano_if_missing
 
 clear
-edit_code=$(printf "%04d" $((RANDOM % 10000)))
+proceed_code=$(printf "%04d" $((RANDOM % 10000)))
+exit_code=$(printf "%04d" $((RANDOM % 10000)))
 
 while true; do
     clear
@@ -60,10 +63,15 @@ while true; do
     echo "The Docker container will be stopped and removed if running."
     echo "You must deploy the Docker container again to accept your changes."
     echo ""
-    echo -e "Do you want to proceed? Type [${RED}${edit_code}${NC}] to proceed or [${GREEN}Z${NC}] to cancel: "
-    
-    read -p "" edit_choice
-    if [[ "$edit_choice" == "$edit_code" ]]; then
+
+    # Two-line 4-digit PIN prompt
+    echo -e "To proceed, enter this PIN [${HOTPINK}${BOLD}${proceed_code}${NC}]"
+    echo -e "To cancel, enter this PIN [${GREEN}${BOLD}${exit_code}${NC}]"
+    echo ""
+
+    read -p "Enter PIN > " edit_choice
+
+    if [[ "$edit_choice" == "$proceed_code" ]]; then
         # Check if the config file exists, if not, create a new one for personal configs
         if [[ ! -f "$config_path" && "$config_type" == "personal" ]]; then
             echo "Config file $config_path does not exist. Creating a new one."
@@ -106,11 +114,12 @@ while true; do
         fi
 
         break
-    elif [[ "${edit_choice,,}" == "z" ]]; then
+    elif [[ "$edit_choice" == "$exit_code" ]]; then
         echo "Operation cancelled."
         break
     else
         # Invalid response: clear the screen and repeat the prompt without any message
         clear
+        echo -e "${RED}Invalid input. Please enter the correct PIN.${NC}"
     fi
 done

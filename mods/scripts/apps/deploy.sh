@@ -3,13 +3,13 @@
 # ANSI color codes
 RED="\033[0;31m"
 GREEN="\033[0;32m"
+HOTPINK="\033[1;35m"  # Hotpink color for the proceed PIN
+BOLD="\033[1m"
 NC="\033[0m" # No color
 
 # Arguments
 app_name=$1
 script_type=$2  # personal or official
-
-#!/bin/bash
 
 # Name of the Docker network to check or create
 network_name="plexguide"
@@ -26,7 +26,7 @@ check_and_create_network() {
         if docker network create "$network_name" --driver bridge; then
             echo "Docker network '${network_name}' created successfully."
         else
-            echo -e "\033[0;31mFailed to create Docker network '${network_name}'.\033[0m"
+            echo -e "${RED}Failed to create Docker network '${network_name}'.${NC}"
             read -p "Press [ENTER] to acknowledge the error and continue..."
         fi
     fi
@@ -48,10 +48,10 @@ redeploy_app() {
     
     # Determine which support script to source
     if [[ "$script_type" == "personal" ]]; then
-        source /pg/scripts/apps_support.sh "$app_name" "$script_type" && appsourcing
+        source /pg/scripts/apps/support.sh "$app_name" "$script_type" && appsourcing
         source "/pg/p_apps/$app_name.app"
     elif [[ "$script_type" == "official" ]]; then
-        source /pg/scripts/apps_support.sh "$app_name" "$script_type" && appsourcing
+        source /pg/scripts/apps/support.sh "$app_name" "$script_type" && appsourcing
         source "/pg/apps/$app_name.app"
     else
         echo -e "${RED}Invalid script type specified. Use 'personal' or 'official'.${NC}"
@@ -61,7 +61,7 @@ redeploy_app() {
     deploy_container "$app_name"  # Call the deploy_container function
 
     # Create the app-specific directory before writing the docker-compose.yml
-    mkdir -p "/pg/ymals/${app_name}"
+    mkdir -p /pg/ymals/${app_name}
 
     # Function to Deploy Docker Compose
     create_docker_compose
@@ -81,7 +81,8 @@ redeploy_app() {
 
 # Deployment logic
 echo ""
-deploy_code=$(printf "%04d" $((RANDOM % 10000)))
+deploy_proceed_code=$(printf "%04d" $((RANDOM % 10000)))  # PIN for proceeding
+deploy_exit_code=$(printf "%04d" $((RANDOM % 10000)))  # PIN for exiting
 
 while true; do
     # Check if the container is already running
@@ -94,10 +95,12 @@ while true; do
     fi
 
     # Prompt user for deployment action with colors maintained
-    echo -en "Type [${RED}${deploy_code}${NC}] to proceed or [${GREEN}Z${NC}] to cancel: "
-    read deploy_choice
+    echo "" && echo -en "To proceed, enter this PIN [${HOTPINK}${BOLD}${deploy_proceed_code}${NC}]\n"
+    echo -en "To cancel, enter this PIN [${GREEN}${BOLD}${deploy_exit_code}${NC}]"
 
-    if [[ "$deploy_choice" == "$deploy_code" ]]; then
+    echo && read -p "Enter PIN > " deploy_choice
+
+    if [[ "$deploy_choice" == "$deploy_proceed_code" ]]; then
         echo ""
         
         # Stop and remove the container if it's running
@@ -113,12 +116,10 @@ while true; do
 
         redeploy_app  # Deploy the container after stopping/removing (if it existed)
         break
-    elif [[ "${deploy_choice,,}" == "z" ]]; then
-        echo "Operation cancelled."
+    elif [[ "$deploy_choice" == "$deploy_exit_code" ]]; then
+        echo "Operation exited."
         break
     else
-        echo ""
-        echo "Invalid choice. Please try again."
-        read -p "Press Enter to continue..."
+        echo "" && echo "Invalid choice. Please try again." && echo ""
     fi
 done
