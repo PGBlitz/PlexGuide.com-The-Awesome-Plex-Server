@@ -60,7 +60,7 @@ while true; do
     echo "The Docker container will be stopped and removed if running."
     echo "You must deploy the Docker container again to accept your changes."
     echo ""
-    echo -e "Do you want to proceed? Type [${RED}${edit_code}${NC}] to proceed or [${GREEN}Z${NC}] to cancel: "
+    echo -e "Proceed? Type [${RED}${edit_code}${NC}] to proceed or [${GREEN}Z${NC}] to cancel > "
     
     read -p "" edit_choice
     if [[ "$edit_choice" == "$edit_code" ]]; then

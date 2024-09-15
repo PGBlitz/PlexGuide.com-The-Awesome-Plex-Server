@@ -62,12 +62,13 @@ change_port_number() {
     local port_code=$(printf "%04d" $((RANDOM % 10000)))
     echo "Current Port: $port_number - Change port number?"
     prompt_code "$port_code" || return
-    read -p "Enter new port for $app_name (1-65000) or type 'exit' to cancel: " new_port_number
+    echo ""
+    read -p "Enter new port # (1-65000) or 'Z' to cancel > " new_port_number
     if [[ "$new_port_number" =~ ^[0-9]+$ ]] && ((new_port_number >= 1 && new_port_number <= 65000)); then
         sed -i "s/^port_number=.*/port_number=${new_port_number}/" "$config_path"
         stop_and_remove_app
         redeploy_app
-    elif [[ "$new_port_number" != "exit" ]]; then
+    elif [[ "$new_port_number" != "Z" && "$new_port_number" != "z" ]]; then
         echo "Invalid input. Please enter a number between 1 and 65000."
         change_port_number  # Retry
     fi
@@ -78,13 +79,13 @@ move_or_delete_appdata() {
     if [[ -z "$(ls -A "$appdata_path")" ]]; then
         echo "No data in the current appdata directory."
     else
-        read -p "Move data to new location? Type: yes / no / exit: " move_choice
+        read -p "Move data to new location? Type: yes / no / Z: " move_choice
         case ${move_choice,,} in
             yes) mv "$appdata_path/"* "$1/" && echo "Data moved to $1";;
             no)  read -p "Delete old appdata? Type: yes / no: " delete_choice
                  [[ ${delete_choice,,} == "yes" ]] && rm -rf "$appdata_path" && echo "Old appdata deleted.";;
-            exit) return;;
-            *)    echo "Invalid input. Operation aborted." && return;;
+            z) return;;
+            *) echo "Invalid input. Operation aborted." && return;;
         esac
     fi
     appdata_path=$1
@@ -98,8 +99,8 @@ change_appdata_path() {
     echo "Current Appdata Path: $appdata_path - Change path?"
     prompt_code "$path_code" || return
     while true; do
-        read -p "Enter new Appdata Path for $app_name or type 'exit' to cancel: " new_appdata_path
-        if [[ "$new_appdata_path" == "exit" ]]; then
+        read -p "Enter appdata path or type 'Z' to cancel > " new_appdata_path
+        if [[ "$new_appdata_path" == "Z" || "$new_appdata_path" == "z" ]]; then
             echo "No changes made."
             return
         elif validate_or_create_path "$new_appdata_path"; then
@@ -122,7 +123,7 @@ check_expose_status() {
 # Function to prompt for code
 prompt_code() {
     local expected_code=$1
-    read -p "$(echo -e "Type [${RED}${expected_code}${NC}] to proceed or [${GREEN}Z${NC}] to cancel: ")" input_code
+    read -p "$(echo -e "Type [${RED}${expected_code}${NC}] to proceed or [${GREEN}Z${NC}] to cancel > ")" input_code
     [[ "$input_code" == "$expected_code" ]] && return 0
     [[ "${input_code,,}" == "z" ]] && echo "Operation cancelled." && return 1
     echo -e "${RED}Invalid response. Try again.${NC}"
