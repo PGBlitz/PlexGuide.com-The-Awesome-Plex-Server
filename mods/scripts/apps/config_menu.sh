@@ -146,7 +146,7 @@ while true; do
     echo "Z) Exit"
     echo ""
 
-    read -p "Choose an option: " choice
+    read -p "Choose an option > " choice
 
     case ${choice,,} in
         a) change_appdata_path;;
