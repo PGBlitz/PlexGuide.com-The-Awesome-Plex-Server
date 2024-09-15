@@ -178,7 +178,7 @@ nvidia_drivers_menu() {
 
         case ${choice,,} in  # Convert input to lowercase for i/I, u/U, z/Z handling
             i)
-                clear
+                echo ""
                 proceed_code=$(generate_code)
                 exit_code=$(generate_code)
 
@@ -196,7 +196,7 @@ nvidia_drivers_menu() {
                 read -p "Press Enter to continue..."
                 ;;
             u)
-                clear
+                echo ""
                 proceed_code=$(generate_code)
                 exit_code=$(generate_code)
 
@@ -237,7 +237,7 @@ main_menu() {
         echo
 
         # Prompt the user for input
-        read -p "Make a Selection: " user_choice
+        read -p "Select an Option > " user_choice
 
         case "$user_choice" in
             I|i)
