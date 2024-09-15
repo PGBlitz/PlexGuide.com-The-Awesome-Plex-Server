@@ -95,8 +95,8 @@ while true; do
     fi
 
     # Prompt user for deployment action with colors maintained
-    echo -en "Type [${HOTPINK}${BOLD}${deploy_proceed_code}${NC}] to proceed\n"
-    echo -en "Or type [${GREEN}${BOLD}${deploy_exit_code}${NC}] to exit: "
+    echo "" && echo -en "Type [${HOTPINK}${BOLD}${deploy_proceed_code}${NC}] to proceed\n"
+    echo -en "Type [${GREEN}${BOLD}${deploy_exit_code}${NC}] to exit: "
     read deploy_choice
 
     if [[ "$deploy_choice" == "$deploy_proceed_code" ]]; then
@@ -119,8 +119,6 @@ while true; do
         echo "Operation exited."
         break
     else
-        echo ""
-        echo "Invalid choice. Please try again."
-        read -p "Press Enter to continue..."
+        echo "" && echo "Invalid choice. Please try again." && echo ""
     fi
 done
