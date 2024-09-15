@@ -1,26 +1,23 @@
 import os
-from flask import Flask, render_template, request, jsonify
+from flask import Flask, render_template, request
 
 app = Flask(__name__)
 
 # Route for the main page
 @app.route('/')
 def index():
-    return render_template('index.html')
-
-# Route to get the list of folders
-@app.route('/get_folders', methods=['GET'])
-def get_folders():
+    # Directory where YML files are stored
     app_dir = "/pg/ymals/"
     
+    # Get the list of folders in the /pg/ymals/ directory
     if os.path.exists(app_dir):
         folders = [folder for folder in os.listdir(app_dir) if os.path.isdir(os.path.join(app_dir, folder))]
     else:
         folders = []
 
-    return jsonify(folders)
+    return render_template('index.html', folders=folders)
 
-# Route to load the content of a selected YML file
+# Route to load the content of a selected YML file (assuming it's named docker-compose.yml)
 @app.route('/load_yml', methods=['POST'])
 def load_yml():
     selected_folder = request.form.get('folder')
@@ -53,4 +50,4 @@ def save_yml():
         return f"Error saving YML file: {str(e)}"
 
 if __name__ == '__main__':
-    app.run(host='0.0.0.0', port=5000, debug=True)
+    app.run(host='0.0.0.0', port=5000)
