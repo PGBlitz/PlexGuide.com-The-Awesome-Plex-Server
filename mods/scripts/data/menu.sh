@@ -132,13 +132,13 @@ menu() {
                 validate_and_create_location "$new_location"
                 result=$?
                 if [ $result -eq 0 ]; then
-                    echo "Backup location updated successfully."
+                    echo "" && echo "Backup location updated successfully."
                 elif [ $result -eq 2 ]; then
-                    echo "Operation canceled. Returning to main menu."
+                    echo "" && echo "Operation canceled. Returning to main menu."
                 else
-                    echo "Failed to set new backup location."
+                    echo "" && echo "Failed to set new backup location."
                 fi
-                read -p "Press Enter to continue..."
+                read -p "Press [ENTER] to continue..."
                 ;;
             Z|z)
                 echo "Exiting..."
