@@ -83,10 +83,10 @@ main_menu() {
         # Convert choice to lowercase and handle options
         case ${choice,,} in 
             v)
-                bash /pg/scripts/drives_view.sh
+                bash /pg/hd/drives_view.sh
                 ;;
             f)
-                bash /pg/scripts/drives_format.sh
+                bash /pg/hd/drives_format.sh
                 ;;
             i)
                 install_mergerfs
