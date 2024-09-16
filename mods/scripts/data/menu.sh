@@ -47,7 +47,7 @@ validate_and_create_location() {
 
     # Basic check for absolute path
     if [[ "$new_location" != /* ]]; then
-        echo -e "${dark_red}Error: Please enter a valid absolute path (starting with '/').${reset}"
+        echo "" && echo -e "${dark_red}Error: Please enter a valid absolute path (starting with '/').${reset}"
         return 1
     fi
 
@@ -62,13 +62,13 @@ validate_and_create_location() {
     done
 
     if [ ! -d "$new_location" ]; then
-        echo "The directory '$new_location' does not exist."
+        echo "" && echo "The directory '$new_location' does not exist."
         echo -e "Enter ${hot_pink}$pin_confirm${reset} to create the directory and set as new backup location."
     else
-        echo "The directory '$new_location' exists."
+        echo "" && echo "The directory '$new_location' exists."
         echo -e "Enter ${hot_pink}$pin_confirm${reset} to set as new backup location."
     fi
-    echo -e "Enter ${bright_green}$pin_cancel${reset} to cancel."
+    echo "" && echo -e "Enter ${bright_green}$pin_cancel${reset} to cancel."
     read -p "Enter PIN: " user_pin
 
     if [ "$user_pin" -eq "$pin_confirm" ]; then
