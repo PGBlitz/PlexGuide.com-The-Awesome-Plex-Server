@@ -1,105 +1,78 @@
 #!/bin/bash
 
-# ANSI color codes
+# ANSI color codes for formatting
 RED="\033[0;31m"
 GREEN="\033[0;32m"
 BLUE="\033[0;34m"
 YELLOW="\033[0;33m"
 NC="\033[0m"  # No color
 
-# Config file to track mount points
-config_file="/pg/config/hd.cfg"
+# Config file to store drive information
+config_file="/pg/config/hdformat.cfg"
 
 # Ensure the config directory exists
 mkdir -p /pg/config
 
-# Function to check if 'bc' is installed and install it if missing
-check_bc() {
-    if ! command -v bc &> /dev/null; then
-        echo -e "${YELLOW}The 'bc' command is required but not installed.${NC}"
-        echo -e "${YELLOW}Installing 'bc'...${NC}"
-        
-        # Check if the system uses apt or yum and install 'bc'
-        if command -v apt-get &> /dev/null; then
-            sudo apt-get update && sudo apt-get install -y bc
-        elif command -v yum &> /dev/null; then
-            sudo yum install -y bc
-        else
-            echo -e "${RED}Unsupported package manager. Please install 'bc' manually.${NC}"
-            exit 1
-        fi
-
-        echo -e "${GREEN}'bc' has been installed.${NC}"
-    fi
-}
-
-# Function to convert bytes to TB and format to 2 decimal places
-convert_to_tb() {
-    local size_in_bytes="$1"
-
-    # Ensure size is numeric before passing it to bc
-    if [[ "$size_in_bytes" =~ ^[0-9]+$ ]]; then
-        printf "%.2f" $(echo "scale=2; $size_in_bytes / 1000000000000" | bc -l)
-    else
-        echo "0.00"  # Return 0.00 if size is not valid
-    fi
-}
-
-# Function to list available drives in TB format
-list_drives() {
-    echo -e "${BLUE}Available Drives (Sizes in TB):${NC}"
-
-    # Get drive information with sizes in bytes and format size in TB
-    lsblk -b -n -o NAME,SIZE,MOUNTPOINT | grep -E '^[a-z]' | while read -r drive_info; do
-        drive_name=$(echo "$drive_info" | awk '{print $1}')
-        size_in_bytes=$(echo "$drive_info" | awk '{print $2}')
-        size_in_tb=$(convert_to_tb "$size_in_bytes")
-        current_mount=$(echo "$drive_info" | awk '{print $3}')
-
-        if [ -z "$current_mount" ]; then
-            current_mount=$(get_existing_mount_point "$drive_name")
-        fi
-
-        printf "%-4s %-8s %s\n" "$drive_name" "${size_in_tb}TB" "${current_mount:-Not mounted}"
-    done
-    echo ""
-}
-
-# Function to load existing mount point from config file
-get_existing_mount_point() {
+# Function to get the file system type from the config file
+get_fs_type() {
     local drive="$1"
     if [ -f "$config_file" ]; then
         grep "^$drive:" "$config_file" | cut -d':' -f2
     fi
 }
 
-# Function to update mount point in the config file
-update_mount_point() {
+# Function to list drives and partitions
+list_drives() {
+    clear
+    echo -e "${BLUE}========================="
+    echo -e "   Top-Level Drives List   "
+    echo -e "=========================${NC}"
+    echo -e "${GREEN}Top-Level View of Drives, Partitions, Sizes, and Filesystems:${NC}"
+    echo ""
+    echo -e "NAME    SIZE    FSTYPE (from lsblk)    FSTYPE (from config)"
+    echo "----    ----    ------------------    ---------------------"
+    lsblk -ndo NAME,SIZE,FSTYPE | grep -E '^[a-z]' | while read -r drive_info; do
+        drive_name=$(echo "$drive_info" | awk '{print $1}')
+        drive_size=$(echo "$drive_info" | awk '{print $2}')
+        lsblk_fstype=$(echo "$drive_info" | awk '{print $3}')
+        config_fstype=$(get_fs_type "$drive_name")
+        printf "%-7s %-7s %-22s %-s\n" "$drive_name" "$drive_size" "${lsblk_fstype:-N/A}" "${config_fstype:-N/A}"
+    done
+    echo ""
+}
+
+# Function to clean old mount points and swaps associated with the selected drive
+clean_old_mounts() {
     local drive="$1"
-    local new_mount_point="$2"
+    
+    echo -e "${YELLOW}Searching for and cleaning old mount points for /dev/${drive}...${NC}"
+    
+    mount | grep "/dev/${drive}" | awk '{print $3}' | while read mp; do
+        echo -e "${YELLOW}Unmounting $mp...${NC}"
+        umount "$mp" &>/dev/null
+    done
+
+    swapon --show | grep "/dev/${drive}" | awk '{print $1}' | while read swap_partition; do
+        echo -e "${YELLOW}Disabling swap on $swap_partition...${NC}"
+        swapoff "$swap_partition"
+    done
+}
+
+# Function to update the config file with drive information
+update_config() {
+    local drive="$1"
+    local fs_type="$2"
 
     # Remove old entry for the drive if it exists
     sed -i "/^$drive:/d" "$config_file"
 
-    # Add the new mount point for the drive
-    echo "$drive:$new_mount_point" >> "$config_file"
+    # Add the new entry for the drive
+    echo "$drive:$fs_type" >> "$config_file"
 }
 
-# Function to remove old mount point if it exists
-remove_old_mount_point() {
-    local old_mount_point="$1"
-
-    if [ -n "$old_mount_point" ] && [ -d "$old_mount_point" ]; then
-        echo -e "${YELLOW}Removing old mount point $old_mount_point...${NC}"
-        sudo umount "$old_mount_point" &> /dev/null
-        sudo rm -rf "$old_mount_point"
-    fi
-}
-
-# Function to change the mount point
-change_mount_point() {
-    list_drives
-    echo -e "${BLUE}Select a drive to remount (e.g., sda, sdb):${NC}"
+# Function to prompt for drive selection and format options
+format_drive() {
+    echo -e "${BLUE}Select a drive to format (e.g., sda, sdb):${NC}"
     read -p "> " drive
 
     if [ ! -b "/dev/$drive" ]; then
@@ -107,56 +80,64 @@ change_mount_point() {
         return
     fi
 
-    # Get existing mount point from config file
-    old_mount_point=$(get_existing_mount_point "$drive")
+    clean_old_mounts "$drive"
 
-    # Ask for new mount point name
-    echo -e "${BLUE}Enter the new mount point name (will mount under /mnt/pg/):${NC}"
-    read -p "> " mount_name
-    new_mount_point="/mnt/pg/${mount_name}"
+    echo -e "${BLUE}Select the filesystem format type:${NC}"
+    echo "1) XFS"
+    echo "2) ZFS"
+    read -p "> " fs_choice
 
-    # Remove old mount point if it exists
-    remove_old_mount_point "$old_mount_point"
-
-    echo -e "${YELLOW}Creating directory $new_mount_point if it doesn't exist...${NC}"
-    sudo mkdir -p "$new_mount_point"  # Create the full directory path if it doesn't exist
-
-    # Unmount if already mounted and remount to the new mount point
-    if mount | grep "/dev/${drive}1" &> /dev/null; then
-        echo -e "${YELLOW}Unmounting /dev/$drive...${NC}"
-        sudo umount "/dev/${drive}1"
+    if [[ "$fs_choice" == "1" ]]; then
+        fs_type="xfs"
+    elif [[ "$fs_choice" == "2" ]]; then
+        fs_type="zfs"
+    else
+        echo -e "${RED}Invalid choice. Exiting.${NC}"
+        return
     fi
 
-    echo -e "${YELLOW}Mounting /dev/$drive to $new_mount_point...${NC}"
-    sudo mount "/dev/${drive}1" "$new_mount_point"
+    echo -e "${YELLOW}Wiping existing filesystem signatures on /dev/$drive...${NC}"
+    wipefs -a "/dev/$drive"
 
-    # Update the config file with the new mount point
-    update_mount_point "$drive" "$new_mount_point"
+    echo -e "${YELLOW}Overwriting beginning of /dev/$drive with zeros...${NC}"
+    dd if=/dev/zero of="/dev/$drive" bs=1M count=1000 status=progress
 
-    echo -e "${GREEN}Drive /dev/$drive is now mounted at $new_mount_point.${NC}"
+    echo -e "${YELLOW}Creating new partition table and partition on /dev/$drive...${NC}"
+    (echo g; echo n; echo 1; echo ""; echo ""; echo w) | fdisk "/dev/$drive"
+
+    echo -e "${YELLOW}Formatting the partition with $fs_type...${NC}"
+    if [[ "$fs_type" == "xfs" ]]; then
+        mkfs.xfs "/dev/${drive}1" -f
+    elif [[ "$fs_type" == "zfs" ]]; then
+        apt-get install -y zfsutils-linux
+        zpool_name="pg_$(tr -dc 'a-z0-9' < /dev/urandom | head -c 8)"
+        zpool create -f "$zpool_name" "/dev/${drive}1"
+    fi
+
+    update_config "$drive" "$fs_type"
+
+    echo -e "${GREEN}Drive /dev/$drive formatted with $fs_type.${NC}"
+    echo -e "${GREEN}Drive information updated in $config_file.${NC}"
 }
 
-# Main menu
+# Main menu function
 main_menu() {
     while true; do
-        clear
-        echo -e "${BLUE}PG: Drive Management${NC}"
-        echo "1) Change Mount Point"
+        list_drives
+        echo -e "${BLUE}Choose an option:${NC}"
+        echo "1) Format a drive"
         echo "2) Exit"
-        echo ""
+        read -p "> " choice
 
-        read -p "Select an option > " choice
         case $choice in
-            1) change_mount_point ;;
+            1) format_drive ;;
             2) exit 0 ;;
-            *) echo -e "${RED}Invalid option, please try again.${NC}" ;;
+            *) echo -e "${RED}Invalid option. Please try again.${NC}" ;;
         esac
-        read -p "Press Enter to return to the menu..."
+
+        read -p "Press ENTER to continue..."
     done
 }
 
-# Check for 'bc' and install if necessary
-check_bc
-
-# Start the menu
+# Start the script
 main_menu
