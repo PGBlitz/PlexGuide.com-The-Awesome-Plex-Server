@@ -65,7 +65,7 @@ validate_and_create_location() {
         echo "" && echo "The directory '$new_location' does not exist."
         echo -e "Enter ${hot_pink}$pin_confirm${reset} to create the directory and set as new backup location."
     else
-        echo "The directory '$new_location' exists." && echo ""
+        echo "" && echo "The directory '$new_location' exists."
         echo -e "Enter ${hot_pink}$pin_confirm${reset} to set as new backup location."
     fi
     echo -e "Enter ${bright_green}$pin_cancel${reset} to cancel."
@@ -84,7 +84,7 @@ validate_and_create_location() {
         if touch "$new_location/.test_write" 2>/dev/null; then
             rm "$new_location/.test_write"
             echo "$new_location" > "$config_dir/location.cfg"
-            echo "Backup location updated to: $new_location"
+            echo "" && echo "Backup location updated to: $new_location"
             return 0
         else
             echo "Failed to write to $new_location. Please check permissions."
