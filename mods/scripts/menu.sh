@@ -104,6 +104,7 @@ main_menu() {
         echo -e "[${YELLOW}${BOLD}A${NC}] Apps Management"
         echo -e "[${CYAN}${BOLD}C${NC}] CloudFlare Tunnel (Domains)"
         echo -e "[${GREEN}${BOLD}S${NC}] Server: Cloud Deployments"
+        echo -e "[${GREEN}${BOLD}D${NC}] Data Management (Backups)"
         echo -e "[${PURPLE}${BOLD}U${NC}] PG: Update Interface"
         echo -e "[${BLUE}${BOLD}O${NC}] Options"
         echo -e "[${RED}${BOLD}Z${NC}] Exit"
@@ -116,6 +117,7 @@ main_menu() {
         case ${choice,,} in
             a) apps_management ;;
             s) server_cloud_deployments ;;
+            d) bash /pg/scripts/data/menu.sh ;;
             c) cloudflare_tunnel ;;
             u) update_pg_interface ;;
             o) options_menu ;;
