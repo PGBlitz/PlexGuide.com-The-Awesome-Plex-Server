@@ -87,6 +87,9 @@ validate_and_create_location() {
 # Backup and Restore Menu Interface
 menu() {
     while true; do
+        # Refresh the backup location variable after every action
+        read_backup_location
+
         clear
         echo -e "${dark_red}PG: Backup & Restore Menu${reset}"
         echo -e "Backup Location: ${yellow}$backup_location${reset}"
