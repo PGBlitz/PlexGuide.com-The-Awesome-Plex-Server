@@ -8,7 +8,7 @@ YELLOW="\033[0;33m"
 NC="\033[0m"  # No color
 
 # Config file to store drive information
-config_file="/pg/config/hd.cfg"
+config_file="/pg/config/hdformat.cfg"
 
 # Ensure the config directory exists
 mkdir -p /pg/config
