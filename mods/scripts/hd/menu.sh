@@ -78,7 +78,7 @@ main_menu() {
         echo ""  # Space between options and input prompt
 
         # Prompt the user for input
-        read -p "Enter your choice: " choice
+        read -p "Select an Option > " choice
 
         # Convert choice to lowercase and handle options
         case ${choice,,} in 
