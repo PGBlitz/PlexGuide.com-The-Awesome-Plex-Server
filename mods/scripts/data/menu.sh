@@ -88,14 +88,11 @@ validate_and_create_location() {
             return 0
         else
             echo "Failed to write to $new_location. Please check permissions."
-            return 1
         fi
     elif [ "$user_pin" -eq "$pin_cancel" ]; then
         echo "" && echo "Operation canceled."
-        return 2  # Special return code for cancellation
     else
         echo "" && echo "Invalid PIN. Operation canceled."
-        return 2  # Special return code for cancellation
     fi
 }
 
