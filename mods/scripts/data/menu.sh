@@ -47,7 +47,7 @@ menu() {
                 read -p "Press Enter to continue..."
                 ;;
             S|s)
-                bash /pg/scripts/mods/data/location.sh set
+                bash /pg/scripts/data/location.sh set
                 result=$?
                 if [ $result -eq 0 ]; then
                     echo "Backup location updated successfully."
