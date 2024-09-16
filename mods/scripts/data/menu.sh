@@ -68,7 +68,7 @@ validate_and_create_location() {
         echo "" && echo "The directory '$new_location' exists."
         echo -e "Enter ${hot_pink}$pin_confirm${reset} to set as new backup location."
     fi
-    echo "" && echo -e "Enter ${bright_green}$pin_cancel${reset} to cancel."
+    && echo -e "Enter ${bright_green}$pin_cancel${reset} to cancel."
     read -p "Enter PIN: " user_pin
 
     if [ "$user_pin" -eq "$pin_confirm" ]; then
