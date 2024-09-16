@@ -1,3 +1,47 @@
+#!/bin/bash
+
+# Define color codes
+dark_red="\033[0;31m"
+yellow="\033[1;33m"
+green="\033[0;32m"
+blue="\033[0;34m"
+purple="\033[0;35m"
+hot_pink="\033[1;35m"
+bright_green="\033[1;32m"
+reset="\033[0m"
+
+# Function to check and create default backup folder
+create_backup_folder() {
+    if [ ! -d /pgbackups/ ]; then
+        mkdir -p /pgbackups/
+        chown 1000:1000 /pgbackups/
+        chmod +x /pgbackups/
+        echo "Backup folder created at /pgbackups/"
+    fi
+}
+
+# Function to read or create the config for backup location
+read_backup_location() {
+    config_dir="/pg/config/backup"
+    location_file="$config_dir/location.cfg"
+    
+    # Check if config directory exists, if not create it
+    if [ ! -d "$config_dir" ]; then
+        mkdir -p "$config_dir"
+        echo "Configuration directory created at $config_dir"
+    fi
+
+    # If location file doesn't exist, create it with default path
+    if [ ! -f "$location_file" ]; then
+        echo "/pgbackups/" > "$location_file"
+        echo "Backup location config created with default path at /pgbackups/"
+    fi
+
+    # Read the current backup location
+    backup_location=$(cat "$location_file")
+}
+
+# Function to validate and create new location
 validate_and_create_location() {
     while true; do
         new_location=$1
@@ -64,3 +108,49 @@ validate_and_create_location() {
         fi
     done
 }
+
+# Backup and Restore Menu Interface
+menu() {
+    while true; do
+        # Refresh the backup location variable after every action
+        read_backup_location
+
+        clear
+        echo -e "${dark_red}PG: Backup & Restore Menu${reset}"
+        echo -e "Backup Location: ${yellow}$backup_location${reset}"
+        echo
+        echo -e "[${yellow}B${reset}] Backup Data"
+        echo -e "[${green}R${reset}] Restore Data"
+        echo -e "[${blue}S${reset}] Set Backup Location"
+        echo -e "[${purple}Z${reset}] Exit"
+        echo
+        read -p "Select an Option > " choice
+
+        case $choice in
+            B|b)
+                echo "Backup process initiated..."
+                # Backup process logic
+                ;;
+            R|r)
+                echo "Restore process initiated..."
+                # Restore process logic
+                ;;
+            S|s)
+                read -p "Enter new backup location: " new_location
+                validate_and_create_location "$new_location"
+                ;;
+            Z|z)
+                echo "Exiting..."
+                exit 0
+                ;;
+            *)
+                echo "Invalid option. Please try again."
+                ;;
+        esac
+    done
+}
+
+# Initialize
+create_backup_folder
+read_backup_location
+menu
