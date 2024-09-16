@@ -46,8 +46,8 @@ validate_and_create_location() {
     while true; do
         new_location=$1
 
-        # Check if the path starts with a single slash (absolute path) and is not just slashes
-        if [[ "$new_location" != /* || "$new_location" == */* ]]; then
+        # Check if the path starts with a single slash (absolute path)
+        if [[ "$new_location" != /* ]]; then
             echo -e "${dark_red}Error: Please enter a valid absolute path (starting with '/').${reset}"
             read -p "Enter new backup location: " new_location
             continue
@@ -88,8 +88,7 @@ validate_and_create_location() {
             
             # Test the location by creating a temporary file
             temp_file="$new_location/.testfile"
-            touch "$temp_file"
-            if [ -f "$temp_file" ]; then
+            if touch "$temp_file" 2>/dev/null; then
                 echo "Location is valid and writable."
                 rm "$temp_file"
                 echo "$new_location" > "$config_dir/location.cfg"
