@@ -83,7 +83,7 @@ main_menu() {
         # Convert choice to lowercase and handle options
         case ${choice,,} in 
             v)
-                bash /pg/scripts/hd/view.sh
+                bash /pg/scripts/hd/detection.sh
                 ;;
             f)
                 bash /pg/scripts/hd/format.sh
