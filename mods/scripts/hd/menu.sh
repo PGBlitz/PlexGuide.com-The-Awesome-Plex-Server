@@ -88,6 +88,9 @@ main_menu() {
             f)
                 bash /pg/scripts/hd/format.sh
                 ;;
+            m)
+                bash /pg/scripts/hd/mountpoint.sh
+                ;;
             i)
                 install_mergerfs
                 ;;
