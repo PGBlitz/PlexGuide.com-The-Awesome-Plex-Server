@@ -12,6 +12,7 @@ CYAN="\033[0;36m"
 BLUE="\033[0;34m"
 PURPLE="\033[0;35m"
 BOLD="\033[1m"
+HOTPINK="\033[1;35m"
 NC="\033[0m"  # No color
 
 # Clear the screen at the start
@@ -83,6 +84,11 @@ server_cloud_deployments() {
     bash /pg/scripts/cloud_server.sh
 }
 
+# Function for Hard Drive Management
+hard_drive_management() {
+    bash /pg/scripts/hd/menu.sh
+}
+
 # Function for Options Menu
 options_menu() {
     bash /pg/scripts/options.sh
@@ -103,6 +109,7 @@ main_menu() {
         # Display menu options with bold colored letters
         echo -e "[${YELLOW}${BOLD}A${NC}] Apps Management"
         echo -e "[${CYAN}${BOLD}C${NC}] CloudFlare Tunnel (Domains)"
+        echo -e "[${HOTPINK}${BOLD}H${NC}] Hard Drive Management"
         echo -e "[${GREEN}${BOLD}S${NC}] Server: Cloud Deployments"
         echo -e "[${PURPLE}${BOLD}U${NC}] PG: Update Interface"
         echo -e "[${BLUE}${BOLD}O${NC}] Options"
@@ -117,6 +124,7 @@ main_menu() {
             a) apps_management ;;
             s) server_cloud_deployments ;;
             c) cloudflare_tunnel ;;
+            h) hard_drive_management ;;
             u) update_pg_interface ;;
             o) options_menu ;;
             z) menu_exit ;;
