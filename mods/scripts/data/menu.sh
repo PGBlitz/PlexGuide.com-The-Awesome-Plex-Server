@@ -43,6 +43,12 @@ read_backup_location() {
 validate_and_create_location() {
     new_location=$1
 
+    # Check if the path is absolute
+    if [[ "$new_location" != /* ]]; then
+        echo "Error: Please enter an absolute path (starting with '/')."
+        return
+    fi
+
     # Generate two random 4-digit PINs
     pin_confirm=$(( RANDOM % 9000 + 1000 ))
     pin_cancel=$(( RANDOM % 9000 + 1000 ))
@@ -60,10 +66,20 @@ validate_and_create_location() {
     
     if [ "$user_pin" -eq "$pin_confirm" ]; then
         if [ ! -d "$new_location" ]; then
-            echo "Creating location at $new_location..."
-            mkdir -p "$new_location"
-            chown 1000:1000 "$new_location"
-            chmod +x "$new_location"
+            echo "The directory '$new_location' does not exist."
+            echo "Would you like to create it?"
+
+            # Confirm creation of the new directory
+            read -p "Enter 'yes' to create or 'no' to cancel: " create_choice
+            if [[ "$create_choice" == "yes" ]]; then
+                echo "Creating location at $new_location..."
+                mkdir -p "$new_location"
+                chown 1000:1000 "$new_location"
+                chmod +x "$new_location"
+            else
+                echo "Operation canceled."
+                return
+            fi
         fi
         
         # Test the location by creating a temporary file
