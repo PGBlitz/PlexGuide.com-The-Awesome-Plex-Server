@@ -91,10 +91,10 @@ validate_and_create_location() {
             return 1
         fi
     elif [ "$user_pin" -eq "$pin_cancel" ]; then
-        echo "Operation canceled."
+        echo "" && echo "Operation canceled."
         return 2  # Special return code for cancellation
     else
-        echo "Invalid PIN. Operation canceled."
+        echo "" && echo "Invalid PIN. Operation canceled."
         return 2  # Special return code for cancellation
     fi
 }
@@ -130,14 +130,6 @@ menu() {
             S|s)
                 read -p "Enter new backup location: " new_location
                 validate_and_create_location "$new_location"
-                result=$?
-                if [ $result -eq 0 ]; then
-                    echo "" && echo "Backup location updated successfully."
-                elif [ $result -eq 2 ]; then
-                    echo "" && echo "Operation canceled. Returning to main menu."
-                else
-                    echo "" && echo "Failed to set new backup location."
-                fi
                 read -p "Press [ENTER] to continue..."
                 ;;
             Z|z)
