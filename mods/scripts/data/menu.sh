@@ -47,11 +47,14 @@ validate_and_create_location() {
         new_location=$1
 
         # Check if the path starts with a single slash (absolute path)
-        if [[ "$new_location" != /* ]]; then
+        if [[ ! "$new_location" =~ ^/[^/]+.*$ ]]; then
             echo -e "${dark_red}Error: Please enter a valid absolute path (starting with '/').${reset}"
             read -p "Enter new backup location: " new_location
             continue
         fi
+
+        # Remove trailing slash if present
+        new_location=${new_location%/}
 
         # Generate two random 4-digit PINs
         pin_confirm=$(( RANDOM % 9000 + 1000 ))
@@ -77,9 +80,13 @@ validate_and_create_location() {
                 read -p "Enter 'yes' to create or 'no' to cancel: " create_choice
                 if [[ "$create_choice" == "yes" ]]; then
                     echo "Creating location at $new_location..."
-                    mkdir -p "$new_location"
-                    chown 1000:1000 "$new_location"
-                    chmod +x "$new_location"
+                    if mkdir -p "$new_location"; then
+                        chown 1000:1000 "$new_location"
+                        chmod +x "$new_location"
+                    else
+                        echo "Failed to create directory. Please check permissions."
+                        return
+                    fi
                 else
                     echo "Operation canceled."
                     return
