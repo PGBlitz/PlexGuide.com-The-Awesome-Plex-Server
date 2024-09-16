@@ -65,10 +65,10 @@ validate_and_create_location() {
         echo "" && echo "The directory '$new_location' does not exist."
         echo -e "Enter ${hot_pink}$pin_confirm${reset} to create the directory and set as new backup location."
     else
-        echo "" && echo "The directory '$new_location' exists."
+        echo "The directory '$new_location' exists." && echo ""
         echo -e "Enter ${hot_pink}$pin_confirm${reset} to set as new backup location."
     fi
-    && echo -e "Enter ${bright_green}$pin_cancel${reset} to cancel."
+    echo -e "Enter ${bright_green}$pin_cancel${reset} to cancel."
     read -p "Enter PIN: " user_pin
 
     if [ "$user_pin" -eq "$pin_confirm" ]; then
@@ -120,12 +120,12 @@ menu() {
             B|b)
                 echo "Backup process initiated..."
                 # Backup process logic (to be implemented)
-                read -p "Press Enter to continue..."
+                read -p "Press [ENTER] to Continue..."
                 ;;
             R|r)
                 echo "Restore process initiated..."
                 # Restore process logic (to be implemented)
-                read -p "Press Enter to continue..."
+                read -p "Press [ENTER] to Continue..."
                 ;;
             S|s)
                 read -p "Enter new backup location: " new_location
