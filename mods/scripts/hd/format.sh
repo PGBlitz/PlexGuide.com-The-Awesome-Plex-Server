@@ -7,6 +7,12 @@ BLUE="\033[0;34m"
 YELLOW="\033[0;33m"
 NC="\033[0m"  # No color
 
+# Config file to store drive information
+config_file="/pg/config/hd.cfg"
+
+# Ensure the config directory exists
+mkdir -p /pg/config
+
 # Function to list drives and partitions
 list_drives() {
     clear
@@ -15,27 +21,37 @@ list_drives() {
     echo -e "=========================${NC}"
     echo -e "${GREEN}Top-Level View of Drives, Partitions, Sizes, and Filesystems:${NC}"
     echo ""
-    lsblk -o NAME,SIZE,FSTYPE,MOUNTPOINT | grep -E '^[a-z]'  # Show drives, sizes, and file system types
+    lsblk -o NAME,SIZE,FSTYPE | grep -E '^[a-z]'
     echo ""
 }
 
-# Function to clean old mount points under /mnt associated with the selected drive
+# Function to clean old mount points and swaps associated with the selected drive
 clean_old_mounts() {
     local drive="$1"
     
     echo -e "${YELLOW}Searching for and cleaning old mount points for /dev/${drive}...${NC}"
     
-    # Unmount all mount points associated with the selected drive
     mount | grep "/dev/${drive}" | awk '{print $3}' | while read mp; do
         echo -e "${YELLOW}Unmounting $mp...${NC}"
         umount "$mp" &>/dev/null
     done
 
-    # Disable swap if it's using the selected drive
     swapon --show | grep "/dev/${drive}" | awk '{print $1}' | while read swap_partition; do
         echo -e "${YELLOW}Disabling swap on $swap_partition...${NC}"
         swapoff "$swap_partition"
     done
+}
+
+# Function to update the config file with drive information
+update_config() {
+    local drive="$1"
+    local fs_type="$2"
+
+    # Remove old entry for the drive if it exists
+    sed -i "/^$drive:/d" "$config_file"
+
+    # Add the new entry for the drive
+    echo "$drive:$fs_type" >> "$config_file"
 }
 
 # Function to prompt for drive selection and format options
@@ -45,10 +61,9 @@ format_drive() {
 
     if [ ! -b "/dev/$drive" ]; then
         echo -e "${RED}Invalid drive. Please ensure the drive exists.${NC}"
-        exit 1
+        return
     fi
 
-    # Clean old mount points and swap for the selected drive
     clean_old_mounts "$drive"
 
     echo -e "${BLUE}Select the filesystem format type:${NC}"
@@ -58,19 +73,12 @@ format_drive() {
 
     if [[ "$fs_choice" == "1" ]]; then
         fs_type="xfs"
-        fs_command="mkfs.xfs"
     elif [[ "$fs_choice" == "2" ]]; then
         fs_type="zfs"
-        fs_command="mkfs.zfs"
     else
         echo -e "${RED}Invalid choice. Exiting.${NC}"
-        exit 1
+        return
     fi
-
-    # Prompt for mount point name
-    echo -e "${BLUE}Enter a name for the mount point (e.g., cat):${NC}"
-    read -p "> " mount_name
-    mount_point="/mnt/pg_${mount_name}"
 
     echo -e "${YELLOW}Wiping existing filesystem signatures on /dev/$drive...${NC}"
     wipefs -a "/dev/$drive"
@@ -85,18 +93,15 @@ format_drive() {
     if [[ "$fs_type" == "xfs" ]]; then
         mkfs.xfs "/dev/${drive}1" -f
     elif [[ "$fs_type" == "zfs" ]]; then
-        apt-get install -y zfsutils-linux  # Ensure ZFS tools are installed
-        mkfs.zfs "/dev/${drive}1"
+        apt-get install -y zfsutils-linux
+        zpool_name="pg_$(tr -dc 'a-z0-9' < /dev/urandom | head -c 8)"
+        zpool create -f "$zpool_name" "/dev/${drive}1"
     fi
 
-    # Create the mount point directory
-    mkdir -p "$mount_point"
+    update_config "$drive" "$fs_type"
 
-    # Mount the formatted partition
-    echo -e "${YELLOW}Mounting the partition to $mount_point...${NC}"
-    mount "/dev/${drive}1" "$mount_point"
-
-    echo -e "${GREEN}Drive /dev/$drive formatted and mounted at $mount_point.${NC}"
+    echo -e "${GREEN}Drive /dev/$drive formatted with $fs_type.${NC}"
+    echo -e "${GREEN}Drive information updated in $config_file.${NC}"
 }
 
 # Main menu function
@@ -104,8 +109,10 @@ main_menu() {
     while true; do
         list_drives
         format_drive
-        read -p "[Press ENTER to Exit]" exit_prompt
-        exit 0
+        read -p "[Press ENTER to continue or type 'exit' to quit] " user_input
+        if [[ "$user_input" == "exit" ]]; then
+            exit 0
+        fi
     done
 }
 
