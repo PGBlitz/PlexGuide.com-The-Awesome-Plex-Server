@@ -1,10 +1,21 @@
 #!/bin/bash
 
+# ANSI color codes
+RED="\033[0;31m"
+NC="\033[0m"  # No color
+
+# Security check: Only allow user with UID 1000 and GID 1000 to run this script
+if [[ $(id -u) -ne 1000 ]] || [[ $(id -g) -ne 1000 ]]; then
+    echo -e "${RED}WARNING: This script can only be run by the user with UID 1000 and GID 1000.${NC}"
+    read -p "Press [ENTER] to acknowledge"
+    menu_exit
+    exit 1
+fi
+
 # Configuration file path
 CONFIG_FILE="/pg/config/config.cfg"
 
-# ANSI color codes
-RED="\033[0;31m"
+# Additional ANSI color codes
 ORANGE="\033[0;33m"
 YELLOW="\033[1;33m"
 GREEN="\033[0;32m"
@@ -12,7 +23,6 @@ CYAN="\033[0;36m"
 BLUE="\033[0;34m"
 PURPLE="\033[0;35m"
 BOLD="\033[1m"
-NC="\033[0m"  # No color
 
 # Clear the screen at the start
 clear
