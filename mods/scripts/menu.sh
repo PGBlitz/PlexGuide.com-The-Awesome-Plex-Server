@@ -19,19 +19,19 @@ is_sudo() {
 # Enhanced security check
 if [[ -z "$SUDO_USER" ]]; then
     echo -e "${RED}WARNING: This script must be run with sudo.${NC}"
-    echo -e "${RED}Please run it as 'sudo -u $REQUIRED_USER $0 $@'${NC}"
+    echo -e "${RED}Please run it as 'sudo $REQUIRED_USER"
     read -p "Press [ENTER] to acknowledge"
     bash /pg/installer/menu_exit.sh
     exit 1
 elif [[ $SUDO_UID -ne 1000 ]] || [[ $SUDO_GID -ne 1000 ]]; then
     echo -e "${RED}WARNING: This script can only be run by the user '$REQUIRED_USER' (UID 1000 and GID 1000) using sudo.${NC}"
-    echo -e "${RED}Please run it as 'sudo -u $REQUIRED_USER $0 $@'${NC}"
+    echo -e "${RED}Please run it as 'sudo $REQUIRED_USER"
     read -p "Press [ENTER] to acknowledge"
     bash /pg/installer/menu_exit.sh
     exit 1
 elif [[ $EUID -ne 0 ]]; then
     echo -e "${RED}WARNING: This script must be run with sudo privileges.${NC}"
-    echo -e "${RED}Please run it as 'sudo -u $REQUIRED_USER $0 $@'${NC}"
+    echo -e "${RED}Please run it as 'sudo $REQUIRED_USER"
     read -p "Press [ENTER] to acknowledge"
     bash /pg/installer/menu_exit.sh
     exit 1
