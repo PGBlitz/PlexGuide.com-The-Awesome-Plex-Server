@@ -22,7 +22,7 @@ if [[ -z "$SUDO_USER" ]]; then
     echo -e "${RED}Run as user '$REQUIRED_USER' by using typing 'su $REQUIRED_USER'"
     echo -e "Then type 'sudo plexguide'${NC}"
     echo ""
-    read -p "Press [ENTER] to acknowledge 1"
+    read -p "Press [ENTER] to acknowledge"
     bash /pg/installer/menu_exit.sh
     exit 1
 elif [[ $SUDO_UID -ne 1000 ]] || [[ $SUDO_GID -ne 1000 ]]; then
@@ -39,7 +39,7 @@ elif [[ $EUID -ne 0 ]]; then
     echo -e "Run as user '$REQUIRED_USER' by using typing 'su $REQUIRED_USER'"
     echo -e "Then type 'sudo plexguide'${NC}"
     echo ""
-    read -p "Press [ENTER] to acknowledge 3"
+    read -p "Press [ENTER] to acknowledge"
     bash /pg/installer/menu_exit.sh
     exit 1
 fi
