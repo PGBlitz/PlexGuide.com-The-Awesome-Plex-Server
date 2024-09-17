@@ -19,7 +19,7 @@ is_sudo() {
 # Enhanced security check
 if [[ -z "$SUDO_USER" ]]; then
     echo ""
-    echo -e "${RED}Run as the user '$REQUIRED_USER' by using 'su $REQUIRED_USER'"
+    echo -e "${RED}Run as user '$REQUIRED_USER' by using typing 'su $REQUIRED_USER'"
     echo -e "Then type 'sudo plexguide'${NC}"
     echo ""
     read -p "Press [ENTER] to acknowledge"
@@ -27,7 +27,7 @@ if [[ -z "$SUDO_USER" ]]; then
     exit 1
 elif [[ $SUDO_UID -ne 1000 ]] || [[ $SUDO_GID -ne 1000 ]]; then
     echo ""
-    echo -e "${RED}Run as the user '$REQUIRED_USER' by using 'su $REQUIRED_USER'"
+    echo -e "${RED}Run as user '$REQUIRED_USER' by using typing 'su $REQUIRED_USER'"
     echo -e "Then type 'sudo plexguide'${NC}"
     echo ""
     read -p "Press [ENTER] to acknowledge"
@@ -36,7 +36,7 @@ elif [[ $SUDO_UID -ne 1000 ]] || [[ $SUDO_GID -ne 1000 ]]; then
 elif [[ $EUID -ne 0 ]]; then
     echo ""
     echo -e "${RED}WARNING: This script must be run with sudo privileges."
-    echo -e "${RED}Run as the user '$REQUIRED_USER' by using 'su $REQUIRED_USER'"
+    echo -e "Run as user '$REQUIRED_USER' by using typing 'su $REQUIRED_USER'"
     echo -e "Then type 'sudo plexguide'${NC}"
     echo ""
     read -p "Press [ENTER] to acknowledge"
