@@ -7,14 +7,38 @@ NC="\033[0m"  # No color
 # Get the username of the user with UID 1000
 REQUIRED_USER=$(getent passwd 1000 | cut -d: -f1)
 
-# Enhanced security check: Block root user and only allow user with UID 1000 and GID 1000
-if [[ $EUID -eq 0 ]] || [[ $(id -u) -ne 1000 ]] || [[ $(id -g) -ne 1000 ]]; then
-    echo -e "${RED}WARNING: This script can only be run by the user '$REQUIRED_USER' (UID 1000 and GID 1000).${NC}"
-    echo -e "${RED}It cannot be run as root or any other user.${NC}"
+# Function to check if the script is being run with sudo
+is_sudo() {
+    if [ -n "$SUDO_USER" ]; then
+        return 0 # True, it's being run with sudo
+    else
+        return 1 # False, it's not being run with sudo
+    fi
+}
+
+# Enhanced security check
+if [[ -z "$SUDO_USER" ]]; then
+    echo -e "${RED}WARNING: This script must be run with sudo.${NC}"
+    echo -e "${RED}Please run it as 'sudo -u $REQUIRED_USER $0 $@'${NC}"
+    read -p "Press [ENTER] to acknowledge"
+    bash /pg/installer/menu_exit.sh
+    exit 1
+elif [[ $SUDO_UID -ne 1000 ]] || [[ $SUDO_GID -ne 1000 ]]; then
+    echo -e "${RED}WARNING: This script can only be run by the user '$REQUIRED_USER' (UID 1000 and GID 1000) using sudo.${NC}"
+    echo -e "${RED}Please run it as 'sudo -u $REQUIRED_USER $0 $@'${NC}"
+    read -p "Press [ENTER] to acknowledge"
+    bash /pg/installer/menu_exit.sh
+    exit 1
+elif [[ $EUID -ne 0 ]]; then
+    echo -e "${RED}WARNING: This script must be run with sudo privileges.${NC}"
+    echo -e "${RED}Please run it as 'sudo -u $REQUIRED_USER $0 $@'${NC}"
     read -p "Press [ENTER] to acknowledge"
     bash /pg/installer/menu_exit.sh
     exit 1
 fi
+
+# If we've made it here, the user is either UID 1000 or is UID 1000 using sudo
+echo "Security check passed. Proceeding with the script..."
 
 # Configuration file path
 CONFIG_FILE="/pg/config/config.cfg"
