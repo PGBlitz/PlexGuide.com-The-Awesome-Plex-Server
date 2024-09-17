@@ -24,6 +24,7 @@ update_cfg() {
 
 # Display main menu for configuration
 show_config_menu() {
+  clear
   echo "Interactive Config Editor"
   echo "1) Configure Trakt"
   echo "2) Configure Radarr"
@@ -37,8 +38,8 @@ show_config_menu() {
     1) configure_trakt ;;
     2) configure_radarr ;;
     3) configure_sonarr ;;
-    4) configure_filters_movies ;;
-    5) configure_filters_shows ;;
+    4) configure_filters_movies ;;  # Configure movie filters
+    5) configure_filters_shows ;;   # Configure show filters
     6) exit ;;
     *) echo "Invalid option. Try again."; show_config_menu ;;
   esac
@@ -94,6 +95,51 @@ configure_sonarr() {
   update_cfg "sonarr_language" "$SONARR_LANGUAGE"
   update_cfg "sonarr_season_folder" "$SONARR_SEASON_FOLDER"
   echo "Sonarr configuration updated."
+  show_config_menu
+}
+
+# Configure Filters for Movies
+configure_filters_movies() {
+  echo "Editing movie filters (blacklist, allowed countries, etc.)"
+  read -p "Enter allowed countries (comma-separated, e.g., us,gb,ca): " MOVIE_COUNTRIES
+  read -p "Enter minimum Rotten Tomatoes score (default: 80): " MOVIE_RT
+  read -p "Enter blacklisted genres (comma-separated): " MOVIE_GENRES
+  read -p "Enter minimum runtime (default: 60): " MOVIE_MIN_RUNTIME
+  read -p "Enter maximum runtime (default: 0 for no limit): " MOVIE_MAX_RUNTIME
+
+  MOVIE_RT=${MOVIE_RT:-80}
+  MOVIE_MIN_RUNTIME=${MOVIE_MIN_RUNTIME:-60}
+  MOVIE_MAX_RUNTIME=${MOVIE_MAX_RUNTIME:-0}
+
+  # Update or add values to the .cfg file
+  update_cfg "movie_allowed_countries" "$MOVIE_COUNTRIES"
+  update_cfg "movie_rotten_tomatoes" "$MOVIE_RT"
+  update_cfg "movie_blacklisted_genres" "$MOVIE_GENRES"
+  update_cfg "movie_min_runtime" "$MOVIE_MIN_RUNTIME"
+  update_cfg "movie_max_runtime" "$MOVIE_MAX_RUNTIME"
+
+  echo "Movie filters updated."
+  show_config_menu
+}
+
+# Configure Filters for Shows
+configure_filters_shows() {
+  echo "Editing show filters (blacklist, allowed countries, etc.)"
+  read -p "Enter allowed countries (comma-separated, e.g., us,gb,ca): " SHOW_COUNTRIES
+  read -p "Enter blacklisted genres (comma-separated): " SHOW_GENRES
+  read -p "Enter minimum runtime (default: 15): " SHOW_MIN_RUNTIME
+  read -p "Enter maximum runtime (default: 0 for no limit): " SHOW_MAX_RUNTIME
+
+  SHOW_MIN_RUNTIME=${SHOW_MIN_RUNTIME:-15}
+  SHOW_MAX_RUNTIME=${SHOW_MAX_RUNTIME:-0}
+
+  # Update or add values to the .cfg file
+  update_cfg "show_allowed_countries" "$SHOW_COUNTRIES"
+  update_cfg "show_blacklisted_genres" "$SHOW_GENRES"
+  update_cfg "show_min_runtime" "$SHOW_MIN_RUNTIME"
+  update_cfg "show_max_runtime" "$SHOW_MAX_RUNTIME"
+
+  echo "Show filters updated."
   show_config_menu
 }
 
