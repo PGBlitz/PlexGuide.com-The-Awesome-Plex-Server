@@ -1,52 +1,43 @@
 #!/bin/bash
 
 CONFIG_FILE="/pg/config/trakt.cfg"
+LOG_DIR="/pg/logs/traktpg"
+LOG_FILE="$LOG_DIR/sync.log"
 
-# Load API keys from config file
-source "$CONFIG_FILE"
-
-# Function to sync Trakt movies with Radarr
-sync_trakt_to_radarr() {
-    echo "Fetching popular movies from Trakt.tv..."
-    movies=$(curl -s "https://api.trakt.tv/movies/popular" \
-        -H "Content-Type: application/json" \
-        -H "trakt-api-key: $trakt_client_id" \
-        -H "trakt-api-version: 2" | jq -r '.[] | {title, year, ids} | @base64')
-
-    echo "Adding movies to Radarr..."
-    for movie in $movies; do
-        _jq() {
-            echo $movie | base64 --decode | jq -r ${1}
-        }
-
-        title=$(_jq '.title')
-        tmdbId=$(_jq '.ids.tmdb')
-        year=$(_jq '.year')
-
-        # Send movie to Radarr
-        curl -X POST "$radarr_url/api/v3/movie" \
-          -H "X-Api-Key: $radarr_api_key" \
-          -H "Content-Type: application/json" \
-          -d "{
-            \"title\": \"$title\",
-            \"qualityProfileId\": 1,
-            \"tmdbId\": $tmdbId,
-            \"year\": $year,
-            \"rootFolderPath\": \"/movies/\",
-            \"monitored\": true
-          }"
-    done
+# Ensure the log directory exists
+initialize_log() {
+  if [ ! -d "$LOG_DIR" ]; then
+    mkdir -p "$LOG_DIR"
+    echo "$(date): Created log directory at $LOG_DIR" >> "$LOG_FILE"
+  fi
 }
+
+# Log message function
+log_message() {
+  echo "$(date): $1" | tee -a "$LOG_FILE"
+}
+
+# Load API keys and settings from config file
+source "$CONFIG_FILE"
 
 # Function to sync Trakt shows with Sonarr
 sync_trakt_to_sonarr() {
-    echo "Fetching popular shows from Trakt.tv..."
+    log_message "Starting sync with Trakt.tv for shows..."
+
+    # Fetch popular shows from Trakt.tv
     shows=$(curl -s "https://api.trakt.tv/shows/popular" \
         -H "Content-Type: application/json" \
         -H "trakt-api-key: $trakt_client_id" \
         -H "trakt-api-version: 2" | jq -r '.[] | {title, year, ids} | @base64')
 
-    echo "Adding shows to Sonarr..."
+    if [ -z "$shows" ]; then
+      log_message "No shows fetched from Trakt.tv."
+      exit 1
+    fi
+
+    log_message "Fetched popular shows from Trakt.tv, syncing to Sonarr..."
+
+    # Add shows to Sonarr
     for show in $shows; do
         _jq() {
             echo $show | base64 --decode | jq -r ${1}
@@ -55,6 +46,8 @@ sync_trakt_to_sonarr() {
         title=$(_jq '.title')
         tvdbId=$(_jq '.ids.tvdb')
         year=$(_jq '.year')
+
+        log_message "Adding show: $title ($year) to Sonarr"
 
         # Send show to Sonarr
         curl -X POST "$sonarr_url/api/v3/series" \
@@ -65,22 +58,24 @@ sync_trakt_to_sonarr() {
             \"qualityProfileId\": 1,
             \"tvdbId\": $tvdbId,
             \"year\": $year,
-            \"rootFolderPath\": \"/tv/\",
-            \"seasonFolder\": true,
+            \"rootFolderPath\": \"$sonarr_root_folder\",
+            \"seasonFolder\": $sonarr_season_folder,
             \"monitored\": true
-          }"
+          }" >> "$LOG_FILE" 2>&1
     done
+
+    log_message "Sync with Sonarr completed."
 }
 
-# Run the appropriate sync based on argument
+# Initialize log directory
+initialize_log
+
+# Run the sync based on argument
 case $1 in
-    movies)
-        sync_trakt_to_radarr
-        ;;
     shows)
         sync_trakt_to_sonarr
         ;;
     *)
-        echo "Invalid argument. Use: movies or shows"
+        log_message "Invalid argument. Use: shows"
         ;;
 esac
