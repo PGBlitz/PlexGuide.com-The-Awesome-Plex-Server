@@ -8,7 +8,7 @@ NC="\033[0m"  # No color
 if [[ $(id -u) -ne 1000 ]] || [[ $(id -g) -ne 1000 ]]; then
     echo -e "${RED}WARNING: This script can only be run by the user with UID 1000 and GID 1000.${NC}"
     read -p "Press [ENTER] to acknowledge"
-    menu_exit
+    bash /pg/installer/menu_exit.sh
     exit 1
 fi
 
