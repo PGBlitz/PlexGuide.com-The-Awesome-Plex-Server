@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Path to sync script
-SYNC_SCRIPT="/pg/scripts/sync.sh"
+SYNC_SCRIPT="/pg/scripts/trakt/sync.sh"
 
 # Path to config file
 CONFIG_FILE="/pg/config/trakt.cfg"
