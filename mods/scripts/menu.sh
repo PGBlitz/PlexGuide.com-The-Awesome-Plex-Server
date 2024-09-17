@@ -1,10 +1,49 @@
 #!/bin/bash
 
+# ANSI color codes
+RED="\033[0;31m"
+NC="\033[0m"  # No color
+
+# Get the username of the user with UID 1000
+REQUIRED_USER=$(getent passwd 1000 | cut -d: -f1)
+
+# Function to check if the script is being run with sudo
+is_sudo() {
+    if [ -n "$SUDO_USER" ]; then
+        return 0 # True, it's being run with sudo
+    else
+        return 1 # False, it's not being run with sudo
+    fi
+}
+
+# Enhanced security check
+if [[ -z "$SUDO_USER" ]]; then
+    echo -e "${RED}WARNING: This script must be run with sudo.${NC}"
+    echo -e "${RED}Please run it as 'sudo -u $REQUIRED_USER $0 $@'${NC}"
+    read -p "Press [ENTER] to acknowledge"
+    bash /pg/installer/menu_exit.sh
+    exit 1
+elif [[ $SUDO_UID -ne 1000 ]] || [[ $SUDO_GID -ne 1000 ]]; then
+    echo -e "${RED}WARNING: This script can only be run by the user '$REQUIRED_USER' (UID 1000 and GID 1000) using sudo.${NC}"
+    echo -e "${RED}Please run it as 'sudo -u $REQUIRED_USER $0 $@'${NC}"
+    read -p "Press [ENTER] to acknowledge"
+    bash /pg/installer/menu_exit.sh
+    exit 1
+elif [[ $EUID -ne 0 ]]; then
+    echo -e "${RED}WARNING: This script must be run with sudo privileges.${NC}"
+    echo -e "${RED}Please run it as 'sudo -u $REQUIRED_USER $0 $@'${NC}"
+    read -p "Press [ENTER] to acknowledge"
+    bash /pg/installer/menu_exit.sh
+    exit 1
+fi
+
+# If we've made it here, the user is either UID 1000 or is UID 1000 using sudo
+echo "Security check passed. Proceeding with the script..."
+
 # Configuration file path
 CONFIG_FILE="/pg/config/config.cfg"
 
-# ANSI color codes
-RED="\033[0;31m"
+# Additional ANSI color codes
 ORANGE="\033[0;33m"
 YELLOW="\033[1;33m"
 GREEN="\033[0;32m"
@@ -12,7 +51,6 @@ CYAN="\033[0;36m"
 BLUE="\033[0;34m"
 PURPLE="\033[0;35m"
 BOLD="\033[1m"
-NC="\033[0m"  # No color
 
 # Clear the screen at the start
 clear
