@@ -4,9 +4,9 @@
 RED="\033[0;31m"
 NC="\033[0m"  # No color
 
-# Security check: Only allow user with UID 1000 and GID 1000 to run this script
-if [[ $(id -u) -ne 1000 ]] || [[ $(id -g) -ne 1000 ]]; then
-    echo -e "${RED}WARNING: This script can only be run by the user with UID 1000 and GID 1000.${NC}"
+# Enhanced security check: Block root user and only allow user with UID 1000 and GID 1000
+if [[ $EUID -eq 0 ]] || [[ $(id -u) -ne 1000 ]] || [[ $(id -g) -ne 1000 ]]; then
+    echo -e "${RED}WARNING: This script can only be run by the user with UID 1000 and GID 1000, and cannot be run as root.${NC}"
     read -p "Press [ENTER] to acknowledge"
     bash /pg/installer/menu_exit.sh
     exit 1
