@@ -19,12 +19,30 @@ MAX_LINE_LENGTH=72
 # Arguments
 deployment_type=$1  # 'personal' for personal deployment, 'official' for official deployment
 
+# Base directory (adjust this to your actual base directory)
+BASE_DIR="/pg"
+
+# Function to safely check if a directory exists
+directory_exists() {
+    if [[ -d "$1" ]]; then
+        return 0
+    else
+        return 1
+    fi
+}
+
 # Function to create the appropriate apps directory if it doesn't exist
 create_apps_directory() {
+    local target_dir
     if [[ "$deployment_type" == "personal" ]]; then
-        [[ ! -d "/pg/p_apps" ]] && mkdir -p /pg/p_apps
+        target_dir="$BASE_DIR/p_apps"
     else
-        [[ ! -d "/pg/apps" ]] && mkdir -p /pg/apps
+        target_dir="$BASE_DIR/apps"
+    fi
+    
+    if ! directory_exists "$target_dir"; then
+        echo "Error: Directory $target_dir does not exist and cannot be created."
+        return 1
     fi
 }
 
@@ -32,18 +50,22 @@ create_apps_directory() {
 list_available_apps() {
     local app_dir
     if [[ "$deployment_type" == "personal" ]]; then
-        app_dir="/pg/p_apps"
+        app_dir="$BASE_DIR/p_apps"
     else
-        app_dir="/pg/apps"
+        app_dir="$BASE_DIR/apps"
     fi
 
-    local all_apps=$(find "$app_dir" -maxdepth 1 -name "*.app" -type f -exec basename {} .app \; | sort)
-    local running_apps=$(docker ps --format '{{.Names}}' | sort)
+    if ! directory_exists "$app_dir"; then
+        echo "Error: App directory $app_dir does not exist."
+        return 1
+    fi
+
+    local all_apps=$(find "$app_dir" -maxdepth 1 -name "*.app" -type f -exec basename {} .app \; 2>/dev/null | sort)
+    local running_apps=$(docker ps --format '{{.Names}}' 2>/dev/null | sort)
 
     local available_apps=()
     for app in $all_apps; do
-        # Only exclude those that are already running
-        if ! echo "$running_apps" | grep -i -w "$app" >/dev/null; then
+        if ! echo "$running_apps" | grep -q -i -w "$app"; then
             available_apps+=("$app")
         fi
     done
@@ -59,20 +81,18 @@ display_available_apps() {
 
     for app in "${apps_list[@]}"; do
         local app_length=${#app}
-        local new_length=$((current_length + app_length + 1)) # +1 for the space
+        local new_length=$((current_length + app_length + 1))
 
-        # If adding the app would exceed the maximum length, start a new line
         if [[ $new_length -gt $TERMINAL_WIDTH ]]; then
             echo "$current_line"
             current_line="$app "
-            current_length=$((app_length + 1)) # Reset with the new app and a space
+            current_length=$((app_length + 1))
         else
             current_line+="$app "
             current_length=$new_length
         fi
     done
 
-    # Print the last line if it has content
     if [[ -n $current_line ]]; then
         echo "$current_line"
     fi
@@ -81,13 +101,10 @@ display_available_apps() {
 # Function to deploy the selected app
 deploy_app() {
     local app_name=$1
-    local app_script
-    app_script="/pg/scripts/apps/interface.sh"
+    local app_script="$BASE_DIR/scripts/apps/interface.sh"
 
-    # Ensure the app script exists before proceeding
     if [[ -f "$app_script" ]]; then
-        # Execute the apps_interface.sh script with the app name as an argument
-        bash /pg/scripts/apps/interface.sh "$app_name" "$deployment_type"
+        bash "$app_script" "$app_name" "$deployment_type"
     else
         echo "Error: Interface script $app_script not found!"
         read -p "Press Enter to continue..."
@@ -99,13 +116,15 @@ deployment_function() {
     while true; do
         clear
 
-        create_apps_directory
+        if ! create_apps_directory; then
+            echo "Error: Unable to access or create necessary directories."
+            exit 1
+        fi
 
-        # Get the list of available apps
         APP_LIST=($(list_available_apps))
 
         echo -e "${RED}PG: Deployable Apps${NC}"
-        echo ""  # Blank line for separation
+        echo ""
 
         if [[ ${#APP_LIST[@]} -eq 0 ]]; then
             echo -e "${ORANGE}No More Apps To Deploy${NC}"
@@ -114,12 +133,10 @@ deployment_function() {
         fi
 
         echo "════════════════════════════════════════════════════════════════════════════════"
-        # Prompt the user to enter an app name or exit
         read -p "$(echo -e "Type [${RED}App${NC}] to Deploy or [${GREEN}Z${NC}] to Exit: ")" app_choice
 
         app_choice=$(echo "$app_choice" | tr '[:upper:]' '[:lower:]')
 
-        # Check if the user input is "z"
         if [[ "$app_choice" == "z" ]]; then
             exit 0
         elif [[ " ${APP_LIST[@]} " =~ " $app_choice " ]]; then

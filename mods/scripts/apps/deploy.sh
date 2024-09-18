@@ -32,6 +32,33 @@ check_and_create_network() {
     fi
 }
 
+# Function to source configuration and functions for the app
+appsourcing() {
+    if [[ "$script_type" == "personal" ]]; then
+        source "/pg/personal_configs/${app_name}.cfg"
+        source "/pg/p_apps/${app_name}/${app_name}.functions" 2>/dev/null
+    else
+        source "/pg/config/${app_name}.cfg"
+        source "/pg/apps/${app_name}/${app_name}.functions" 2>/dev/null
+    fi
+}
+
+# Function to source configuration from the config file 
+#configsource() {
+#    if [[ "$config_type" == "personal" ]]; then
+#        config_path="/pg/personal_configs/${app_name}.cfg"
+#    else
+#        config_path="/pg/config/${app_name}.cfg"
+#    fi
+#
+#    if [ -f "$config_path" ]; then
+#        source "$config_path"
+#    else
+#        echo "Config file for ${app_name} not found at ${config_path}."
+#        exit 1
+#    fi
+#}
+
 # Function: Deploys / Redploys App
 redeploy_app() {
     # Check if lspci is installed; detect NVIDIA graphics cards
@@ -48,10 +75,10 @@ redeploy_app() {
     
     # Determine which support script to source
     if [[ "$script_type" == "personal" ]]; then
-        source /pg/scripts/apps/support.sh "$app_name" "$script_type" && appsourcing
+        appsourcing
         source "/pg/p_apps/$app_name.app"
     elif [[ "$script_type" == "official" ]]; then
-        source /pg/scripts/apps/support.sh "$app_name" "$script_type" && appsourcing
+        appsourcing
         source "/pg/apps/$app_name.app"
     else
         echo -e "${RED}Invalid script type specified. Use 'personal' or 'official'.${NC}"
