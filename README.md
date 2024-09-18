@@ -3,7 +3,7 @@
 <p align="center">
   <table align="center" border="0">
     <tr>
-      <td align="center"><a href="https://discord.gg/xePSHN56"><img src="https://i.imgur.com/qwZEVKG.jpeg" alt="Discussions" width="150"></a></td>
+      <td align="center"><a href="https://discord.gg/C9JnTHc655"><img src="https://i.imgur.com/qwZEVKG.jpeg" alt="Discussions" width="150"></a></td>
       <td align="center"><a href="https://github.com/plexguide/PlexGuide.com/wiki/Change-Log"><img src="https://i.imgur.com/5sZSukx.png" alt="ChangeLog" width="150"></a></td>
       <td align="center"><a href="https://github.com/plexguide/PlexGuide.com/wiki"><img src="https://i.imgur.com/YNf9ps0.png" alt="Wiki" width="150"></a></td>
       <td align="center"><a href="https://github.com/plexguide/PlexGuide.com/wiki/Donations"><img src="https://i.imgur.com/1TAkRpM.png" alt="Donate" width="150"></a></td>
@@ -14,12 +14,12 @@
 ### ⚡ Quick Install Command
 
 ```bash
-sudo apt-get update && sudo apt-get install -y curl && bash <(curl -s https://raw.githubusercontent.com/plexguide/Installer/v11/install_menu.sh)
+sudo apt-get update && sudo apt-get install -y curl && bash <(curl -fsSL https://raw.githubusercontent.com/plexguide/Installer/v11/install_menu.sh)
 ```
 
 ### ⚡ Lastest Stable Version
 ```bash
-11.0.0
+11.0.4
 ```
 
 ### ⚡ PlexGuide v11
@@ -30,6 +30,7 @@ sudo apt-get update && sudo apt-get install -y curl && bash <(curl -s https://ra
 | **Domain Access**  | CloudFlare Tunnel & Traefik Reverse Proxy v3                                                          | Access via a CF Domain
 | **App Deployment** | Deploy Multiple Docker Apps | App List [Click Here](https://github.com/plexguide/Apps)
 | **App Management** | Change, Close, or Open Ports and AppData |
+| **Port Protection**  | Default Open/Closed Ports | Useful with CF Tunnel and Traefik
 | **Personal Apps**  | Create Your Own Apps | [Click Here](https://github.com/plexguide/AppsFork) & Fork
 | **PG Fork**  | Customize Your own PG (Great for Dev) | Fork PG
 | **Cloud Servers**  | Deploy Cloud Servers in a Breeze | Hetzner (HCloud)
@@ -55,15 +56,15 @@ sudo apt-get update && sudo apt-get install -y curl && bash <(curl -s https://ra
 
 ### ⚡ Primary Focus PG: 
 ```bash
-11.1
+11.0.2
 ```
-- [ ] Mass Port Management (Close all ports by default - useful for Traefik and CloudFlare Tunnel)
+- [ ] AppData Backup & Restore  
 - [ ] Wiki
 
 Additional Tasks
 - [ ] HD Management - Formatting, SnapRaid, and MergerFS
+- [ ] Custom Subdomains for Traefik and Primary Domain for an App
 - [ ] Incorporate CloudDrives (low priority)
-- [ ] AppData Backup & Restore  
 - [ ] Deployment of PlexDebrid/Zurg
 - [ ] VPN Server Capabilities
 
