@@ -119,8 +119,8 @@ menu_exit() {
 }
 
 # Function for CloudFlare Tunnel Management
-cloudflare_tunnel() {
-    bash /pg/scripts/cf_tunnel.sh
+domain_interface() {
+    bash /pg/scripts/domain_menu.sh
 }
 
 # Function for Server Cloud Deployments
@@ -147,7 +147,7 @@ main_menu() {
 
         # Display menu options with bold colored letters
         echo -e "[${YELLOW}${BOLD}A${NC}] Apps Management"
-        echo -e "[${CYAN}${BOLD}C${NC}] CloudFlare Tunnel (Domains)"
+        echo -e "[${CYAN}${BOLD}C${NC}] CloudFlare Tunnel & Traefik"
         echo -e "[${GREEN}${BOLD}S${NC}] Server: Cloud Deployments"
         echo -e "[${PURPLE}${BOLD}U${NC}] PG: Update Interface"
         echo -e "[${BLUE}${BOLD}O${NC}] Options"
@@ -161,7 +161,7 @@ main_menu() {
         case ${choice,,} in
             a) apps_management ;;
             s) server_cloud_deployments ;;
-            c) cloudflare_tunnel ;;
+            c) domain_interface ;;
             u) update_pg_interface ;;
             o) options_menu ;;
             z) menu_exit ;;
