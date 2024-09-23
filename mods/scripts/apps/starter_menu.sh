@@ -203,7 +203,7 @@ main_menu() {
                 fi
                 ;;
             Y|y)
-                bash /pg/scripts/apps/expose.sh
+                bash /pg/scripts/default_ports.sh
                 ;;
             Z|z)
                 exit 0
