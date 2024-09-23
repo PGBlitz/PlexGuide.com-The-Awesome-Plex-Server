@@ -1,6 +1,7 @@
 parse_and_store_defaults() {
     local app_name="$1"
     local app_type="$2"  # 'personal' for personal apps, 'official' for official apps
+    local port_default="$3"  # The default port to expose
 
     # Determine paths based on app type
     if [[ "$app_type" == "personal" ]]; then
@@ -12,7 +13,10 @@ parse_and_store_defaults() {
     fi
 
     # Check if the config file exists, create it if not
-    [[ ! -f "$config_path" ]] && touch "$config_path"
+    if [[ ! -f "$config_path" ]]; then
+        touch "$config_path"
+        add_expose_variable "$config_path" "$port_default"  # Add expose variable
+    fi
 
     # Check if the app file exists
     if [[ ! -f "$app_path" ]]; then
@@ -42,4 +46,30 @@ parse_and_store_defaults() {
             fi
         fi
     done
+
+    # Add or update traefik_domain
+    update_traefik_domain "$config_path"
+}
+
+# Function to add the 'expose' variable based on default ports status
+add_expose_variable() {
+    local config_path="$1"
+    local port_default="$2"
+
+    # Check the status of the ports from /pg/config/default_ports.cfg
+    local default_ports_cfg="/pg/config/default_ports.cfg"
+    if [[ -f "$default_ports_cfg" ]]; then
+        source "$default_ports_cfg"
+
+        # If ports=closed, use 127.0.0.1 for $port_default
+        if [[ "$ports" == "closed" ]]; then
+            echo "expose=\"127.0.0.1:$port_default\"" >> "$config_path"
+        else
+            # If ports=open, just write expose=
+            echo "expose=" >> "$config_path"
+        fi
+    else
+        # Default to open if the config file doesn't exist
+        echo "expose=" >> "$config_path"
+    fi
 }
