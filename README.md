@@ -54,18 +54,12 @@ sudo apt-get update && sudo apt-get install -y curl && bash <(curl -fsSL https:/
 
 ----
 
-### ⚡ Primary Focus PG: 
-```bash
-11.0.2
-```
-- [ ] AppData Backup & Restore  
-- [ ] Wiki
-
 Additional Tasks
 - [ ] HD Management - Formatting, SnapRaid, and MergerFS
 - [ ] Custom Subdomains for Traefik and Primary Domain for an App
 - [ ] Incorporate CloudDrives (low priority)
-- [ ] Deployment of PlexDebrid/Zurg
+- [ ] AppData Backup & Restore  
+- [ ] Wiki
 - [ ] VPN Server Capabilities
 
 ### **Additional Notes**
