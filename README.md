@@ -34,7 +34,7 @@ sudo apt-get update && sudo apt-get install -y curl && bash <(curl -fsSL https:/
 | **Personal Apps**  | Create Your Own Apps | [Click Here](https://github.com/plexguide/AppsFork) & Fork
 | **PG Fork**  | Customize Your own PG (Great for Dev) | Fork PG
 | **Cloud Servers**  | Deploy Cloud Servers in a Breeze | Hetzner (HCloud)
-
+| **Zurg Intergration**  | Deploy Zurg Easily | RealDebrid & Zurg
 
 
 ### ⚡ PlexGuide Snippets
