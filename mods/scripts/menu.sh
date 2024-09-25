@@ -156,7 +156,7 @@ main_menu() {
 
         # Display menu options with bold colored letters
         echo -e "[${YELLOW}${BOLD}A${NC}] Apps Management"
-        echo -e "[${HOTPINK}${BOLD}C${NC}] Zurg/Debrid Deployment (Beta)"
+        echo -e "[${HOTPINK}${BOLD}Z${NC}] Zurg/Debrid Deployment (Beta)"
         echo -e "[${CYAN}${BOLD}C${NC}] CloudFlare Tunnel & Traefik"
         echo -e "[${GREEN}${BOLD}S${NC}] Server: Cloud Deployments"
         echo -e "[${PURPLE}${BOLD}U${NC}] PG: Update Interface"
