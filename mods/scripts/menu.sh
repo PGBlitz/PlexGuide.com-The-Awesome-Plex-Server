@@ -133,7 +133,7 @@ server_cloud_deployments() {
 }
 
 # Function for Server Cloud Deployments
-server_cloud_deployments() {
+zurg_interface() {
     bash /pg/scripts/zurg/menu.sh
 }
 
