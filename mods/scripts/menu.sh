@@ -156,7 +156,7 @@ main_menu() {
 
         # Display menu options with bold colored letters
         echo -e "[${YELLOW}${BOLD}A${NC}] Apps Management"
-        echo -e "[${HOTPINK}${BOLD}Z${NC}] Zurg/Debrid Deployment (Beta)"
+        echo -e "[${HOTPINK}${BOLD}D${NC}] Debrid/Zurg Deployment (Beta)"
         echo -e "[${CYAN}${BOLD}C${NC}] CloudFlare Tunnel & Traefik"
         echo -e "[${GREEN}${BOLD}S${NC}] Server: Cloud Deployments"
         echo -e "[${PURPLE}${BOLD}U${NC}] PG: Update Interface"
@@ -170,7 +170,7 @@ main_menu() {
         # Process user input
         case ${choice,,} in
             a) apps_management ;;
-            z) zurg_interface ;;
+            d) zurg_interface ;;
             s) server_cloud_deployments ;;
             c) domain_interface ;;
             u) update_pg_interface ;;
