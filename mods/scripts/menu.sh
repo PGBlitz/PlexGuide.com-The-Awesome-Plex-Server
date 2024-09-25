@@ -50,14 +50,18 @@ echo "Security check passed. Proceeding with the script..."
 # Configuration file path
 CONFIG_FILE="/pg/config/config.cfg"
 
-# Additional ANSI color codes
-ORANGE="\033[0;33m"
-YELLOW="\033[1;33m"
-GREEN="\033[0;32m"
-CYAN="\033[0;36m"
-BLUE="\033[0;34m"
-PURPLE="\033[0;35m"
-BOLD="\033[1m"
+# ANSI color codes for styling output
+CYAN='\033[0;36m'
+GREEN='\033[0;32m'
+RED='\033[0;31m'
+YELLOW='\033[1;33m'
+BLUE='\033[0;34m'
+ORANGE='\033[0;33m'
+PURPLE='\033[0;35m'
+HOTPINK='\033[38;5;205m'
+NC='\033[0m'  # No color
+BOLD='\033[1m'
+UNDERLINE='\033[4m'
 
 # Clear the screen at the start
 clear
@@ -128,6 +132,11 @@ server_cloud_deployments() {
     bash /pg/scripts/cloud_server.sh
 }
 
+# Function for Server Cloud Deployments
+zurg_interface() {
+    bash /pg/scripts/zurg/menu.sh
+}
+
 # Function for Options Menu
 options_menu() {
     bash /pg/scripts/options.sh
@@ -147,6 +156,7 @@ main_menu() {
 
         # Display menu options with bold colored letters
         echo -e "[${YELLOW}${BOLD}A${NC}] Apps Management"
+        echo -e "[${HOTPINK}${BOLD}D${NC}] Debrid/Zurg Deployment (Beta)"
         echo -e "[${CYAN}${BOLD}C${NC}] CloudFlare Tunnel & Traefik"
         echo -e "[${GREEN}${BOLD}S${NC}] Server: Cloud Deployments"
         echo -e "[${PURPLE}${BOLD}U${NC}] PG: Update Interface"
@@ -160,6 +170,7 @@ main_menu() {
         # Process user input
         case ${choice,,} in
             a) apps_management ;;
+            d) zurg_interface ;;
             s) server_cloud_deployments ;;
             c) domain_interface ;;
             u) update_pg_interface ;;
