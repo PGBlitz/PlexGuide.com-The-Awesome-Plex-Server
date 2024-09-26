@@ -7,6 +7,7 @@ BLUE="\033[0;34m"
 ORANGE="\033[0;33m"
 CYAN="\033[0;36m"
 NC="\033[0m" # No color
+BOLD="\033[1m"
 
 # Clear the screen at the start
 clear
@@ -93,7 +94,7 @@ running_function() {
             exit 0
         fi
 
-        echo -e "${CYAN}${BOLD}PG: Running Apps [View | Edit]${NC}"
+        echo -e "${CYAN}${BOLD}PG: Running Apps${NC}"
         echo ""  # Blank line for separation
 
         # Display the list of running Docker apps that match the selected type
