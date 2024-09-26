@@ -52,7 +52,7 @@ while true; do
             bash /pg/scripts/cloudflare/tunnel.sh
             ;;
         [Bb])
-            bash /pg/scripts/traefik/traefik_menu.sh
+            bash /pg/scripts/traefik/menu.sh
             ;;
         [Pp])
             bash /pg/scripts/default_ports.sh
