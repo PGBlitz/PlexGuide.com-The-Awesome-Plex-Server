@@ -24,7 +24,7 @@ check_and_create_network() {
         # Network does not exist, attempt to create it
         echo "Creating Docker network '${network_name}'..."
         if docker network create "$network_name" --driver bridge; then
-            #echo "Docker network '${network_name}' created successfully."
+            echo "Docker network '${network_name}' created successfully."
         else
             echo -e "${RED}Failed to create Docker network '${network_name}'.${NC}"
             read -p "Press [ENTER] to acknowledge the error and continue..."
