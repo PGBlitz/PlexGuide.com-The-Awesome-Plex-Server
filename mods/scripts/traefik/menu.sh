@@ -13,15 +13,16 @@ setup_dns_provider() {
         check_traefik_status
         check_email_status
         check_domain_status
+        check_provider_status  # Assuming you have a function to check if Cloudflare is properly configured
         
         echo -e "${CYAN}${BOLD}PG: CloudFlare Traefik Interface ${traefik_status}${NC}"
         echo ""
-        echo -e "[${GREEN}${BOLD}A${NC}] Domain Name (${domain_status})"
-        echo -e "[${CYAN}${BOLD}C${NC}] CF Information"
+        echo -e "[${GREEN}${BOLD}A${NC}] Domain Name (${GREEN}${BOLD}Set${NC})"  # Always show "Set" in green for A
+        echo -e "[${CYAN}${BOLD}C${NC}] CF Information (${provider_status})"  # Will be either [Set] or [Not Set]
         echo -e "[${MAGENTA}${BOLD}E${NC}] Notification E-Mail Address (${email_status})"
         
-        # Show the Deploy Traefik option only if email is set
-        if [[ "$email_status" == "${GREEN}${BOLD}Set${NC}" ]]; then
+        # Show the Deploy Traefik option only if all conditions are met
+        if [[ "$domain_status" == "${GREEN}${BOLD}Set${NC}" && "$email_status" == "${GREEN}${BOLD}Set${NC}" && "$provider_status" == "${GREEN}${BOLD}Set${NC}" ]]; then
             echo -e "[${BLUE}${BOLD}D${NC}] Deploy Traefik"
         fi
         
@@ -46,7 +47,7 @@ setup_dns_provider() {
                 set_email
                 ;;
             [Dd])
-                if [[ "$email_status" == "${GREEN}${BOLD}Set${NC}" ]]; then
+                if [[ "$domain_status" == "${GREEN}${BOLD}Set${NC}" && "$email_status" == "${GREEN}${BOLD}Set${NC}" && "$provider_status" == "${GREEN}${BOLD}Set${NC}" ]]; then
                     bash /pg/scripts/traefik/deploy.sh
                     echo ""
                     read -p "Press Enter to continue..."
