@@ -42,11 +42,11 @@ container_exists() {
 # Function to display the main menu
 show_menu() {
     clear
-    echo -n -e "${CYAN}${BOLD}PG: CloudFlare Tunnel${NC} - Container Deployed: "
+    echo -n -e "${CYAN}${BOLD}PG: CloudFlare Tunnel${NC} "
     if container_running; then
-        echo -e "${GREEN}${BOLD}Yes${NC}"
+        echo -e "${GREEN}${BOLD}[Deployed]${NC}"
     else
-        echo -e "${RED}${BOLD}No${NC}"
+        echo -e "${RED}${BOLD}[Not Deployed]${NC}"
     fi
 
     echo
