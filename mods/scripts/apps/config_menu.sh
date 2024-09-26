@@ -55,7 +55,7 @@ validate_or_create_path() {
 # Function to check Docker container status
 check_deployment_status() {
     docker ps --filter "name=^/${app_name}$" --format "{{.Names}}" | grep -q "^${app_name}$" && \
-        echo -e "${GREEN}[Deployed]${NC}" || echo -e "${RED}[Not Deployed]${NC}"
+        echo -e "${GREEN}${BOLD}[Deployed]${NC}" || echo -e "${RED}${BOLD}[Not Deployed]${NC}"
 }
 
 # Function to prompt and change the port number
