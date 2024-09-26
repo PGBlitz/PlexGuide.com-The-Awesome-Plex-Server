@@ -86,7 +86,7 @@ running_function() {
         APP_LIST=($(list_running_docker_apps))
 
         if [[ ${#APP_LIST[@]} -eq 0 ]]; then
-            clear
+            echo ""
             echo -e "${RED}Cannot View/Edit Apps as None Exist.${NC}"
             echo ""  # Blank line for separation
             read -p "$(echo -e "${RED}Press Enter to continue...${NC}")"
@@ -107,7 +107,7 @@ running_function() {
         app_choice=$(echo "$app_choice" | tr '[:upper:]' '[:lower:]')
 
         # Check if the user wants to exit
-        if [[ "$app_choice" == "Z" ]]; then
+        if [[ "$app_choice" == "z" ]]; then
             exit 0
         fi
 
@@ -117,8 +117,8 @@ running_function() {
             manage_app "$app_choice"
             exit 0
         else
-            echo "Invalid choice. Please try again."
-            read -p "Press Enter to continue..."
+            echo ""
+            read -p "Invalid Choice. Press [ENTER] to continue..."
         fi
     done
 }
