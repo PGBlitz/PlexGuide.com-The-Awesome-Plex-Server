@@ -39,10 +39,7 @@ container_exists() {
 # Function to display the main menu
 show_menu() {
     clear
-    echo "PG: CloudFlare Tunnel"
-
-    # Display container deployment status
-    echo -n "Container Deployed: "
+    echo "${CYAN}${BOLD}PG: CloudFlare Tunnel${NC} - Container Deployed: "
     if container_running; then
         echo -e "${GREEN}Yes${NC}"
     else
@@ -64,7 +61,7 @@ show_menu() {
 
 # Function to prompt the user with a choice
 prompt_choice() {
-    read -p "Select an option: " choice
+    read -p "Select an Option > " choice
     case ${choice,,} in  # Convert input to lowercase for v/V, c/C, d/D, s/S, z/Z handling
         v)
             clear
