@@ -82,7 +82,7 @@ EOF
       - /pg/traefik/letsencrypt:/letsencrypt
     labels:
       - "traefik.enable=true"
-      - "traefik.http.routers.traefik.rule=Host(\`traefik.${domain_name}\`)"
+      - "traefik.http.routers.traefik.rule=Host(\'traefik.${domain_name}\')"
       - "traefik.http.routers.traefik.entrypoints=websecure"
       - "traefik.http.routers.traefik.tls.certresolver=mytlschallenge"
       - "traefik.http.routers.traefik.service=api@internal"
