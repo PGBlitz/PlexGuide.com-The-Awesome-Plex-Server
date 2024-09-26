@@ -67,16 +67,8 @@ services:
       - "--certificatesresolvers.mytlschallenge.acme.dnschallenge.provider=cloudflare"
       - "--certificatesresolvers.mytlschallenge.acme.dnschallenge.resolvers=1.1.1.1:53,8.8.8.8:53"
       - "--certificatesresolvers.mytlschallenge.acme.dnschallenge.delaybeforecheck=60"
-EOF
-
-    # Add Cloudflare-specific environment variable
-    cat <<EOF >> $DOCKER_COMPOSE_FILE
     environment:
       - CLOUDFLARE_DNS_API_TOKEN=$api_key
-EOF
-
-    # Finalize Docker Compose file
-    cat <<EOF >> $DOCKER_COMPOSE_FILE
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
       - /pg/traefik/letsencrypt:/letsencrypt
@@ -94,6 +86,8 @@ EOF
     docker-compose -f "$DOCKER_COMPOSE_FILE" up -d
     echo -e "${GREEN}Traefik has been deployed successfully.${NC}"
 }
+
+chmod 600 /pg/traefik/acme.json
 
 # Deploy Traefik with Cloudflare
 deploy_traefik
