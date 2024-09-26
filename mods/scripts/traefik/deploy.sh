@@ -53,7 +53,6 @@ services:
     image: traefik:latest
     container_name: traefik
     hostname: traefik
-    network_mode: host
     command:
       - "--api.insecure=true"
       - "--providers.docker=true"
