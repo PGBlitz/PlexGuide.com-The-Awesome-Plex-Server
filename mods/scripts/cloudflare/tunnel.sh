@@ -9,6 +9,8 @@ HOT_PINK="\033[1;35m"  # Bold Hot Pink
 RED="\033[0;31m"
 BLUE="\033[0;34m"
 NC="\033[0m" # No color
+CYAN="\033[0;36m"
+BOLD="\033[1m"
 
 # Clear the screen when the script starts
 clear
