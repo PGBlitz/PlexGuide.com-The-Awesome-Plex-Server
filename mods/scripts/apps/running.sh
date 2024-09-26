@@ -91,7 +91,7 @@ running_function() {
             exit 0
         fi
 
-        echo -e "${CYAN}${BOLD}PG: Running Apps${NC}"
+        echo -e "${CYAN}${BOLD}PG Running Apps${NC}"
         echo ""  # Blank line for separation
 
         # Display the list of running Docker apps that match the selected type
