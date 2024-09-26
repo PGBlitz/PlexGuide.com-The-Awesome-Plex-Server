@@ -81,7 +81,7 @@ configure_provider() {
     
     # Prompt for Cloudflare email and API key
     read -p "Enter your Cloudflare email: " cf_email
-    read -p "Enter your Cloudflare API key: " api_key
+    read -p "Enter your Cloudflare Zone API key: " api_key
 
     # Trim any leading/trailing whitespace from the API key
     api_key=$(echo "$api_key" | xargs)
