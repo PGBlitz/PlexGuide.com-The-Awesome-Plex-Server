@@ -51,10 +51,24 @@ check_domain_status() {
         if [[ -z "$domain_name" ]]; then
             domain_status="${RED}${BOLD}Not Set${NC}"
         else
-            domain_status="${GREEN}${BOLD}${domain_name}${NC}"
+            domain_status="${GREEN}${BOLD}Set${NC}"  # Display Set in green
         fi
     else
         domain_status="${RED}${BOLD}Not Set${NC}"
+    fi
+}
+
+# Function to check if the Cloudflare credentials are properly set
+check_provider_status() {
+    if grep -q "^api_key=" "$CONFIG_FILE" && grep -q "^email=" "$CONFIG_FILE"; then
+        api_key=$(grep "^api_key=" "$CONFIG_FILE" | cut -d'=' -f2)
+        if [[ -z "$api_key" || "$api_key" == "notset" ]]; then
+            provider_status="${RED}${BOLD}Not Set${NC}"
+        else
+            provider_status="${GREEN}${BOLD}Set${NC}"
+        fi
+    else
+        provider_status="${RED}${BOLD}Not Set${NC}"
     fi
 }
 
