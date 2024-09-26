@@ -83,7 +83,7 @@ setup_dns_provider() {
         echo -e "[${RED}${BOLD}Z${NC}] Exit"
         echo ""
         
-        read -p "Enter your choice: " choice
+        read -p "Select an Option > " choice
         case $choice in
             [Cc])
                 if docker ps --filter "name=traefik" --format '{{.Names}}' | grep -q 'traefik'; then
