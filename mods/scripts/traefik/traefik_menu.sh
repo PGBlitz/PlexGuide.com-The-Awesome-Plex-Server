@@ -7,7 +7,6 @@ RED="\033[0;31m"
 YELLOW="\033[0;33m"
 BLUE="\033[0;34m"
 MAGENTA="\033[0;35m"
-BOLD="\033[1m"
 NC="\033[0m"  # No color
 
 # Configuration file path for storing DNS provider and domain details
@@ -16,23 +15,23 @@ CONFIG_FILE="/pg/config/dns_provider.cfg"
 # Function to check if Traefik is deployed
 check_traefik_status() {
     if docker ps --filter "name=traefik" --format '{{.Names}}' | grep -q 'traefik'; then
-        traefik_status="${GREEN}${BOLD}[Deployed]${NC}"
+        traefik_status="${GREEN}[Deployed]${NC}"
     else
-        traefik_status="${RED}${BOLD}[Not Deployed]${NC}"
+        traefik_status="${RED}[Not Deployed]${NC}"
     fi
 }
 
-# Function to check if the Let's Encrypt email is set
-check_email_status() {
-    if grep -q "^letsencrypt_email=" "$CONFIG_FILE"; then
-        letsencrypt_email=$(grep "^letsencrypt_email=" "$CONFIG_FILE" | cut -d'=' -f2)
-        if [[ -z "$letsencrypt_email" || "$letsencrypt_email" == "notset" ]]; then
-            email_status="${RED}${BOLD}Not Set${NC}"
+# Function to display the currently configured domain
+check_domain_status() {
+    if grep -q "^domain_name=" "$CONFIG_FILE"; then
+        domain_name=$(grep "^domain_name=" "$CONFIG_FILE" | cut -d'=' -f2)
+        if [[ -z "$domain_name" ]]; then
+            domain_status="${RED}Not Set${NC}"
         else
-            email_status="${GREEN}${BOLD}Set${NC}"
+            domain_status="${GREEN}${domain_name}${NC}"
         fi
     else
-        email_status="${RED}${BOLD}Not Set${NC}"
+        domain_status="${RED}Not Set${NC}"
     fi
 }
 
@@ -49,13 +48,13 @@ test_cloudflare_credentials() {
     fi
 }
 
-# Function to validate email format
-validate_email() {
-    local email="$1"
-    if [[ "$email" =~ ^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$ ]]; then
-        return 0  # Email is valid
+# Function to validate domain name
+validate_domain() {
+    local domain="$1"
+    if [[ "$domain" =~ ^[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$ ]]; then
+        return 0  # Valid domain
     else
-        return 1  # Email is invalid
+        return 1  # Invalid domain
     fi
 }
 
@@ -97,22 +96,18 @@ setup_dns_provider() {
     while true; do
         clear
         check_traefik_status
-        check_email_status
+        check_domain_status  # Fetch the current domain status
         
-        echo -e "${CYAN}${BOLD}PG: CloudFlare Traefik Interface ${traefik_status}${NC}"
+        echo -e "${CYAN}PG: CloudFlare Traefik Interface ${traefik_status}${NC}"
         echo ""
+        echo -e "[${BLUE}${BOLD}Domain${NC}] Current Domain: ${domain_status}"
         echo -e "[${CYAN}${BOLD}C${NC}] CF Information"
-        echo -e "[${MAGENTA}${BOLD}E${NC}] Notification E-Mail Address (${email_status})"
-        
-        # Show the Deploy Traefik option only if email is set
-        if [[ "$email_status" == "${GREEN}${BOLD}Set${NC}" ]]; then
-            echo -e "[${BLUE}${BOLD}D${NC}] Deploy Traefik"
-        fi
-        
+        echo -e "[${MAGENTA}${BOLD}E${NC}] E-Mail for Let's Encrypt"
+        echo -e "[${BLUE}${BOLD}D${NC}] Deploy Traefik"
         echo -e "[${RED}${BOLD}Z${NC}] Exit"
         echo ""
         
-        read -p "Select an Option > " choice
+        read -p "Enter your choice: " choice
         case $choice in
             [Cc])
                 if docker ps --filter "name=traefik" --format '{{.Names}}' | grep -q 'traefik'; then
@@ -127,11 +122,9 @@ setup_dns_provider() {
                 set_email
                 ;;
             [Dd])
-                if [[ "$email_status" == "${GREEN}${BOLD}Set${NC}" ]]; then
-                    bash /pg/scripts/traefik/traefik_deploy.sh
-                    echo ""
-                    read -p "Press Enter to continue..."
-                fi
+                bash /pg/scripts/traefik_deploy.sh
+                echo ""
+                read -p "Press Enter to continue..."
                 ;;
             [Zz])
                 exit 0
@@ -160,13 +153,20 @@ configure_provider() {
     # Test the credentials before saving
     echo -e "${YELLOW}Testing Cloudflare credentials...${NC}"
     if test_cloudflare_credentials; then
-        read -p "Enter the domain name to use (e.g., example.com): " domain_name
-        echo "provider=cloudflare" > "$CONFIG_FILE"
-        echo "email=$cf_email" >> "$CONFIG_FILE"
-        echo "api_key=$api_key" >> "$CONFIG_FILE"
-        echo "domain_name=$domain_name" >> "$CONFIG_FILE"
-        echo ""
-        echo -e "${GREEN}Cloudflare DNS provider and domain have been configured successfully.${NC}"
+        while true; do
+            read -p "Enter the domain name to use (e.g., example.com): " domain_name
+            if validate_domain "$domain_name"; then
+                echo "provider=cloudflare" > "$CONFIG_FILE"
+                echo "email=$cf_email" >> "$CONFIG_FILE"
+                echo "api_key=$api_key" >> "$CONFIG_FILE"
+                echo "domain_name=$domain_name" >> "$CONFIG_FILE"
+                echo ""
+                echo -e "${GREEN}Cloudflare DNS provider and domain have been configured successfully.${NC}"
+                break
+            else
+                echo -e "${RED}Invalid domain name. Please enter a valid domain (e.g., example.com).${NC}"
+            fi
+        done
     else
         # Blank out all information in the config file if credentials are invalid
         echo "" > "$CONFIG_FILE"
@@ -180,19 +180,10 @@ configure_provider() {
 
 # Function to set email for Let's Encrypt
 set_email() {
-    while true; do
-        read -p "Enter your email for Let's Encrypt notifications: " letsencrypt_email
-
-        # Validate email format
-        if validate_email "$letsencrypt_email"; then
-            echo "letsencrypt_email=$letsencrypt_email" >> "$CONFIG_FILE"
-            echo -e "${GREEN}Email has been configured successfully.${NC}"
-            read -p "Press Enter to continue..."
-            break
-        else
-            echo -e "${RED}Invalid email format. Please enter a valid email (e.g., user@example.com).${NC}"
-        fi
-    done
+    read -p "Enter your email for Let's Encrypt notifications: " letsencrypt_email
+    echo "letsencrypt_email=$letsencrypt_email" >> "$CONFIG_FILE"
+    echo -e "${GREEN}Email has been configured successfully.${NC}"
+    read -p "Press Enter to continue..."
 }
 
 # Execute the setup function
