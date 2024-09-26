@@ -37,20 +37,6 @@ container_exists() {
     docker ps -a --filter "name=cf_tunnel" --format "{{.Names}}" | grep -q "cf_tunnel"
 }
 
-# Function to validate Cloudflare token via API
-validate_token() {
-    local token=$1
-    response=$(curl -s -X GET "https://api.cloudflare.com/client/v4/user/tokens/verify" \
-    -H "Authorization: Bearer $token" \
-    -H "Content-Type: application/json")
-    
-    if echo "$response" | grep -q '"success":true'; then
-        return 0  # Token is valid
-    else
-        return 1  # Token is invalid
-    fi
-}
-
 # Function to display the main menu
 show_menu() {
     clear
@@ -134,18 +120,6 @@ change_token() {
     echo -e "Enter new Cloudflare token:"
     read -p "> " new_token  # Get the new token from the user
     echo  # Echo a blank line for spacing
-
-    # Validate the token using the Cloudflare API
-    if validate_token "$new_token"; then
-        echo -e "${GREEN}Validating token...${NC}"
-        echo -e "${GREEN}Token is valid!${NC}"
-    else
-        echo -e "${RED}Invalid Cloudflare token. Please try again.${NC}"
-        sleep 2
-        show_menu
-        prompt_choice
-        return
-    fi
 
     # Confirmation prompt with hot pink pin for proceed and green for cancel
     while true; do
