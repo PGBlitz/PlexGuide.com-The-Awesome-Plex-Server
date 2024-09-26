@@ -102,7 +102,7 @@ running_function() {
 
         echo "════════════════════════════════════════════════════════════════════════════════"
         # Prompt the user to enter an app name or exit
-        read -p "$(echo -e "Type [${GREEN}${BOLD}App${NC}] to View/Edit or [${RED}${BOLD}Z${NC}] to exit > ")" app_choice
+        read -p "$(echo -e "Type [${GREEN}${BOLD}App${NC}] to View/Edit or [${GREEN}${BOLD}Z${NC}] to exit > ")" app_choice
 
         # Convert the user input to lowercase for case-insensitive matching
         app_choice=$(echo "$app_choice" | tr '[:upper:]' '[:lower:]')
@@ -116,10 +116,9 @@ running_function() {
         if echo "${APP_LIST[@]}" | grep -i -w "$app_choice" >/dev/null; then
             # Manage the selected app by calling the apps_interface script
             manage_app "$app_choice"
-            exit 0
         else
             echo ""
-            read -p "Invalid Choice. Press [ENTER] to continue..."
+            read -p "${RED}Invalid Choice. Press [ENTER] to continue${NC}"
         fi
     done
 }

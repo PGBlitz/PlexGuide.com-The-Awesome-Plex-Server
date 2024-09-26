@@ -8,6 +8,7 @@ RED="\033[0;31m"
 BLUE="\033[0;34m"
 ORANGE="\033[0;33m"
 NC="\033[0m" # No color
+BOLD="\033[1m"
 
 # Clear the screen at the start
 clear
@@ -133,7 +134,7 @@ deployment_function() {
         fi
 
         echo "════════════════════════════════════════════════════════════════════════════════"
-        read -p "$(echo -e "Type [${RED}App${NC}] to Deploy or [${GREEN}Z${NC}] to Exit: ")" app_choice
+        read -p "$(echo -e "Type [${RED}App${NC}] to Deploy or [${BOLD}${GREEN}Z${NC}] to Exit: ")" app_choice
 
         app_choice=$(echo "$app_choice" | tr '[:upper:]' '[:lower:]')
 

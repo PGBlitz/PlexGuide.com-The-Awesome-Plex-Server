@@ -24,7 +24,7 @@ check_and_create_network() {
         # Network does not exist, attempt to create it
         echo "Creating Docker network '${network_name}'..."
         if docker network create "$network_name" --driver bridge; then
-            echo "Docker network '${network_name}' created successfully."
+            #echo "Docker network '${network_name}' created successfully."
         else
             echo -e "${RED}Failed to create Docker network '${network_name}'.${NC}"
             read -p "Press [ENTER] to acknowledge the error and continue..."
@@ -42,22 +42,6 @@ appsourcing() {
         source "/pg/apps/${app_name}/${app_name}.functions" 2>/dev/null
     fi
 }
-
-# Function to source configuration from the config file 
-#configsource() {
-#    if [[ "$config_type" == "personal" ]]; then
-#        config_path="/pg/personal_configs/${app_name}.cfg"
-#    else
-#        config_path="/pg/config/${app_name}.cfg"
-#    fi
-#
-#    if [ -f "$config_path" ]; then
-#        source "$config_path"
-#    else
-#        echo "Config file for ${app_name} not found at ${config_path}."
-#        exit 1
-#    fi
-#}
 
 # Function: Deploys / Redploys App
 redeploy_app() {
@@ -147,6 +131,7 @@ while true; do
         echo "Operation exited."
         break
     else
-        echo "" && echo "Invalid choice. Please try again." && echo ""
+        echo ""
+        read -p "${RED}Invalid Choice. Press [ENTER] to continue${NC}"
     fi
 done
