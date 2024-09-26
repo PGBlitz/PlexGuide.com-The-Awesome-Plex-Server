@@ -173,8 +173,9 @@ while true; do
     echo ""
 
     # Prompt user with the updated question, using echo for colors
-    echo -e "Which Version to Install? (Type ${GREEN}[Z]${NC} to Exit): "
-    read -r selected_version
+    echo "════════════════════════════════════════════════════════════════════════════════"
+    # Prompt the user to enter an app name or exit
+    read -p "$(echo -e "Type [${RED}${BOLD}Version${NC}] to download or [${GREEN}${BOLD}Z${NC}] to exit > ")" selected_version
     echo ""
 
     # Handle the user's input, including the exit option
