@@ -1,10 +1,11 @@
 #!/bin/bash
 
-# ANSI color codes for formatting
-RED="\033[0;31m"
-GREEN="\033[0;32m"
-ORANGE="\033[0;33m"
-BLUE="\033[0;34m"
+# ANSI color codes for bold formatting
+RED="\033[1;31m"
+GREEN="\033[1;32m"
+ORANGE="\033[1;33m"  # Gold/Yellow
+WHITE="\033[1;37m"
+HOT_PINK="\033[1;35m"  # Bold hot pink
 NC="\033[0m" # No color
 
 # Function to check and install unzip if not present
@@ -33,22 +34,26 @@ get_current_version() {
     fi
 }
 
-# Function to display releases
+# Function to display releases with Alpha in red, the first release in gold/yellow, and the rest in white
 display_releases() {
     local current_version="$1"
     releases="$2"
-    echo -e "Apps Version Selector - [${GREEN}${current_version}${NC}]"
+    echo -e "Current Store Version - [${GREEN}${current_version}${NC}]"
     echo "NOTE: Visit https://github.com/plexguide/Apps/releases for Information"
     echo ""
+
+    # Display Alpha option in bold red
     echo -n -e "${RED}Alpha${NC} "
-    line_length=0
+
+    # Print the first release in gold/yellow and the rest in white
+    first_release=true
     for release in $releases; do
-        if (( line_length + ${#release} + 1 > 80 )); then
-            echo ""
-            line_length=0
+        if $first_release; then
+            echo -n -e "${ORANGE}$release${NC} "
+            first_release=false
+        else
+            echo -n -e "${WHITE}$release${NC} "
         fi
-        echo -n -e "${ORANGE}$release${NC} "
-        line_length=$((line_length + ${#release} + 1))
     done
     echo "" # New line after displaying all releases
 }
@@ -158,6 +163,18 @@ update_config_version() {
     echo "App Store version has been set to $selected_version in $config_file"
 }
 
+# Function to generate a random 4-digit PIN with no repeating digits
+generate_random_pin() {
+    local pin=""
+    while [[ ${#pin} -lt 4 ]]; do
+        local digit=$((RANDOM % 10))
+        if [[ ! "$pin" =~ $digit ]]; then
+            pin+="$digit"
+        fi
+    done
+    echo "$pin"
+}
+
 # Main logic
 while true; do
     clear
@@ -174,7 +191,6 @@ while true; do
 
     # Prompt user with the updated question, using echo for colors
     echo "════════════════════════════════════════════════════════════════════════════════"
-    # Prompt the user to enter an app name or exit
     read -p "$(echo -e "Type [${RED}${BOLD}Version${NC}] to download or [${GREEN}${BOLD}Z${NC}] to exit > ")" selected_version
     echo ""
 
@@ -195,11 +211,15 @@ while true; do
         continue
     fi
 
-    random_pin=$(printf "%04d" $((RANDOM % 10000)))
+    random_proceed_pin=$(generate_random_pin)
+    random_cancel_pin=$(generate_random_pin)
+    
     while true; do
         echo ""
-        read -p "$(echo -e "Type [${RED}${random_pin}${NC}] to proceed or [${GREEN}Z${NC}] to cancel: ")" response
-        if [[ "$response" == "$random_pin" ]]; then
+        echo -e "To proceed, enter this PIN [${HOT_PINK}${random_proceed_pin}${NC}]"
+        echo -e "To cancel, enter this PIN [${GREEN}${random_cancel_pin}${NC}]"
+        read -p "Enter PIN > " response
+        if [[ "$response" == "$random_proceed_pin" ]]; then
             check_and_install_unzip
             if download_and_extract "$selected_version"; then
                 update_config_version "$selected_version"
@@ -209,7 +229,7 @@ while true; do
             else
                 echo "Error during download or extraction."
             fi
-        elif [[ "${response,,}" == "z" ]]; then
+        elif [[ "$response" == "$random_cancel_pin" ]]; then
             echo "Installation canceled."
             exit 0
         else
