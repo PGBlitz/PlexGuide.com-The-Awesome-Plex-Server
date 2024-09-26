@@ -38,7 +38,7 @@ get_current_version() {
 display_releases() {
     local current_version="$1"
     releases="$2"
-    echo -e "Current Store Version - [${GREEN}${current_version}${NC}]"
+    echo -e "Apps Version Selector - [${GREEN}${current_version}${NC}]"
     echo "NOTE: Visit https://github.com/plexguide/Apps/releases for Information"
     echo ""
 
@@ -199,11 +199,28 @@ while true; do
         echo "Installation canceled."
         exit 0
     elif [[ "${selected_version,,}" == "alpha" ]]; then
+        # Same PIN process for Alpha
         echo "Alpha version selected."
-        handle_alpha_version  # Call the function to handle the Alpha version
-        echo -e "\nAlpha version setup complete. [Press ENTER] to continue..."
-        read -r
-        exit 0
+        random_proceed_pin=$(generate_random_pin)
+        random_cancel_pin=$(generate_random_pin)
+        
+        while true; do
+            echo ""
+            echo -e "To proceed, enter this PIN [${HOT_PINK}${random_proceed_pin}${NC}]"
+            echo -e "To cancel, enter this PIN [${GREEN}${random_cancel_pin}${NC}]"
+            read -p "Enter PIN > " response
+            if [[ "$response" == "$random_proceed_pin" ]]; then
+                handle_alpha_version  # Proceed with Alpha version setup
+                echo -e "\nAlpha version setup complete. [Press ENTER] to continue..."
+                read -r
+                exit 0
+            elif [[ "$response" == "$random_cancel_pin" ]]; then
+                echo "Installation canceled."
+                exit 0
+            else
+                echo "Invalid input. Please try again."
+            fi
+        done
     elif echo "$releases" | grep -q "^${selected_version}$"; then
         echo "Valid version selected: $selected_version"
     else
