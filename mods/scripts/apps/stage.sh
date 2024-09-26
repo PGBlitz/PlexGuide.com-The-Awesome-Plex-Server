@@ -9,6 +9,7 @@ BLUE="\033[0;34m"
 ORANGE="\033[0;33m"
 NC="\033[0m" # No color
 BOLD="\033[1m"
+CYAN="\033[0;36m"
 
 # Clear the screen at the start
 clear
@@ -124,7 +125,7 @@ deployment_function() {
 
         APP_LIST=($(list_available_apps))
 
-        echo -e "${RED}PG: Deployable Apps${NC}"
+        echo -e "${CYAN}${BOLD}PG Deployable Apps${NC}"
         echo ""
 
         if [[ ${#APP_LIST[@]} -eq 0 ]]; then
