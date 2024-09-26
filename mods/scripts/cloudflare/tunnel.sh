@@ -113,8 +113,9 @@ view_token() {
 
 # Function to change the Cloudflare token
 change_token() {
-    local change_code
-    change_code=$(printf "%04d" $((RANDOM % 10000)))  # Generate a 4-digit pin
+    local proceed_pin cancel_pin
+    proceed_pin=$(printf "%04d" $((RANDOM % 10000)))  # Generate a 4-digit proceed pin
+    cancel_pin=$(printf "%04d" $((RANDOM % 10000)))   # Generate a 4-digit cancel pin
 
     # Ask the user for the new token
     echo -e "Enter new Cloudflare token:"
@@ -123,8 +124,11 @@ change_token() {
 
     # Confirmation prompt with hot pink pin for proceed and green for cancel
     while true; do
-        read -p "$(echo -e "To proceed with the new token, type [${HOT_PINK}${change_code}${NC}] to proceed or [${GREEN}exit${NC}] to cancel: ")" input_code
-        if [[ "$input_code" == "$change_code" ]]; then
+        echo -e "To proceed, enter this PIN [${HOT_PINK}${proceed_pin}${NC}]"
+        echo -e "To cancel, enter this PIN [${GREEN}${cancel_pin}${NC}]"
+        read -p "Enter PIN > " input_code
+        
+        if [[ "$input_code" == "$proceed_pin" ]]; then
             # Save the token and confirm
             CLOUDFLARE_TOKEN="$new_token"
             save_token_to_config
@@ -133,14 +137,14 @@ change_token() {
             show_menu
             prompt_choice
             break
-        elif [[ "${input_code,,}" == "exit" ]]; then
+        elif [[ "$input_code" == "$cancel_pin" ]]; then
             echo -e "${GREEN}Operation cancelled.${NC}"
             sleep 2
             show_menu
             prompt_choice
             break
         else
-            echo -e "${RED}Invalid response.${NC} Please type [${HOT_PINK}${change_code}${NC}] or [${GREEN}exit${NC}]."
+            echo -e "${RED}Invalid response.${NC} Please enter [${HOT_PINK}${proceed_pin}${NC}] to proceed or [${GREEN}${cancel_pin}${NC}] to cancel."
         fi
     done
 }
