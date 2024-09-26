@@ -69,35 +69,11 @@ prompt_choice() {
             ;;
         c)
             clear
-            local change_code=$(printf "%04d" $((RANDOM % 10000)))  # Generate a 4-digit code
-            while true; do
-                read -p "$(echo -e "To change the Cloudflare token, type [${RED}${change_code}${NC}] to proceed or [${GREEN}no${NC}] to cancel: ")" input_code
-                if [[ "$input_code" == "$change_code" ]]; then
-                    change_token
-                    break
-                elif [[ "${input_code,,}" == "no" ]]; then
-                    echo "Operation cancelled."
-                    break
-                else
-                    echo -e "${RED}Invalid response.${NC} Please type [${RED}${change_code}${NC}] or [${GREEN}no${NC}]."
-                fi
-            done
+            change_token
             ;;
         d)
             clear
-            local deploy_code=$(printf "%04d" $((RANDOM % 10000)))  # Generate a 4-digit code
-            while true; do
-                read -p "$(echo -e "Deploy CF Tunnel? Type [${RED}${deploy_code}${NC}] to proceed or [${GREEN}no${NC}] to cancel: ")" input_code
-                if [[ "$input_code" == "$deploy_code" ]]; then
-                    deploy_container
-                    break
-                elif [[ "${input_code,,}" == "no" ]]; then
-                    echo "Operation cancelled."
-                    break
-                else
-                    echo -e "${RED}Invalid response.${NC} Please type [${RED}${deploy_code}${NC}] or [${GREEN}no${NC}]."
-                fi
-            done
+            deploy_container
             ;;
         s)
             clear
@@ -136,13 +112,40 @@ view_token() {
 
 # Function to change the Cloudflare token
 change_token() {
-    clear
-    read -p "Enter new Cloudflare token: " CLOUDFLARE_TOKEN
-    save_token_to_config
-    echo "Cloudflare token has been updated and saved to $CONFIG_FILE."
-    sleep 2
-    show_menu
-    prompt_choice
+    local change_code deploy_code new_token
+    change_code=$(printf "%04d" $((RANDOM % 10000)))  # Generate first 4-digit pin
+    deploy_code=$(printf "%04d" $((RANDOM % 10000)))  # Generate second 4-digit pin
+
+    # Ensure both pin codes are not the same
+    while [[ "$deploy_code" == "$change_code" ]]; do
+        deploy_code=$(printf "%04d" $((RANDOM % 10000)))
+    done
+
+    echo -e "Enter new Cloudflare token (you'll need a pin to confirm):"
+    read -p "> " new_token  # Get the new token from the user
+    echo  # Echo a blank line for spacing
+
+    while true; do
+        read -p "$(echo -e "To confirm the new token, type [${RED}${change_code}${NC}] to proceed or [${GREEN}no${NC}] to cancel: ")" input_code
+        if [[ "$input_code" == "$change_code" ]]; then
+            # Save the token and confirm
+            CLOUDFLARE_TOKEN="$new_token"
+            save_token_to_config
+            echo -e "${GREEN}Cloudflare token has been updated and saved to $CONFIG_FILE.${NC}"
+            sleep 2
+            show_menu
+            prompt_choice
+            break
+        elif [[ "${input_code,,}" == "no" ]]; then
+            echo -e "${RED}Operation cancelled.${NC}"
+            sleep 2
+            show_menu
+            prompt_choice
+            break
+        else
+            echo -e "${RED}Invalid response.${NC} Please type [${RED}${change_code}${NC}] or [${GREEN}no${NC}]."
+        fi
+    done
 }
 
 # Function to deploy or redeploy the container
