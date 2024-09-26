@@ -88,9 +88,11 @@ EOF
       - "traefik.http.routers.traefik.service=api@internal"
       - "traefik.http.middlewares.traefik-auth.basicauth.users=${TRAEFIK_AUTH}"
     restart: unless-stopped
+    networks:
+      - plexguide
 
 networks:
-  host:
+  plexguide:
     external: true
 EOF
 
