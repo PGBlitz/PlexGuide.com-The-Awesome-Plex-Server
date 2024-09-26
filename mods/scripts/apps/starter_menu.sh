@@ -134,7 +134,11 @@ main_menu() {
         
         # Conditionally display other menu options only if appstore_version is not "None"
         if [[ "$appstore_version" != "None" ]]; then
-            printf "  B) Official: Manage      [%d]\n" "$APP_COUNT"
+            # Only display option B) if there are official apps deployed (APP_COUNT > 0)
+            if [[ "$APP_COUNT" -gt 0 ]]; then
+                printf "  B) Official: Manage      [%d]\n" "$APP_COUNT"
+            fi
+
             printf "  C) Official: Deploy\n"
             echo ""  # Space for separation
 
@@ -160,7 +164,7 @@ main_menu() {
         echo ""  # Space between options and input prompt
         echo -e "${WHITE}────────────────────────────────────────────────────${NC}"
         # Display the prompt with colors and capture user input
-        echo -e "Make a Choice or [${GREEN}Z${NC}] to Exit >${NC} \c"
+        echo -e "Make a Choice or [${GREEN}${BOLD}Z${NC}] to Exit >${NC} \c"
         read -r choice
 
         case $choice in
@@ -215,6 +219,7 @@ main_menu() {
         esac
     done
 }
+
 
 # Call the main menu function
 main_menu

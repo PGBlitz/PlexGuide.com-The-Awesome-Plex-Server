@@ -8,6 +8,8 @@ RED="\033[0;31m"
 BLUE="\033[0;34m"
 ORANGE="\033[0;33m"
 NC="\033[0m" # No color
+BOLD="\033[1m"
+CYAN="\033[0;36m"
 
 # Clear the screen at the start
 clear
@@ -123,7 +125,7 @@ deployment_function() {
 
         APP_LIST=($(list_available_apps))
 
-        echo -e "${RED}PG: Deployable Apps${NC}"
+        echo -e "${CYAN}${BOLD}PG Deployable Apps${NC}"
         echo ""
 
         if [[ ${#APP_LIST[@]} -eq 0 ]]; then
@@ -133,7 +135,7 @@ deployment_function() {
         fi
 
         echo "════════════════════════════════════════════════════════════════════════════════"
-        read -p "$(echo -e "Type [${RED}App${NC}] to Deploy or [${GREEN}Z${NC}] to Exit: ")" app_choice
+        read -p "$(echo -e "Type [${RED}${BOLD}App${NC}] to Deploy or [${GREEN}${BOLD}Z${NC}] to Exit > ")" app_choice
 
         app_choice=$(echo "$app_choice" | tr '[:upper:]' '[:lower:]')
 
