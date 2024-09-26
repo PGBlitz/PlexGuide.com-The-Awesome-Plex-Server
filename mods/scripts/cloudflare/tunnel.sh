@@ -3,11 +3,14 @@
 # Configuration file path
 CONFIG_FILE="/pg/config/cf_tunnel.cfg"
 
-# ANSI color codes for green, red, and blue
-GREEN="\033[0;32m"
+# ANSI color codes for green, hot pink, and others
+GREEN="\033[1;32m"  # Bold Green
+HOT_PINK="\033[1;35m"  # Bold Hot Pink
 RED="\033[0;31m"
 BLUE="\033[0;34m"
 NC="\033[0m" # No color
+CYAN="\033[0;36m"
+BOLD="\033[1m"
 
 # Clear the screen when the script starts
 clear
@@ -39,14 +42,11 @@ container_exists() {
 # Function to display the main menu
 show_menu() {
     clear
-    echo "PG: CloudFlare Tunnel"
-
-    # Display container deployment status
-    echo -n "Container Deployed: "
+    echo -n -e "${CYAN}${BOLD}PG: CloudFlare Tunnel${NC} "
     if container_running; then
-        echo -e "${GREEN}Yes${NC}"
+        echo -e "${GREEN}${BOLD}[Deployed]${NC}"
     else
-        echo -e "${RED}No${NC}"
+        echo -e "${RED}${BOLD}[Not Deployed]${NC}"
     fi
 
     echo
@@ -64,7 +64,7 @@ show_menu() {
 
 # Function to prompt the user with a choice
 prompt_choice() {
-    read -p "Select an option: " choice
+    read -p "Select an Option > " choice
     case ${choice,,} in  # Convert input to lowercase for v/V, c/C, d/D, s/S, z/Z handling
         v)
             clear
@@ -72,35 +72,11 @@ prompt_choice() {
             ;;
         c)
             clear
-            local change_code=$(printf "%04d" $((RANDOM % 10000)))  # Generate a 4-digit code
-            while true; do
-                read -p "$(echo -e "To change the Cloudflare token, type [${RED}${change_code}${NC}] to proceed or [${GREEN}no${NC}] to cancel: ")" input_code
-                if [[ "$input_code" == "$change_code" ]]; then
-                    change_token
-                    break
-                elif [[ "${input_code,,}" == "no" ]]; then
-                    echo "Operation cancelled."
-                    break
-                else
-                    echo -e "${RED}Invalid response.${NC} Please type [${RED}${change_code}${NC}] or [${GREEN}no${NC}]."
-                fi
-            done
+            change_token
             ;;
         d)
             clear
-            local deploy_code=$(printf "%04d" $((RANDOM % 10000)))  # Generate a 4-digit code
-            while true; do
-                read -p "$(echo -e "Deploy CF Tunnel? Type [${RED}${deploy_code}${NC}] to proceed or [${GREEN}no${NC}] to cancel: ")" input_code
-                if [[ "$input_code" == "$deploy_code" ]]; then
-                    deploy_container
-                    break
-                elif [[ "${input_code,,}" == "no" ]]; then
-                    echo "Operation cancelled."
-                    break
-                else
-                    echo -e "${RED}Invalid response.${NC} Please type [${RED}${deploy_code}${NC}] or [${GREEN}no${NC}]."
-                fi
-            done
+            deploy_container
             ;;
         s)
             clear
@@ -139,13 +115,52 @@ view_token() {
 
 # Function to change the Cloudflare token
 change_token() {
-    clear
-    read -p "Enter new Cloudflare token: " CLOUDFLARE_TOKEN
-    save_token_to_config
-    echo "Cloudflare token has been updated and saved to $CONFIG_FILE."
-    sleep 2
-    show_menu
-    prompt_choice
+    local proceed_pin cancel_pin
+    proceed_pin=$(printf "%04d" $((RANDOM % 10000)))  # Generate a 4-digit proceed pin
+    cancel_pin=$(printf "%04d" $((RANDOM % 10000)))   # Generate a 4-digit cancel pin
+
+    # Ask the user for the new token
+    echo -e "Enter new Cloudflare token:"
+    read -p "> " new_token  # Get the new token from the user
+    echo  # Echo a blank line for spacing
+
+    # Confirmation prompt with hot pink pin for proceed and green for cancel
+    while true; do
+        echo -e "To proceed, enter this PIN [${HOT_PINK}${proceed_pin}${NC}]"
+        echo -e "To cancel, enter this PIN [${GREEN}${cancel_pin}${NC}]"
+        read -p "Enter PIN > " input_code
+        
+        if [[ "$input_code" == "$proceed_pin" ]]; then
+            # Save the token and confirm
+            CLOUDFLARE_TOKEN="$new_token"
+            save_token_to_config
+            echo -e "${GREEN}Cloudflare token has been updated and saved to $CONFIG_FILE.${NC}"
+
+            # Check if the container is running, notify the user and stop/remove it
+            if container_running; then
+                echo -e "${RED}Note:${NC} The CloudFlare Tunnel container is currently running."
+                echo "You must redeploy the container for the changes to take effect."
+                
+                echo "Stopping and removing the running container..."
+                docker stop cf_tunnel
+                docker rm cf_tunnel
+                echo "Container stopped and removed."
+            fi
+            
+            sleep 2
+            show_menu
+            prompt_choice
+            break
+        elif [[ "$input_code" == "$cancel_pin" ]]; then
+            echo -e "${GREEN}Operation cancelled.${NC}"
+            sleep 2
+            show_menu
+            prompt_choice
+            break
+        else
+            echo -e "${RED}Invalid response.${NC} Please enter [${HOT_PINK}${proceed_pin}${NC}] to proceed or [${GREEN}${cancel_pin}${NC}] to cancel."
+        fi
+    done
 }
 
 # Function to deploy or redeploy the container
