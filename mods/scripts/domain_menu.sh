@@ -33,7 +33,7 @@ get_port_status() {
 display_menu() {
     clear
     get_port_status  # Fetch the port status
-    echo -e "${CYAN}PG Domain Configuration Interface${NC}"
+    echo -e "${CYAN}${BOLD}PG Domain Configuration Interface${NC}"
     echo
     echo -e "[${YELLOW}${BOLD}A${NC}] CloudFlare Tunnel"
     echo -e "[${CYAN}${BOLD}B${NC}] CloudFlare Traefik"
