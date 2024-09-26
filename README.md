@@ -19,7 +19,7 @@ sudo apt-get update && sudo apt-get install -y curl && bash <(curl -fsSL https:/
 
 ### ⚡ Lastest Stable Version
 ```bash
-11.0.9
+11.0.10
 ```
 
 ### ⚡ PlexGuide v11
