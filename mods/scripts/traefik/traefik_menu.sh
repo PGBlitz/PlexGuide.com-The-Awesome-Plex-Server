@@ -7,6 +7,7 @@ RED="\033[0;31m"
 YELLOW="\033[0;33m"
 BLUE="\033[0;34m"
 MAGENTA="\033[0;35m"
+BOLD="\033[1m"
 NC="\033[0m"  # No color
 
 # Configuration file path for storing DNS provider and domain details
@@ -74,7 +75,7 @@ setup_dns_provider() {
         clear
         check_traefik_status
         
-        echo -e "${CYAN}PG: CloudFlare Traefik Interface ${traefik_status}${NC}"
+        echo -e "${CYAN}${BOLD}PG: CloudFlare Traefik Interface ${traefik_status}${NC}"
         echo ""
         echo -e "[${CYAN}${BOLD}C${NC}] CF Information"
         echo -e "[${MAGENTA}${BOLD}E${NC}] E-Mail for Let's Encrypt"
