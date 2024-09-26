@@ -165,7 +165,7 @@ main_menu() {
         echo ""  # Space between options and input prompt
 
         # Prompt for user input
-        read -p "Choose and Option > " choice
+        read -p "Select an Option > " choice
 
         # Process user input
         case ${choice,,} in

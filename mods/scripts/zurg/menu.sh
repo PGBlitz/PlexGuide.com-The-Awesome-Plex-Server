@@ -55,17 +55,17 @@ main_menu() {
         check_docker_status
 
         echo -e "${CYAN}${BOLD}PG Zurg Interface${NC}"
-        echo -e "${BLUE}-------------------------------${NC}"
-        echo -e "[C] Clone repository to /pg/zurg         ${repo_status}"
+        echo ""
+        echo -e "C) Clone repository to /pg/zurg         ${repo_status}"
         if check_repo_status; then
-            echo -e "[T] Real Debrid API Token                ${token_status}"
+            echo -e "T) Real Debrid API Token                ${token_status}"
         fi
         if check_token_status; then
-            echo -e "[R] Run docker compose up -d             ${docker_status}"
+            echo -e "R) Run docker compose up -d             ${docker_status}"
         fi
-        echo -e "[D] Destroy & Remove All Data"
-        echo -e "[Z] Exit"
-        echo -e "${BLUE}-------------------------------${NC}"
+        echo -e "D) Destroy & Remove All Data"
+        echo -e "Z) Exit"
+        echo ""
         read -p "Select an Option > " choice
         case $choice in
             [Cc])

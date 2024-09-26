@@ -11,6 +11,11 @@ NC="\033[0m" # No color
 app_name=$1
 script_type=$2  # personal or official
 
+# Configuration file paths
+dns_provider_config="/pg/config/dns_provider.cfg"
+app_config_official="/pg/config/${app_name}.cfg"
+app_config_personal="/pg/personal_configs/${app_name}.cfg"
+
 # Name of the Docker network to check or create
 network_name="plexguide"
 
@@ -35,11 +40,53 @@ check_and_create_network() {
 # Function to source configuration and functions for the app
 appsourcing() {
     if [[ "$script_type" == "personal" ]]; then
-        source "/pg/personal_configs/${app_name}.cfg"
+        source "$app_config_personal"
         source "/pg/p_apps/${app_name}/${app_name}.functions" 2>/dev/null
     else
-        source "/pg/config/${app_name}.cfg"
+        source "$app_config_official"
         source "/pg/apps/${app_name}/${app_name}.functions" 2>/dev/null
+    fi
+}
+
+# Function to update traefik_domain in the app's config
+update_traefik_domain() {
+    # Ensure dns_provider.cfg exists
+    if [[ ! -f "$dns_provider_config" ]]; then
+        mkdir -p "$(dirname "$dns_provider_config")"
+        touch "$dns_provider_config"
+    fi
+
+    # Read domain_name from dns_provider.cfg
+    if grep -q "^domain_name=" "$dns_provider_config"; then
+        domain_name=$(grep "^domain_name=" "$dns_provider_config" | cut -d'=' -f2)
+    else
+        domain_name=""
+    fi
+
+    # Set traefik_domain value based on domain_name
+    if [[ -z "$domain_name" ]]; then
+        # No domain set, use empty value
+        traefik_domain="traefik_domain=\"\""
+    else
+        # Domain exists, use it in the traefik_domain
+        traefik_domain="traefik_domain=\"$domain_name\""
+    fi
+
+    # Update the app's configuration file
+    if [[ "$script_type" == "personal" ]]; then
+        # Overwrite traefik_domain in the personal config file
+        if grep -q "^traefik_domain=" "$app_config_personal"; then
+            sed -i "s/^traefik_domain=.*/$traefik_domain/" "$app_config_personal"
+        else
+            echo "$traefik_domain" >> "$app_config_personal"
+        fi
+    else
+        # Overwrite traefik_domain in the official config file
+        if grep -q "^traefik_domain=" "$app_config_official"; then
+            sed -i "s/^traefik_domain=.*/$traefik_domain/" "$app_config_official"
+        else
+            echo "$traefik_domain" >> "$app_config_official"
+        fi
     fi
 }
 
@@ -56,6 +103,9 @@ redeploy_app() {
     check_and_create_network
 
     echo "Deploying $app_name"
+
+    # Update traefik_domain based on the domain_name in dns_provider.cfg
+    update_traefik_domain
     
     # Determine which support script to source
     if [[ "$script_type" == "personal" ]]; then
