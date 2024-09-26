@@ -44,9 +44,9 @@ show_menu() {
     clear
     echo -n -e "${CYAN}${BOLD}PG: CloudFlare Tunnel${NC} - Container Deployed: "
     if container_running; then
-        echo -e "${GREEN}Yes${NC}"
+        echo -e "${GREEN}${BOLD}Yes${NC}"
     else
-        echo -e "${RED}No${NC}"
+        echo -e "${RED}${BOLD}No${NC}"
     fi
 
     echo
