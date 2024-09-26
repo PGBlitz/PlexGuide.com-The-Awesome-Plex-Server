@@ -133,6 +133,18 @@ change_token() {
             CLOUDFLARE_TOKEN="$new_token"
             save_token_to_config
             echo -e "${GREEN}Cloudflare token has been updated and saved to $CONFIG_FILE.${NC}"
+
+            # Check if the container is running, notify the user and stop/remove it
+            if container_running; then
+                echo -e "${RED}Note:${NC} The CloudFlare Tunnel container is currently running."
+                echo "You must redeploy the container for the changes to take effect."
+                
+                echo "Stopping and removing the running container..."
+                docker stop cf_tunnel
+                docker rm cf_tunnel
+                echo "Container stopped and removed."
+            fi
+            
             sleep 2
             show_menu
             prompt_choice
