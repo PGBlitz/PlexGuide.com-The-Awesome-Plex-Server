@@ -7,6 +7,7 @@ RED="\033[0;31m"
 GREEN="\033[0;32m"
 BLUE="\033[0;34m"
 NC="\033[0m" # No color
+BOLD="\033[1m"
 
 # Source the defaults script
 source /pg/scripts/apps/defaults.sh
@@ -43,9 +44,9 @@ check_deployment_status() {
     else
         # App is not deployed, show potential port status if deployed
         if [[ "$port_status" == "Closed" ]]; then
-            echo -e "${RED}[Not Deployed]${NC} $app_name - Port Closed if Deployed"
+            echo -e "${RED}${BOLD}[Not Deployed]${NC} $app_name - Port Closed if Deployed"
         else
-            echo -e "${RED}[Not Deployed]${NC} $app_name - Port Open if Deployed"
+            echo -e "${RED}${BOLD}[Not Deployed]${NC} $app_name - Port Open if Deployed"
         fi
     fi
 }
