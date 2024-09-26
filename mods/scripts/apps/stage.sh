@@ -135,7 +135,7 @@ deployment_function() {
         fi
 
         echo "════════════════════════════════════════════════════════════════════════════════"
-        read -p "$(echo -e "Type [${RED}App${NC}] to Deploy or [${BOLD}${GREEN}Z${NC}] to Exit > ")" app_choice
+        read -p "$(echo -e "Type [${RED}${BOLD}App${NC}] to Deploy or [${BOLD}${GREEN}Z${NC}] to Exit > ")" app_choice
 
         app_choice=$(echo "$app_choice" | tr '[:upper:]' '[:lower:]')
 
