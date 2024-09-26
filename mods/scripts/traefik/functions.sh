@@ -48,13 +48,14 @@ check_email_status() {
 check_domain_status() {
     if grep -q "^domain_name=" "$CONFIG_FILE"; then
         domain_name=$(grep "^domain_name=" "$CONFIG_FILE" | cut -d'=' -f2)
-        if [[ -z "$domain_name" ]]; then
-            domain_status="${RED}${BOLD}Not Set${NC}"
-        else
+        # Check if the domain_name is not empty and matches the domain format
+        if [[ -n "$domain_name" && "$domain_name" =~ ^[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$ ]]; then
             domain_status="${GREEN}${BOLD}Set${NC}"  # Display Set in green
+        else
+            domain_status="${RED}${BOLD}Not Set${NC}"  # Display Not Set in red if the value is invalid or empty
         fi
     else
-        domain_status="${RED}${BOLD}Not Set${NC}"
+        domain_status="${RED}${BOLD}Not Set${NC}"  # Display Not Set in red if the key doesn't exist
     fi
 }
 

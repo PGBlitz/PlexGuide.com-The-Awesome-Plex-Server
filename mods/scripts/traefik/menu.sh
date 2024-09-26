@@ -12,13 +12,13 @@ setup_dns_provider() {
         clear
         check_traefik_status
         check_email_status
-        check_domain_status
-        check_provider_status  # Assuming you have a function to check if Cloudflare is properly configured
+        check_domain_status  # This will update domain_status
+        check_provider_status  # Update Cloudflare status
         
         echo -e "${CYAN}${BOLD}PG: CloudFlare Traefik Interface ${traefik_status}${NC}"
         echo ""
-        echo -e "[${GREEN}${BOLD}A${NC}] Domain Name (${GREEN}${BOLD}Set${NC})"  # Always show "Set" in green for A
-        echo -e "[${CYAN}${BOLD}C${NC}] CF Information (${provider_status})"  # Will be either [Set] or [Not Set]
+        echo -e "[${GREEN}${BOLD}A${NC}] Domain Name (${domain_status})"  # Domain status (Set or Not Set)
+        echo -e "[${CYAN}${BOLD}C${NC}] CF Information (${provider_status})"
         echo -e "[${MAGENTA}${BOLD}E${NC}] Notification E-Mail Address (${email_status})"
         
         # Show the Deploy Traefik option only if all conditions are met
@@ -32,7 +32,7 @@ setup_dns_provider() {
         read -p "Select an Option > " choice
         case $choice in
             [Aa])
-                set_domain
+                set_domain  # This updates domain_name in the config
                 ;;
             [Cc])
                 if docker ps --filter "name=traefik" --format '{{.Names}}' | grep -q 'traefik'; then
@@ -44,7 +44,7 @@ setup_dns_provider() {
                 configure_provider
                 ;;
             [Ee])
-                set_email
+                set_email  # This updates letsencrypt_email in the config
                 ;;
             [Dd])
                 if [[ "$domain_status" == "${GREEN}${BOLD}Set${NC}" && "$email_status" == "${GREEN}${BOLD}Set${NC}" && "$provider_status" == "${GREEN}${BOLD}Set${NC}" ]]; then
