@@ -1,9 +1,13 @@
 #!/bin/bash
 
 # ANSI color codes
+CYAN="\033[0;36m"
 RED="\033[0;31m"
+ORANGE="\033[0;33m"
+WHITE="\033[1;37m"
+BOLD="\033[1m"
+NC="\033[0m"  # No color
 BLUE="\033[0;34m"
-NC="\033[0m" # No color
 
 # Clear the screen at the start
 clear
@@ -30,7 +34,7 @@ exit_script() {
 main_menu() {
   while true; do
     clear
-    echo -e "${BLUE}PlexGuide Options Interface${NC}"
+    echo -e "${CYAN}${BOLD}PG Options Interface${NC}"
     echo ""  # Blank line for separation
     # Display the main menu options
     echo "G) Graphics Cards"
