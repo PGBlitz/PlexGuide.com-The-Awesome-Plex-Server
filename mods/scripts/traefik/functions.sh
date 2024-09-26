@@ -89,14 +89,16 @@ configure_provider() {
     # Test the credentials before saving
     echo -e "${YELLOW}Testing Cloudflare credentials...${NC}"
     if test_cloudflare_credentials; then
+        # Save credentials only if they are valid
+        sed -i '/^email=/d' "$CONFIG_FILE"  # Remove previous email entry
+        sed -i '/^api_key=/d' "$CONFIG_FILE"  # Remove previous api_key entry
         echo "provider=cloudflare" > "$CONFIG_FILE"
         echo "email=$cf_email" >> "$CONFIG_FILE"
         echo "api_key=$api_key" >> "$CONFIG_FILE"
         echo ""
         echo -e "${GREEN}Cloudflare credentials have been configured successfully.${NC}"
     else
-        # Blank out all information in the config file if credentials are invalid
-        echo "" > "$CONFIG_FILE"
+        # Do not modify the config file if credentials are invalid
         echo ""
         echo -e "${RED}CloudFlare Information is Incorrect and/or the API Key may not have the proper permissions.${NC}"
         echo ""
@@ -141,6 +143,9 @@ set_email() {
 
         # Validate email format
         if validate_email "$letsencrypt_email"; then
+            # Remove any existing letsencrypt_email entry
+            sed -i '/^letsencrypt_email=/d' "$CONFIG_FILE"
+            # Add the new email to the config
             echo "letsencrypt_email=$letsencrypt_email" >> "$CONFIG_FILE"
             echo -e "${GREEN}Email has been configured successfully.${NC}"
             read -p "Press Enter to continue..."
