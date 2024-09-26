@@ -49,7 +49,7 @@ while true; do
 
     case $choice in
         [Aa])
-            bash /pg/scripts/cf_tunnel.sh
+            bash /pg/scripts/cloudflare/tunnel.sh
             ;;
         [Bb])
             bash /pg/scripts/traefik/traefik_menu.sh
