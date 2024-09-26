@@ -147,7 +147,10 @@ main_menu() {
             
             # Conditionally hide options Q and R if the repo is set to "None"
             if [[ "$repo" != "None" ]]; then
-                printf "  Q) Personal: Manage      [%d]\n" "$P_COUNT"
+                # Only display option Q) if there are personal apps deployed (P_COUNT > 0)
+                if [[ "$P_COUNT" -gt 0 ]]; then
+                    printf "  Q) Personal: Manage      [%d]\n" "$P_COUNT"
+                fi
                 printf "  R) Personal: Deploy Apps\n"
             fi
             
@@ -191,8 +194,8 @@ main_menu() {
                 bash /pg/scripts/apps/personal_select.sh
                 ;;
             Q|q)
-                if [[ "$repo" == "None" ]]; then
-                    echo -e "${RED}Option Q is not available. Please use P to set a User and Repo first.${NC}"
+                if [[ "$repo" == "None" || "$P_COUNT" -eq 0 ]]; then
+                    echo -e "${RED}Option Q is not available. Please deploy a personal app first.${NC}"
                     read -p "Press Enter to continue..."
                 else
                     bash /pg/scripts/apps/running.sh "personal"
@@ -219,7 +222,6 @@ main_menu() {
         esac
     done
 }
-
 
 # Call the main menu function
 main_menu
