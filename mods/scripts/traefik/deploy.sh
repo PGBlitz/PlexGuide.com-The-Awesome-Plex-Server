@@ -42,7 +42,7 @@ deploy_traefik() {
 
     # Create the Docker Compose directory if it doesn't exist
     mkdir -p /pg/traefik
-    DOCKER_COMPOSE_FILE="/pg/traefik/docker-compose.yml"
+    DOCKER_COMPOSE_FILE="/pg_traefik/docker-compose.yml"
 
     # Write the base configuration
     cat <<EOF > $DOCKER_COMPOSE_FILE
@@ -86,8 +86,6 @@ EOF
     docker-compose -f "$DOCKER_COMPOSE_FILE" up -d
     echo -e "${GREEN}Traefik has been deployed successfully.${NC}"
 }
-
-chmod 600 /pg/traefik/acme.json
 
 # Deploy Traefik with Cloudflare
 deploy_traefik
