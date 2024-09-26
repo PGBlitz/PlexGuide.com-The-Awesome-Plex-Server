@@ -42,7 +42,7 @@ deploy_traefik() {
 
     # Create the Docker Compose directory if it doesn't exist
     mkdir -p /pg/traefik
-    DOCKER_COMPOSE_FILE="/pg_traefik/docker-compose.yml"
+    DOCKER_COMPOSE_FILE="/pg/traefik/docker-compose.yml"
 
     # Write the base configuration
     cat <<EOF > $DOCKER_COMPOSE_FILE
