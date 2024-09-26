@@ -36,6 +36,20 @@ check_email_status() {
     fi
 }
 
+# Function to check if the domain is set
+check_domain_status() {
+    if grep -q "^domain_name=" "$CONFIG_FILE"; then
+        domain_name=$(grep "^domain_name=" "$CONFIG_FILE" | cut -d'=' -f2)
+        if [[ -z "$domain_name" ]]; then
+            domain_status="${RED}${BOLD}Not Set${NC}"
+        else
+            domain_status="${GREEN}${BOLD}${domain_name}${NC}"
+        fi
+    else
+        domain_status="${RED}${BOLD}Not Set${NC}"
+    fi
+}
+
 # Function to test Cloudflare credentials
 test_cloudflare_credentials() {
     response=$(curl -s -X GET "https://api.cloudflare.com/client/v4/user/tokens/verify" \
@@ -56,6 +70,16 @@ validate_email() {
         return 0  # Email is valid
     else
         return 1  # Email is invalid
+    fi
+}
+
+# Function to validate domain format
+validate_domain() {
+    local domain="$1"
+    if [[ "$domain" =~ ^[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$ ]]; then
+        return 0  # Domain is valid
+    else
+        return 1  # Domain is invalid
     fi
 }
 
@@ -98,9 +122,11 @@ setup_dns_provider() {
         clear
         check_traefik_status
         check_email_status
+        check_domain_status
         
         echo -e "${CYAN}${BOLD}PG: CloudFlare Traefik Interface ${traefik_status}${NC}"
         echo ""
+        echo -e "[${GREEN}${BOLD}A${NC}] Domain Name (${domain_status})"
         echo -e "[${CYAN}${BOLD}C${NC}] CF Information"
         echo -e "[${MAGENTA}${BOLD}E${NC}] Notification E-Mail Address (${email_status})"
         
@@ -114,6 +140,9 @@ setup_dns_provider() {
         
         read -p "Select an Option > " choice
         case $choice in
+            [Aa])
+                set_domain
+                ;;
             [Cc])
                 if docker ps --filter "name=traefik" --format '{{.Names}}' | grep -q 'traefik'; then
                     warn_traefik_removal
@@ -160,13 +189,11 @@ configure_provider() {
     # Test the credentials before saving
     echo -e "${YELLOW}Testing Cloudflare credentials...${NC}"
     if test_cloudflare_credentials; then
-        read -p "Enter the domain name to use (e.g., example.com): " domain_name
         echo "provider=cloudflare" > "$CONFIG_FILE"
         echo "email=$cf_email" >> "$CONFIG_FILE"
         echo "api_key=$api_key" >> "$CONFIG_FILE"
-        echo "domain_name=$domain_name" >> "$CONFIG_FILE"
         echo ""
-        echo -e "${GREEN}Cloudflare DNS provider and domain have been configured successfully.${NC}"
+        echo -e "${GREEN}Cloudflare credentials have been configured successfully.${NC}"
     else
         # Blank out all information in the config file if credentials are invalid
         echo "" > "$CONFIG_FILE"
@@ -176,6 +203,23 @@ configure_provider() {
     fi
 
     read -p "Press [ENTER] to continue..."
+}
+
+# Function to set domain name
+set_domain() {
+    while true; do
+        read -p "Enter the domain name to use (e.g., example.com): " domain_name
+
+        # Validate domain format
+        if validate_domain "$domain_name"; then
+            echo "domain_name=$domain_name" >> "$CONFIG_FILE"
+            echo -e "${GREEN}Domain has been configured successfully.${NC}"
+            read -p "Press Enter to continue..."
+            break
+        else
+            echo -e "${RED}Invalid domain name. Please enter a valid domain (e.g., example.com).${NC}"
+        fi
+    done
 }
 
 # Function to set email for Let's Encrypt
