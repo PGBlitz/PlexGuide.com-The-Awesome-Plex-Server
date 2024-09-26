@@ -212,6 +212,8 @@ set_domain() {
 
         # Validate domain format
         if validate_domain "$domain_name"; then
+            # Remove any existing domain_name entry
+            sed -i '/^domain_name=/d' "$CONFIG_FILE"
             echo "domain_name=$domain_name" >> "$CONFIG_FILE"
             echo -e "${GREEN}Domain has been configured successfully.${NC}"
             read -p "Press Enter to continue..."
