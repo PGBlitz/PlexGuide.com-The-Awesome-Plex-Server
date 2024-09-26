@@ -62,7 +62,7 @@ services:
       - "--entrypoints.web.http.redirections.entrypoint.to=websecure"
       - "--entrypoints.web.http.redirections.entrypoint.scheme=https"
       - "--certificatesresolvers.mytlschallenge.acme.dnschallenge=true"
-      - "--certificatesresolvers.mytlschallenge.acme.email=${letsencrypt_email:-example@example.com}"
+      - "--certificatesresolvers.mytlschallenge.acme.email=${letsencrypt_email}"
       - "--certificatesresolvers.mytlschallenge.acme.storage=/letsencrypt/acme.json"
       - "--certificatesresolvers.mytlschallenge.acme.dnschallenge.provider=cloudflare"
       - "--certificatesresolvers.mytlschallenge.acme.dnschallenge.resolvers=1.1.1.1:53,8.8.8.8:53"

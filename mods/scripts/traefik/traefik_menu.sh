@@ -22,6 +22,19 @@ check_traefik_status() {
     fi
 }
 
+# Function to check if the Let's Encrypt email is set
+check_email_status() {
+    if grep -q "^letsencrypt_email=" "$CONFIG_FILE"; then
+        letsencrypt_email=$(grep "^letsencrypt_email=" "$CONFIG_FILE" | cut -d'=' -f2)
+        if [[ -z "$letsencrypt_email" || "$letsencrypt_email" == "notset" ]]; then
+            email_status="${RED}${BOLD}Not Set${NC}"
+        else
+            email_status="${GREEN}${BOLD}Set${NC}"
+        fi
+    else
+        email_status="${RED}${BOLD}Not Set${NC}"
+    fi
+}
 
 # Function to test Cloudflare credentials
 test_cloudflare_credentials() {
@@ -33,6 +46,16 @@ test_cloudflare_credentials() {
         return 0  # Valid credentials
     else
         return 1  # Invalid credentials
+    fi
+}
+
+# Function to validate email format
+validate_email() {
+    local email="$1"
+    if [[ "$email" =~ ^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$ ]]; then
+        return 0  # Email is valid
+    else
+        return 1  # Email is invalid
     fi
 }
 
@@ -74,12 +97,18 @@ setup_dns_provider() {
     while true; do
         clear
         check_traefik_status
+        check_email_status
         
         echo -e "${CYAN}${BOLD}PG: CloudFlare Traefik Interface ${traefik_status}${NC}"
         echo ""
         echo -e "[${CYAN}${BOLD}C${NC}] CF Information"
-        echo -e "[${MAGENTA}${BOLD}E${NC}] E-Mail for Let's Encrypt"
-        echo -e "[${BLUE}${BOLD}D${NC}] Deploy Traefik"
+        echo -e "[${MAGENTA}${BOLD}E${NC}] Notification E-Mail Address (${email_status})"
+        
+        # Show the Deploy Traefik option only if email is set
+        if [[ "$email_status" == "${GREEN}${BOLD}Set${NC}" ]]; then
+            echo -e "[${BLUE}${BOLD}D${NC}] Deploy Traefik"
+        fi
+        
         echo -e "[${RED}${BOLD}Z${NC}] Exit"
         echo ""
         
@@ -98,9 +127,11 @@ setup_dns_provider() {
                 set_email
                 ;;
             [Dd])
+                if [[ "$email_status" == "${GREEN}${BOLD}Set${NC}" ]]; then
                     bash /pg/scripts/traefik/traefik_deploy.sh
                     echo ""
                     read -p "Press Enter to continue..."
+                fi
                 ;;
             [Zz])
                 exit 0
@@ -149,10 +180,19 @@ configure_provider() {
 
 # Function to set email for Let's Encrypt
 set_email() {
-    read -p "Enter your email for Let's Encrypt notifications: " letsencrypt_email
-    echo "letsencrypt_email=$letsencrypt_email" >> "$CONFIG_FILE"
-    echo -e "${GREEN}Email has been configured successfully.${NC}"
-    read -p "Press Enter to continue..."
+    while true; do
+        read -p "Enter your email for Let's Encrypt notifications: " letsencrypt_email
+
+        # Validate email format
+        if validate_email "$letsencrypt_email"; then
+            echo "letsencrypt_email=$letsencrypt_email" >> "$CONFIG_FILE"
+            echo -e "${GREEN}Email has been configured successfully.${NC}"
+            read -p "Press Enter to continue..."
+            break
+        else
+            echo -e "${RED}Invalid email format. Please enter a valid email (e.g., user@example.com).${NC}"
+        fi
+    done
 }
 
 # Execute the setup function
