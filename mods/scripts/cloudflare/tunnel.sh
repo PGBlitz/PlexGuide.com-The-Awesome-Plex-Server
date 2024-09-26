@@ -3,8 +3,9 @@
 # Configuration file path
 CONFIG_FILE="/pg/config/cf_tunnel.cfg"
 
-# ANSI color codes for green, red, and blue
-GREEN="\033[0;32m"
+# ANSI color codes for green, hot pink, and others
+GREEN="\033[1;32m"  # Bold Green
+HOT_PINK="\033[1;35m"  # Bold Hot Pink
 RED="\033[0;31m"
 BLUE="\033[0;34m"
 NC="\033[0m" # No color
@@ -112,21 +113,17 @@ view_token() {
 
 # Function to change the Cloudflare token
 change_token() {
-    local change_code deploy_code new_token
-    change_code=$(printf "%04d" $((RANDOM % 10000)))  # Generate first 4-digit pin
-    deploy_code=$(printf "%04d" $((RANDOM % 10000)))  # Generate second 4-digit pin
+    local change_code
+    change_code=$(printf "%04d" $((RANDOM % 10000)))  # Generate a 4-digit pin
 
-    # Ensure both pin codes are not the same
-    while [[ "$deploy_code" == "$change_code" ]]; do
-        deploy_code=$(printf "%04d" $((RANDOM % 10000)))
-    done
-
-    echo -e "Enter new Cloudflare token (you'll need a pin to confirm):"
+    # Ask the user for the new token
+    echo -e "Enter new Cloudflare token:"
     read -p "> " new_token  # Get the new token from the user
     echo  # Echo a blank line for spacing
 
+    # Confirmation prompt with hot pink pin for proceed and green for cancel
     while true; do
-        read -p "$(echo -e "To confirm the new token, type [${RED}${change_code}${NC}] to proceed or [${GREEN}no${NC}] to cancel: ")" input_code
+        read -p "$(echo -e "To proceed with the new token, type [${HOT_PINK}${change_code}${NC}] to proceed or [${GREEN}exit${NC}] to cancel: ")" input_code
         if [[ "$input_code" == "$change_code" ]]; then
             # Save the token and confirm
             CLOUDFLARE_TOKEN="$new_token"
@@ -136,14 +133,14 @@ change_token() {
             show_menu
             prompt_choice
             break
-        elif [[ "${input_code,,}" == "no" ]]; then
-            echo -e "${RED}Operation cancelled.${NC}"
+        elif [[ "${input_code,,}" == "exit" ]]; then
+            echo -e "${GREEN}Operation cancelled.${NC}"
             sleep 2
             show_menu
             prompt_choice
             break
         else
-            echo -e "${RED}Invalid response.${NC} Please type [${RED}${change_code}${NC}] or [${GREEN}no${NC}]."
+            echo -e "${RED}Invalid response.${NC} Please type [${HOT_PINK}${change_code}${NC}] or [${GREEN}exit${NC}]."
         fi
     done
 }
