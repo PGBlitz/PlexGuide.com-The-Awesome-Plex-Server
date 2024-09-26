@@ -124,6 +124,29 @@ validate_domain() {
     fi
 }
 
+# Function to set domain name
+set_domain() {
+    while true; do
+        read -p "Enter the domain name to use (e.g., example.com): " domain_name
+
+        # Validate domain format
+        if validate_domain "$domain_name"; then
+            # Overwrite the existing domain_name entry in the config
+            if grep -q "^domain_name=" "$CONFIG_FILE"; then
+                sed -i "s/^domain_name=.*/domain_name=$domain_name/" "$CONFIG_FILE"
+            else
+                echo "domain_name=$domain_name" >> "$CONFIG_FILE"
+            fi
+            echo -e "${GREEN}Domain has been configured successfully.${NC}"
+            read -p "Press Enter to continue..."
+            break
+        else
+            echo -e "${RED}Invalid domain name. Please enter a valid domain (e.g., example.com).${NC}"
+        fi
+    done
+}
+
+
 # Function to set email for Let's Encrypt
 set_email() {
     while true; do
