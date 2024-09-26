@@ -81,7 +81,7 @@ configure_provider() {
     
     # Prompt for Cloudflare email and API key
     read -p "Enter your Cloudflare email: " cf_email
-    read -p "Enter your Cloudflare Zone API key: " api_key
+    read -p "Enter your Cloudflare API key: " api_key
 
     # Trim any leading/trailing whitespace from the API key
     api_key=$(echo "$api_key" | xargs)
@@ -89,12 +89,19 @@ configure_provider() {
     # Test the credentials before saving
     echo -e "${YELLOW}Testing Cloudflare credentials...${NC}"
     if test_cloudflare_credentials; then
-        # Save credentials only if they are valid
-        sed -i '/^email=/d' "$CONFIG_FILE"  # Remove previous email entry
-        sed -i '/^api_key=/d' "$CONFIG_FILE"  # Remove previous api_key entry
-        echo "provider=cloudflare" > "$CONFIG_FILE"
-        echo "email=$cf_email" >> "$CONFIG_FILE"
-        echo "api_key=$api_key" >> "$CONFIG_FILE"
+        # Overwrite existing email and api_key entries in the config file
+        if grep -q "^email=" "$CONFIG_FILE"; then
+            sed -i "s/^email=.*/email=$cf_email/" "$CONFIG_FILE"
+        else
+            echo "email=$cf_email" >> "$CONFIG_FILE"
+        fi
+
+        if grep -q "^api_key=" "$CONFIG_FILE"; then
+            sed -i "s/^api_key=.*/api_key=$api_key/" "$CONFIG_FILE"
+        else
+            echo "api_key=$api_key" >> "$CONFIG_FILE"
+        fi
+
         echo ""
         echo -e "${GREEN}Cloudflare credentials have been configured successfully.${NC}"
     else
@@ -105,25 +112,6 @@ configure_provider() {
     fi
 
     read -p "Press [ENTER] to continue..."
-}
-
-# Function to set domain name
-set_domain() {
-    while true; do
-        read -p "Enter the domain name to use (e.g., example.com): " domain_name
-
-        # Validate domain format
-        if validate_domain "$domain_name"; then
-            # Remove any existing domain_name entry
-            sed -i '/^domain_name=/d' "$CONFIG_FILE"
-            echo "domain_name=$domain_name" >> "$CONFIG_FILE"
-            echo -e "${GREEN}Domain has been configured successfully.${NC}"
-            read -p "Press Enter to continue..."
-            break
-        else
-            echo -e "${RED}Invalid domain name. Please enter a valid domain (e.g., example.com).${NC}"
-        fi
-    done
 }
 
 # Function to validate domain format
@@ -143,10 +131,12 @@ set_email() {
 
         # Validate email format
         if validate_email "$letsencrypt_email"; then
-            # Remove any existing letsencrypt_email entry
-            sed -i '/^letsencrypt_email=/d' "$CONFIG_FILE"
-            # Add the new email to the config
-            echo "letsencrypt_email=$letsencrypt_email" >> "$CONFIG_FILE"
+            # Overwrite the existing letsencrypt_email entry in the config
+            if grep -q "^letsencrypt_email=" "$CONFIG_FILE"; then
+                sed -i "s/^letsencrypt_email=.*/letsencrypt_email=$letsencrypt_email/" "$CONFIG_FILE"
+            else
+                echo "letsencrypt_email=$letsencrypt_email" >> "$CONFIG_FILE"
+            fi
             echo -e "${GREEN}Email has been configured successfully.${NC}"
             read -p "Press Enter to continue..."
             break
