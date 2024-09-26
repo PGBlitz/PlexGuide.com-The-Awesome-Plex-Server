@@ -53,9 +53,7 @@ services:
     image: traefik:latest
     container_name: traefik
     hostname: traefik
-    ports:
-      - "80:80"
-      - "443:443"
+    network_mode: host
     command:
       - "--api.insecure=true"
       - "--providers.docker=true"
@@ -63,30 +61,32 @@ services:
       - "--entrypoints.websecure.address=:443"
       - "--entrypoints.web.http.redirections.entrypoint.to=websecure"
       - "--entrypoints.web.http.redirections.entrypoint.scheme=https"
+      - "--certificatesresolvers.mytlschallenge.acme.dnschallenge=true"
       - "--certificatesresolvers.mytlschallenge.acme.email=${letsencrypt_email}"
       - "--certificatesresolvers.mytlschallenge.acme.storage=/letsencrypt/acme.json"
       - "--certificatesresolvers.mytlschallenge.acme.dnschallenge.provider=cloudflare"
       - "--certificatesresolvers.mytlschallenge.acme.dnschallenge.resolvers=1.1.1.1:53,8.8.8.8:53"
       - "--certificatesresolvers.mytlschallenge.acme.dnschallenge.delaybeforecheck=60"
+EOF
+
+    # Add Cloudflare-specific environment variable
+    cat <<EOF >> $DOCKER_COMPOSE_FILE
     environment:
-      - CLOUDFLARE_DNS_API_TOKEN=${api_key}
+      - CLOUDFLARE_DNS_API_TOKEN=$api_key
+EOF
+
+    # Finalize Docker Compose file
+    cat <<EOF >> $DOCKER_COMPOSE_FILE
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
       - /pg/traefik/letsencrypt:/letsencrypt
     labels:
       - "traefik.enable=true"
-      - "traefik.http.routers.traefik.rule=Host(traefik.${domain_name}`)"
       - "traefik.http.routers.traefik.entrypoints=websecure"
       - "traefik.http.routers.traefik.tls.certresolver=mytlschallenge"
       - "traefik.http.routers.traefik.service=api@internal"
       - "traefik.http.middlewares.traefik-auth.basicauth.users=${TRAEFIK_AUTH}"
     restart: unless-stopped
-    networks:
-      - plexguide
-
-networks:
-  plexguide:
-    external: true
 EOF
 
     echo -e "${GREEN}Docker Compose file for Traefik has been created at $DOCKER_COMPOSE_FILE.${NC}"
