@@ -43,22 +43,6 @@ appsourcing() {
     fi
 }
 
-# Function to source configuration from the config file 
-#configsource() {
-#    if [[ "$config_type" == "personal" ]]; then
-#        config_path="/pg/personal_configs/${app_name}.cfg"
-#    else
-#        config_path="/pg/config/${app_name}.cfg"
-#    fi
-#
-#    if [ -f "$config_path" ]; then
-#        source "$config_path"
-#    else
-#        echo "Config file for ${app_name} not found at ${config_path}."
-#        exit 1
-#    fi
-#}
-
 # Function: Deploys / Redploys App
 redeploy_app() {
     # Check if lspci is installed; detect NVIDIA graphics cards
@@ -147,6 +131,7 @@ while true; do
         echo "Operation exited."
         break
     else
-        echo "" && echo "Invalid choice. Please try again." && echo ""
+        echo ""
+        read -p "${RED}Invalid Choice. Press [ENTER] to continue${NC}"
     fi
 done
