@@ -86,11 +86,8 @@ running_function() {
         # Get the list of running Docker apps that match .app files
         APP_LIST=($(list_running_docker_apps))
 
+        # Exits interface if there are no apps running
         if [[ ${#APP_LIST[@]} -eq 0 ]]; then
-            echo ""
-            echo -e "${RED}Cannot View/Edit Apps as None Exist.${NC}"
-            echo ""  # Blank line for separation
-            read -p "$(echo -e "${RED}Press Enter to continue...${NC}")"
             exit 0
         fi
 
