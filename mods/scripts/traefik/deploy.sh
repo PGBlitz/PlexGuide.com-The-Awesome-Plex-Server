@@ -53,6 +53,9 @@ services:
     image: traefik:latest
     container_name: traefik
     hostname: traefik
+    ports:
+      - "80:80"
+      - "443:443"
     command:
       - "--api.insecure=true"
       - "--providers.docker=true"
@@ -66,22 +69,14 @@ services:
       - "--certificatesresolvers.mytlschallenge.acme.dnschallenge.provider=cloudflare"
       - "--certificatesresolvers.mytlschallenge.acme.dnschallenge.resolvers=1.1.1.1:53,8.8.8.8:53"
       - "--certificatesresolvers.mytlschallenge.acme.dnschallenge.delaybeforecheck=60"
-EOF
-
-    # Add Cloudflare-specific environment variable
-    cat <<EOF >> $DOCKER_COMPOSE_FILE
     environment:
-      - CLOUDFLARE_DNS_API_TOKEN=$api_key
-EOF
-
-    # Finalize Docker Compose file
-    cat <<EOF >> $DOCKER_COMPOSE_FILE
+      - CLOUDFLARE_DNS_API_TOKEN=${api_key}
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
       - /pg/traefik/letsencrypt:/letsencrypt
     labels:
       - "traefik.enable=true"
-      - "traefik.http.routers.traefik.rule=Host(\'traefik.${domain_name}\')"
+      - "traefik.http.routers.traefik.rule=Host(traefik.${domain_name}`)"
       - "traefik.http.routers.traefik.entrypoints=websecure"
       - "traefik.http.routers.traefik.tls.certresolver=mytlschallenge"
       - "traefik.http.routers.traefik.service=api@internal"
