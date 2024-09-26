@@ -102,7 +102,7 @@ running_function() {
 
         echo "════════════════════════════════════════════════════════════════════════════════"
         # Prompt the user to enter an app name or exit
-        read -p "$(echo -e "Type [${GREEN}${BOLD}App${NC}] to View/Edit or [${RED}${BOLD}Z${NC}] > ")" app_choice
+        read -p "$(echo -e "Type [${GREEN}${BOLD}App${NC}] to View/Edit or [${RED}${BOLD}Z${NC}] to exit > ")" app_choice
 
         # Convert the user input to lowercase for case-insensitive matching
         app_choice=$(echo "$app_choice" | tr '[:upper:]' '[:lower:]')
