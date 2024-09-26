@@ -16,9 +16,9 @@ CONFIG_FILE="/pg/config/dns_provider.cfg"
 # Function to check if Traefik is deployed
 check_traefik_status() {
     if docker ps --filter "name=traefik" --format '{{.Names}}' | grep -q 'traefik'; then
-        traefik_status="${GREEN}[Deployed]${NC}"
+        traefik_status="${GREEN}${BOLD}[Deployed]${NC}"
     else
-        traefik_status="${RED}[Not Deployed]${NC}"
+        traefik_status="${RED}${BOLD}[Not Deployed]${NC}"
     fi
 }
 
