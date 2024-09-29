@@ -151,7 +151,7 @@ run_docker_compose() {
     echo -e "${YELLOW}Running docker compose up -d...${NC}"
     if [ -f "/pg/zurg/docker-compose.yml" ]; then
         cd /pg/zurg
-        docker compose up -d
+        docker-compose up -d
         if [ $? -eq 0 ]; then
             echo -e "${GREEN}Docker containers started successfully.${NC}"
             echo ""
