@@ -1,6 +1,6 @@
 <h2 align="center">Want to Help? Click the Star in the Upper-Right Corner! ⭐</h2>
 
-NOTE: I am affected by Hurricane Helene with power knocked out. I will respond when I can - Admin9705
+<h3 align="center">NOTE: I am affected by Hurricane Helene with power knocked out. I will respond when I can - Admin9705</h3>
 
 <p align="center">
   <table align="center" border="0">
