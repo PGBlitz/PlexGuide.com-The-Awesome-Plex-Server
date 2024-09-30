@@ -199,10 +199,12 @@ automate_setup() {
         echo -e "${GREEN}/mnt/zurg created.${NC}"
     fi
 
-    # Set ownership to 1000:1000 and chmod +x for /pg/zurg and /mnt/zurg
+    # Force ownership to 1000:1000 and chmod +x for /pg/zurg and /mnt/zurg
     sudo chown -R 1000:1000 /pg/zurg
     sudo chown -R 1000:1000 /mnt/zurg
-    sudo chmod -R +x /pg/zurg
+    sudo find /mnt/zurg -type d -exec chmod 755 {} \;
+    sudo find /mnt/zurg -type f -exec chmod 644 {} \;
+
     echo -e "${GREEN}Ownership and permissions set for /pg/zurg and /mnt/zurg.${NC}"
 }
 
