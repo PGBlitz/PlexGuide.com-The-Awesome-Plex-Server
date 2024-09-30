@@ -151,8 +151,8 @@ run_docker_compose() {
     echo -e "${YELLOW}Running docker compose up -d...${NC}"
     
     if [ -f "/pg/zurg/docker-compose.yml" ]; then
-        # Remove only the lines before 'services:' while keeping 'services:' intact
-        sed -i '1,/^services:/!d' /pg/zurg/docker-compose.yml
+        # Remove only the lines above 'services:', but keep 'services:' itself
+        sed -i '/^services:/,$!d' /pg/zurg/docker-compose.yml
         
         cd /pg/zurg
         docker-compose up -d
