@@ -151,8 +151,11 @@ run_docker_compose() {
     echo -e "${YELLOW}Running docker compose up -d...${NC}"
     
     if [ -f "/pg/zurg/docker-compose.yml" ]; then
-        # Safely remove everything before 'services:', keeping 'services:' intact
+        # Remove everything before 'services:', keeping 'services:' intact
         awk '/^services:/ {found=1} found {print}' /pg/zurg/docker-compose.yml > /tmp/docker-compose.yml && mv /tmp/docker-compose.yml /pg/zurg/docker-compose.yml
+        
+        # Update the mount line for /mnt/zurg
+        sed -i 's|/mnt/zurg:/data:rshared|/mnt/zurg:/data:rshared,uid=1000,gid=1000|' /pg/zurg/docker-compose.yml
         
         cd /pg/zurg
         docker-compose up -d
