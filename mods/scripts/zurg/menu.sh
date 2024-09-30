@@ -146,18 +146,54 @@ enter_token() {
     read -p "Press [ENTER] to continue..."
 }
 
+# Function to update docker-compose.yml
+update_docker_compose() {
+    echo -e "${YELLOW}Updating docker-compose.yml...${NC}"
+    
+    # Check if docker-compose.yml exists
+    if [ ! -f "/pg/zurg/docker-compose.yml" ]; then
+        echo -e "${RED}docker-compose.yml not found in /pg/zurg. Please clone the repository first.${NC}"
+        return 1
+    fi
+
+    # Update the rclone service in docker-compose.yml
+    sed -i '/rclone:/,/command:/ s#- /mnt/zurg:/data:rshared.*#- /mnt/zurg:/data:rshared,uid=1000,gid=1000#' /pg/zurg/docker-compose.yml
+
+    echo -e "${GREEN}docker-compose.yml updated successfully.${NC}"
+}
+
+# Automated setup: Create /mnt/zurg, set ownership and permissions
+automate_setup() {
+    echo -e "${YELLOW}Setting up directories, ownership, and permissions...${NC}"
+
+    # Create /mnt/zurg directory if it doesn't exist
+    if [ ! -d "/mnt/zurg" ]; then
+        sudo mkdir -p /mnt/zurg
+        echo -e "${GREEN}/mnt/zurg created.${NC}"
+    fi
+
+    # Set ownership to 1000:1000 for /pg/zurg and /mnt/zurg
+    sudo chown -R 1000:1000 /pg/zurg
+    sudo chown -R 1000:1000 /mnt/zurg
+
+    # Set permissions for /mnt/zurg
+    sudo chmod 755 /mnt/zurg
+    sudo find /mnt/zurg -type d -exec chmod 755 {} +
+    sudo find /mnt/zurg -type f -exec chmod 644 {} +
+
+    echo -e "${GREEN}Ownership and permissions set for /pg/zurg and /mnt/zurg.${NC}"
+
+    # Update docker-compose.yml
+    update_docker_compose
+}
+
 # Function to run docker compose up -d
 run_docker_compose() {
     echo -e "${YELLOW}Running docker compose up -d...${NC}"
     
     if [ -f "/pg/zurg/docker-compose.yml" ]; then
-        # Remove everything before 'services:', keeping 'services:' intact
-        awk '/^services:/ {found=1} found {print}' /pg/zurg/docker-compose.yml > /tmp/docker-compose.yml && mv /tmp/docker-compose.yml /pg/zurg/docker-compose.yml
-        
-        # Update the mount line for /mnt/zurg
-        sed -i 's|/mnt/zurg:/data:rshared|/mnt/zurg:/data:rshared,uid=1000,gid=1000|' /pg/zurg/docker-compose.yml
-        
         cd /pg/zurg
+        docker-compose down  # Stop and remove existing containers
         docker-compose up -d
         if [ $? -eq 0 ]; then
             echo -e "${GREEN}Docker containers started successfully.${NC}"
@@ -190,25 +226,6 @@ destroy_and_remove() {
         echo -e "${YELLOW}Operation cancelled.${NC}"
     fi
     read -p "Press [ENTER] to continue..."
-}
-
-# Automated setup: Create /mnt/zurg, set ownership and permissions
-automate_setup() {
-    echo -e "${YELLOW}Setting up directories, ownership, and permissions...${NC}"
-
-    # Create /mnt/zurg directory if it doesn't exist
-    if [ ! -d "/mnt/zurg" ]; then
-        sudo mkdir -p /mnt/zurg
-        echo -e "${GREEN}/mnt/zurg created.${NC}"
-    fi
-
-    # Force ownership to 1000:1000 and chmod +x for /pg/zurg and /mnt/zurg
-    sudo chown -R 1000:1000 /pg/zurg
-    sudo chown -R 1000:1000 /mnt/zurg
-    sudo find /mnt/zurg -type d -exec chmod 755 {} \;
-    sudo find /mnt/zurg -type f -exec chmod 644 {} \;
-
-    echo -e "${GREEN}Ownership and permissions set for /pg/zurg and /mnt/zurg.${NC}"
 }
 
 # Start the script
