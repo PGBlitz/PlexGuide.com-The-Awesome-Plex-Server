@@ -149,7 +149,11 @@ enter_token() {
 # Function to run docker compose up -d
 run_docker_compose() {
     echo -e "${YELLOW}Running docker compose up -d...${NC}"
+    
     if [ -f "/pg/zurg/docker-compose.yml" ]; then
+        # Remove lines before 'services:'
+        sed -i '1,/services:/d' /pg/zurg/docker-compose.yml
+        
         cd /pg/zurg
         docker-compose up -d
         if [ $? -eq 0 ]; then
