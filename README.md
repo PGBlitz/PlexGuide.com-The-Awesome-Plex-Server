@@ -1,7 +1,5 @@
 <h2 align="center">Want to Help? Click the Star in the Upper-Right Corner! ⭐</h2>
 
-<h3 align="center">NOTE: I'm affected by Hurricane Helene with power knocked out - Admin9705</h3>
-
 ### ⚡ Quick Install Command
 
 ```bash
